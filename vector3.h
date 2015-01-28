@@ -219,8 +219,8 @@
         if(O != NULL)
         {
             return RootIter((X - O->getX()) * (X - O->getX()) +
-                        (Y - O->getY()) * (Y - O->getY()) +
-                        (Z - O->getZ()) * (Z - O->getZ()),0.00001,100);
+                            (Y - O->getY()) * (Y - O->getY()) +
+                            (Z - O->getZ()) * (Z - O->getZ()),0.00001,100);
         }else{
             return RootIter(X*X + Y*Y + Z*Z,0.00001,100);
         }
