@@ -286,8 +286,6 @@
         return Vec("FAIL",0,0,0);
     }
 
-
-
     Vec& Vec::DirByOrigin(class Vec *O)
     {
         f32 D;
@@ -386,18 +384,21 @@
         a.setY(a.getY() - b.getY());
         a.setZ(a.getZ() - b.getZ());
     }
+
     Vec operator*(f32 a, Vec b)
     {
         return Vec("*",a * b.getX(),
                        a * b.getY(),
                        a * b.getZ());
     }
+
     Vec operator*(Vec b, f32 a)
     {
         return Vec("*",a * b.getX(),
                        a * b.getY(),
                        a * b.getZ());
     }
+
     Vec  operator/(Vec b, f32 a)
     {
         if(a != 0)
@@ -408,6 +409,7 @@
         }
         return Vec("FAIL",0,0,0);
     }
+
     void operator*=(Vec &a, f32 b)
     {
         a.setX(a.getX() * b);

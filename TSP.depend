@@ -35,3 +35,19 @@
 1412773572 e:\documents\codeblocks-projs\tsp\common.h
 	"mytypes.h"
 
+1422524409 source:e:\documents\lua-projs\svn\tsp_master\main.cpp
+	<stdio.h>
+	<conio.h>
+	<malloc.h>
+	<math.h>
+	"vector3.h"
+
+1422524409 e:\documents\lua-projs\svn\tsp_master\vector3.h
+	"mytypes.h"
+	"common.h"
+
+1422524409 e:\documents\lua-projs\svn\tsp_master\mytypes.h
+
+1422524409 e:\documents\lua-projs\svn\tsp_master\common.h
+	"mytypes.h"
+
