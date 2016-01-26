@@ -1,104 +1,133 @@
-#include <stdio.h>
 #include <conio.h>
 #include <malloc.h>
+#include <stdio.h>
 #include <math.h>
+#include <string.h>
+#include "common.h"
+#include "mytypes.h"
 #include "vector3.h"
 
 int main()
 {
-    u32 oA = 123;
-    u32 oB = 456;
-    u32 nA = oA;
-    u32 nB = oB;
+  cVec A = Vec("A", 1, 2, 3);
 
-    f32 a = 05.555f;
-    cVec *T = new cVec(1,1,1);
-    cVec A = Vec("A",1,2,3);
-    cVec B = Vec("B",3,2,1);
-    cVec C = Vec("C",0,12,0);
-    cVec D = Vec("D");
-    cVec E = Vec("E");
-    cVec F = Vec("F");
-    cVec G = Vec("G");
-    cVec H = Vec("H");
-    cVec I = Vec("I");
-    cVec J = Vec("J");
-    cVec K = Vec("K");
+/* Coplanarity
+  cVec A = Vec("A", 1, 2, 3);
+  cVec B = Vec("B", 4, 5, 6);
+  cVec C = Vec("C", 7, 8, 9);
+  printf("\nCoplan: %u",A.isCoplanar(&B,&C));
+  printf("\nCoplan: %u",A.isCoplanar(B,C));
+  printf("\nCoplan: %u",A.isCoplanar(B,&C));
+  printf("\nCoplan: %u",A.isCoplanar(&B,C));
+*/
+/* Mixed product (18)
+  cVec A = Vec("A", 1, 2, 3);
+  cVec B = Vec("B", 4, 5, 6);
+  cVec C = Vec("C", 3, 5, 1);
 
-    A.setNext(&B);
-    B.setNext(&C);
-    C.setNext(&D);
-    D.setNext(&E);
-    E.setNext(&F);
-    F.setNext(&G);
-    G.setNext(&H);
-    H.setNext(&I);
-    I.setNext(&J);
+  printf("\nMix: %f",A.getMix(B,C));
+  printf("\nMix: %f",A.getMix(&B,&C));
+  printf("\nMix: %f",A.getMix(&B,C));
+  printf("\nMix: %f",A.getMix(B,&C));
+*/
 
-    J.setName("Master Yoda").setNext(&K).Set(2,2,2).Mul(1.5);
-    K.setNext(T).Add(&A);
-    T->Set(1,1,1).setName("Test").Offset(A,10).Mul(0.3).Normalize().setNext(NULL);
+/* Orthogonal (255)
+  cVec A = Vec("A", 1, 2, 3);
+  cVec B = Vec("B", 5, -1, -1);
 
+  printf("\nOrth: %u",A.isOrthogonal(B));
+  printf("\nOrth: %u",A.isOrthogonal(&B));
+*/
+/* Collinear
+  cVec A = Vec("A", 1, 2, 3);
+  cVec B = Vec("B", -2, -4, -6);
 
-    C.Set(A.getCross(B));
-    D.Set(A.getProjected(&B));
-    E.Set(A+B).Mul(A*B);
+  printf("\nColl: %u",A.isCollinear(B));
+  printf("\nColl: %u",A.isCollinear(&B));
+*/
 
-    T->Print();
+/* Swap
+  A.getSwap("xy").Print();
+  A.getSwap("xY").Print();
+  A.getSwap("Xy").Print();
+  A.getSwap("XY").Print();
+  C.Set(A).Swap("xy").Print();
+  C.Set(A).Swap("xY").Print();
+  C.Set(A).Swap("Xy").Print();
+  C.Set(A).Swap("XY").Print();
+ */
 
-    // delete T;
+/* Direction
+  A.getDirection().Print();
+  C.Set(A).Direction().Print();
 
-    T->~Vec();
+  C.Set(A).Direction(B).Print();
+  C.Set(A).Direction(&B).Print();
+  A.getDirection(B).Print();
+  A.getDirection(&B).Print();
+*/
 
+/* Projections
+  A.getProject(&B).Print();
+  A.getProject( B).Print();
+  C.Set(A).Project(&B).Print();
+  C.Set(A).Project( B).Print();
+*/
 
-    T->Print();
+/* Angles
+printf("\n%f, %f, %f, %f",A.getAngleDeg(B),A.getAngleDeg(&B),A.getAngleRad(&B),A.getAngleRad(B));
+*/
 
-    T = new Vec(E.getDirByOrigin(NULL));
+/* Div
+  A.getDiv(2).Print();
+  C.Set(&A).Div(2).Print();
+  C.Set(&A) /= 2;
+  C.Print();
+  C = A / 2;
+  C.Print();
+*/
 
-    T->Print();
+/* Mul
+  A.getMul(2).Print();
+  C.Set(&A).Mul(2).Print();
+  C.Set(&A) *= 2;
+  C.Print();
+  C = A * 2;
+  C.Print();
+*/
 
-    E.Offset(T,4).Mul(4);
+/* Sub
+  A.getSub(&B).Print();
+  A.getSub (B).Print();
+  C.Set(&A).Sub(B).Print();
+  C.Set(&A).Sub(&B).Print();
+  C.Set(&A) -= B;
+  C.Print();
+  C = A - B;
+  C.Print();
+*/
 
-    F.Set(2,2,2);
+/* Add
+  A.getAdd(&B).Print();
+  A.getAdd (B).Print();
+  C.Set(&A).Add(B).Print();
+  C.Set(&A).Add(&B).Print();
+  C.Set(&A) += B;
+  C.Print();
+  C = A + B;
+  C.Print();
+*/
 
-    F /= 2;
-    F *= 3.56;
-    F -= A;
-    F *= A;
-    F ^= C;
+/* Cross product
+  A.getCross(&B).Print();
+  A.getCross (B).Print();
+  C.Set(&A).Cross(B).Print();
+  C.Set(&A).Cross(&B).Print();
+  C.Set(&A) ^= B;
+  C.Print();
+  C = A ^ B;
+  C.Print();
+*/
 
-    F.Print();
-    G.Set(A * 2);
-    H.Set(A ^ B).Neg().Div(4);
-    I.Set(A.getDirByOrigin(&B));
-    J.Set(*(&F) + F + (2 * A));
-    K.Set(Vec(A.getDirCos('x'),A.getDirCos('y'),A.getDirCos('z')));
-    K.setName("Obi-One!");
-    I.setName("Jedi !");
-    a = 555.5555;
-
-    K.setY(0);
-
-    K.Set(1,1,1);
-
-    K.Mul(2);
-    K.Mul(2).Mul(2).Set(1,2,3);
-
-
-    A.RollR();
-    A.Swap("zy");
-
-
-    C += ((A+B) ^ C);
-
-    // Privatizations and violations !!!
-    *(((u32*)(&K)) + 2) = *((u32*)(&a));
-
-    A.PrintTrajectory();
-
-    nA^=nB^=nA^=nB;
-
-    printf("\nvA: %u(%u), vB: %u(%u)",nA,oA,nB,oB);
-
-    return 0;
+  return 0;
 }

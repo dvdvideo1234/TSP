@@ -463,7 +463,7 @@
         return 0;
     }
 
-    f32 Pi(u32 N)
+    f32 getPi(u32 N)
     {
         u32 C = 1, M = 3;
         s8  S = -1;
@@ -478,6 +478,11 @@
             C++;
         }
         return Val * RootIter(12,0.00001,100);
+    }
+
+    f32 getPi()
+    {
+      return (4.0 * atan(1.0));
     }
 
 #endif
