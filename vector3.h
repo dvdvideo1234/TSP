@@ -351,16 +351,12 @@
 
     Vec operator+(Vec a, Vec b)
     {
-      return  Vec(a.getX() + b.getX(),
-                  a.getY() + b.getY(),
-                  a.getZ() + b.getZ());
+      return  Vec(a.getX() + b.getX(), a.getY() + b.getY(), a.getZ() + b.getZ());
     }
 
     Vec operator-(Vec a, Vec b)
     {
-      return  Vec(a.getX() - b.getX(),
-                  a.getY() - b.getY(),
-                  a.getZ() - b.getZ());
+      return  Vec(a.getX() - b.getX(), a.getY() - b.getY(), a.getZ() - b.getZ());
     }
 
     void operator+=(Vec &a, f32 b)
@@ -399,24 +395,18 @@
 
     Vec operator*(f32 a, Vec b)
     {
-      return Vec(a * b.getX(),
-                 a * b.getY(),
-                 a * b.getZ());
+      return Vec(a * b.getX(), a * b.getY(), a * b.getZ());
     }
 
     Vec operator*(Vec b, f32 a)
     {
-      return Vec(a * b.getX(),
-                 a * b.getY(),
-                 a * b.getZ());
+      return Vec(a * b.getX(), a * b.getY(), a * b.getZ());
     }
 
     Vec  operator/(Vec b, f32 a)
     {
       if(a == 0){ return Vec("FAIL"); }
-      return Vec(b.getX() / a,
-                 b.getY() / a,
-                 b.getZ() / a);
+      return Vec(b.getX() / a, b.getY() / a, b.getZ() / a);
     }
 
     void operator*=(Vec &a, f32 b)
@@ -935,11 +925,10 @@
 
     Vec& Vec::RollL(void)
     {  // X Y Z  ->  Z X Y
-      f32 T;
-      T = Z;
-      Z = Y;
-      Y = X;
-      X = T;
+      f32 T = Z;
+          Z = Y;
+          Y = X;
+          X = T;
       return *this;
     }
 
@@ -950,11 +939,10 @@
 
     Vec& Vec::RollR(void)
     {  // X Y Z  ->  Y Z X
-      f32 T;
-      T = X;
-      X = Y;
-      Y = Z;
-      Z = T;
+      f32 T = X;
+          X = Y;
+          Y = Z;
+          Z = T;
       return *this;
     }
 
