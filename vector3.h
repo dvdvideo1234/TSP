@@ -1,6 +1,6 @@
 #ifndef __VECTOR3__H_
     #define __VECTOR3__H_
-    #define TSP_PI 3.1415927410125732
+    #define TSP_PI 3.141592653589793238462643383279502884197169399375105820974944
     typedef class Vec
     {
         private:
@@ -13,7 +13,9 @@
         public:
             friend Vec  operator+ (Vec,  Vec);
             friend Vec  operator- (Vec,  Vec);
+            friend void operator+=(Vec&, f32);
             friend void operator+=(Vec&, Vec);
+            friend void operator-=(Vec&, f32);
             friend void operator-=(Vec&, Vec);
             friend Vec  operator^ (Vec,  Vec);
             friend void operator^=(Vec&, Vec);
@@ -34,22 +36,22 @@
             friend void operator--(Vec&, s32);
             friend void operator++(Vec&);
             friend void operator--(Vec&);
-            u8          isCollinear (class Vec *V);
-            u8          isCollinear (class Vec &V);
-            u8          isOrthogonal(class Vec *V);
-            u8          isOrthogonal(class Vec &V);
-            u8          isCoplanar  (class Vec &A, class Vec &B);
-            u8          isCoplanar  (class Vec *A, class Vec *B);
-            u8          isCoplanar  (class Vec *A, class Vec &B);
-            u8          isCoplanar  (class Vec &A, class Vec *B);
-            f32         getDistance (class Vec *V);
-            f32         getDistance (class Vec &V);
+            u8          isCollinear (class Vec *v);
+            u8          isCollinear (class Vec &v);
+            u8          isOrthogonal(class Vec *v);
+            u8          isOrthogonal(class Vec &v);
+            u8          isCoplanar  (class Vec &a, class Vec &b);
+            u8          isCoplanar  (class Vec *a, class Vec *b);
+            u8          isCoplanar  (class Vec *a, class Vec &b);
+            u8          isCoplanar  (class Vec &a, class Vec *b);
+            f32         getDistance (class Vec *v);
+            f32         getDistance (class Vec &v);
             f32         getDistance (void);
-            Vec&           Direction(class Vec *V);
-            Vec&           Direction(class Vec &V);
+            Vec&           Direction(class Vec *v);
+            Vec&           Direction(class Vec &v);
             Vec&           Direction(void);
-            class Vec   getDirection(class Vec *V);
-            class Vec   getDirection(class Vec &V);
+            class Vec   getDirection(class Vec *v);
+            class Vec   getDirection(class Vec &v);
             class Vec   getDirection(void);
             f32         getX(){ return X; };
             f32         getY(){ return Y; };
@@ -63,48 +65,56 @@
             Vec&        setKey(u32 k){ Key = k; return *this; };
             Vec&        setName(const char *pcName){ Name = (u8*)pcName; return *this; };
             Vec&        setNext(class  Vec *pvNext){ Next = pvNext;      return *this; };
-            f32         getAngleDeg(class  Vec *V);
-            f32         getAngleDeg(class  Vec &V);
-            f32         getAngleRad(class  Vec *V);
-            f32         getAngleRad(class  Vec &V);
-            Vec&           Project(class Vec *V);
-            Vec&           Project(class Vec &V);
-            class Vec   getProject(class Vec *V);
-            class Vec   getProject(class Vec &V);
-            Vec&           Add(class Vec *V);
-            Vec&           Add(class Vec &V);
-            class Vec   getAdd(class Vec *V);
-            class Vec   getAdd(class Vec &V);
-            Vec&           Sub(class Vec *V);
-            Vec&           Sub(class Vec &V);
-            class Vec   getSub(class Vec *V);
-            class Vec   getSub(class Vec &V);
+            f32         getAngleDeg(class  Vec *v);
+            f32         getAngleDeg(class  Vec &v);
+            f32         getAngleRad(class  Vec *v);
+            f32         getAngleRad(class  Vec &v);
+            f32         getAreaTriangle(class Vec *v);
+            f32         getAreaTriangle(class Vec &v);
+            f32         getAreaParallelogram(class Vec *v);
+            f32         getAreaParallelogram(class Vec &v);
+            f32         getVolumeTetrahedron(class Vec &a, class Vec &b);
+            f32         getVolumeTetrahedron(class Vec *a, class Vec *b);
+            f32         getVolumeTetrahedron(class Vec *a, class Vec &b);
+            f32         getVolumeTetrahedron(class Vec &a, class Vec *b);
+            Vec&           Project(class Vec *v);
+            Vec&           Project(class Vec &v);
+            class Vec   getProject(class Vec *v);
+            class Vec   getProject(class Vec &v);
+            Vec&           Add(class Vec *v);
+            Vec&           Add(class Vec &v);
+            class Vec   getAdd(class Vec *v);
+            class Vec   getAdd(class Vec &v);
+            Vec&           Sub(class Vec *v);
+            Vec&           Sub(class Vec &v);
+            class Vec   getSub(class Vec *v);
+            class Vec   getSub(class Vec &v);
             f32         getCosine(u8);
             Vec&           Neg(void);
             class Vec   getNeg(void);
-            Vec&           Mul(f32 Num);
-            class Vec   getMul(f32 Num);
-            Vec&           Div(f32 Num);
-            class Vec   getDiv(f32 Num);
-            f32         getMix(class Vec &A, class Vec &B);
-            f32         getMix(class Vec *A, class Vec *B);
-            f32         getMix(class Vec *A, class Vec &B);
-            f32         getMix(class Vec &A, class Vec *B);
-            Vec&           Set(class Vec &V);
-            Vec&           Set(class Vec *V);
+            Vec&           Mul(f32 n);
+            class Vec   getMul(f32 n);
+            Vec&           Div(f32 n);
+            class Vec   getDiv(f32 n);
+            f32         getMix(class Vec &a, class Vec &b);
+            f32         getMix(class Vec *a, class Vec *b);
+            f32         getMix(class Vec *a, class Vec &b);
+            f32         getMix(class Vec &a, class Vec *b);
+            Vec&           Set(class Vec &v);
+            Vec&           Set(class Vec *v);
             Vec&           Set(f32 x, f32 y, f32 z);
             Vec&           Set(f32 x, f32 y);
             Vec&           Set(f32 x);
-            Vec&           Offset(class Vec &Dir, f32 Num);
-            Vec&           Offset(class Vec *Dir, f32 Num);
-            class Vec   getOffset(class Vec &Dir, f32 Num);
-            class Vec   getOffset(class Vec *Dir, f32 Num);
-            Vec&           Cross(class Vec *V);
-            Vec&           Cross(class Vec &V);
-            class Vec   getCross(class Vec *V);
-            class Vec   getCross(class Vec &V);
-            f32         getDot(class Vec *V);
-            f32         getDot(class Vec &V);
+            Vec&           Offset(class Vec &Dir, f32 n);
+            Vec&           Offset(class Vec *Dir, f32 n);
+            class Vec   getOffset(class Vec &Dir, f32 n);
+            class Vec   getOffset(class Vec *Dir, f32 n);
+            Vec&           Cross(class Vec *v);
+            Vec&           Cross(class Vec &v);
+            class Vec   getCross(class Vec *v);
+            class Vec   getCross(class Vec &v);
+            f32         getDot(class Vec *v);
+            f32         getDot(class Vec &v);
             Vec&           RollR(void);
             class Vec   getRollR(void);
             Vec&           RollL(void);
@@ -126,56 +136,56 @@
 
     void Vec::Print(void)
     {
-      printf("\rVec %p > %p --> %s, %u\n\rXYZ = { %10.4f, %10.4f, %10.4f }\n\r\n\r",
+      printf("\n\rVec %p > %p --> %s, %u\n\rXYZ = { %10.4f, %10.4f, %10.4f }\n\r",
          this,getNext(),getName(),getKey(),getX(),getY(),getZ());
     }
 
     void Vec::PrintTrajectory(void)
     {
-      cVec *V = this;
-      while(V != NULL)
+      cVec *v = this;
+      while(v != NULL)
       {
-        V->Print();
-        V = V->getNext();
+        v->Print();
+        v = v->getNext();
       }
     }
 
-    Vec::Vec(const char *N, f32 x, f32 y, f32 z, u32 k, class Vec *Next)
+    Vec::Vec(const char *Name, f32 x, f32 y, f32 z, u32 k, class Vec *Next)
     {
       setX(x);
       setY(y);
       setZ(z);
       setKey(k);
-      setName(N);
+      setName(Name);
       setNext(Next);
     }
 
-    Vec::Vec(const char *N, f32 x, f32 y, f32 z, class Vec *Next)
+    Vec::Vec(const char *Name, f32 x, f32 y, f32 z, class Vec *Next)
     {
       setX(x);
       setY(y);
       setZ(z);
       setKey(0);
-      setName(N);
+      setName(Name);
       setNext(Next);
     }
-    Vec::Vec(const char *N)
+    Vec::Vec(const char *Name)
     {
       setX(0.0);
       setY(0.0);
       setZ(0.0);
       setKey(0);
-      setName(N);
+      setName(Name);
       setNext(NULL);
     }
 
-    Vec::Vec(const char *N, f32 x, f32 y, f32 z)
+    Vec::Vec(const char *Name, f32 x, f32 y, f32 z)
     {
       setX(x);
       setY(y);
       setZ(z);
       setKey(0);
-      setName(N);
+      setName(Name);
       setNext(NULL);
     }
 
@@ -185,7 +195,7 @@
       setY(y);
       setZ(z);
       setKey(0);
-      setName("XYZ");
+      setName(NULL);
       setNext(NULL);
     }
 
@@ -195,7 +205,7 @@
       setY(y);
       setZ(0.0);
       setKey(0);
-      setName("XY");
+      setName(NULL);
       setNext(NULL);
     }
 
@@ -205,7 +215,7 @@
       setY(0.0);
       setZ(0.0);
       setKey(0);
-      setName("X");
+      setName(NULL);
       setNext(NULL);
     }
 
@@ -224,60 +234,36 @@
       free(getName());
     }
 
-    u8 Vec::isOrthogonal(class Vec *V)
+    u8 Vec::isOrthogonal(class Vec *v)
     {
-      if(V != NULL)
-      {
-        if(getDot(V) == 0){ return 0xFF; }
-      }
+      if(v == NULL){ return 0x00; }
+      if(getDot(v) == 0){ return 0xFF; }
       return 0x00;
     }
 
-    u8 Vec::isOrthogonal(class Vec &V)
+    u8 Vec::isOrthogonal(class Vec &v)
     {
-      if(getDot(V) == 0){ return 0xFF; }
+      if(getDot(v) == 0){ return 0xFF; }
       return 0x00;
     }
 
-    u8 Vec::isCollinear(class Vec *V)
+    u8 Vec::isCollinear(class Vec *v)
     {
-      f32 X, Y, Z;
-      if(V != NULL)
-      {
-        X = getX() / V->getX();
-        Y = getY() / V->getY();
-        Z = getZ() / V->getZ();
-        if(X == Y && Y == Z && Z == X){ return 0xFF; }
-      }
+      if(v == NULL){ return 0x00; }
+      f32 x = getX() / v->getX();
+      f32 y = getY() / v->getY();
+      f32 z = getZ() / v->getZ();
+      if(x == y && y == z && z == x){ return 0xFF; }
       return 0x00;
     }
 
-    u8 Vec::isCollinear(class Vec &V)
+    u8 Vec::isCollinear(class Vec &v)
     {
-      f32 X = getX() / V.getX();
-      f32 Y = getY() / V.getY();
-      f32 Z = getZ() / V.getZ();
-      if(X == Y && Y == Z && Z == X){ return 0xFF; }
+      f32 x = getX() / v.getX();
+      f32 y = getY() / v.getY();
+      f32 z = getZ() / v.getZ();
+      if(x == y && y == z && z == x){ return 0xFF; }
       return 0x00;
-    }
-
-    f32 Vec::getDistance(class Vec *V)
-    {
-      if(V != NULL)
-      {
-        return sqrt((getX() - V->getX()) * (getX() - V->getX()) +
-                    (getY() - V->getY()) * (getY() - V->getY()) +
-                    (getZ() - V->getZ()) * (getZ() - V->getZ()));
-      }else{
-        return sqrt(getX()*getX() + getY()*getY() + getZ()*getZ());
-      }
-    }
-
-    f32 Vec::getDistance(class Vec &V)
-    {
-      return sqrt((getX() - V.getX()) * (getX() - V.getX()) +
-                  (getY() - V.getY()) * (getY() - V.getY()) +
-                  (getZ() - V.getZ()) * (getZ() - V.getZ()));
     }
 
     f32 Vec::getDistance(void)
@@ -285,100 +271,71 @@
       return sqrt(getX()*getX() + getY()*getY() + getZ()*getZ());
     }
 
-    Vec Vec::getDirection(class Vec *V)
+    f32 Vec::getDistance(class Vec *v)
     {
-      f32 D;
-      if(V != NULL)
-      {
-        D = getDistance(V);
-        if(D != 0)
-        {
-          return Vec("DIRORG",(getX() - V->getX()) / D,
-                              (getY() - V->getY()) / D,
-                              (getZ() - V->getZ()) / D);
-        }
-        return Vec("FAIL",0.0,0.0,0.0);
-      }else{
-        D = getDistance();
-        if(D != 0)
-        {
-          return Vec("DIRORG",getX() / D,
-                              getY() / D,
-                              getZ() / D);
-        }
-        return Vec("FAIL",0.0,0.0,0.0);
-      }
+      if(v == NULL){ return getDistance(); }
+      return sqrt((getX() - v->getX()) * (getX() - v->getX()) +
+                  (getY() - v->getY()) * (getY() - v->getY()) +
+                  (getZ() - v->getZ()) * (getZ() - v->getZ()));
     }
 
-    Vec Vec::getDirection(class Vec &V)
+    f32 Vec::getDistance(class Vec &v)
     {
-      f32 D = getDistance(&V);
-      if(D != 0)
-      {
-        return Vec("DIRORG",(getX() - V.getX()) / D,
-                            (getY() - V.getY()) / D,
-                            (getZ() - V.getZ()) / D);
-      }
-      return Vec("FAIL",0.0,0.0,0.0);
+      return sqrt((getX() - v.getX()) * (getX() - v.getX()) +
+                  (getY() - v.getY()) * (getY() - v.getY()) +
+                  (getZ() - v.getZ()) * (getZ() - v.getZ()));
     }
 
     Vec Vec::getDirection(void)
     {
       f32 D = getDistance();
-      if(D != 0)
-      {
-        return Vec("DIRORG",getX() / D,
-                            getY() / D,
-                            getZ() / D);
-      }
-      return Vec("FAIL",0.0,0.0,0.0);
+      if(D == 0){ return Vec("FAIL"); }
+      return Vec(getX() / D, getY() / D, getZ() / D);
     }
 
-    Vec& Vec::Direction(class Vec *V)
+    Vec Vec::getDirection(class Vec *v)
     {
-      f32 D;
-      if(V != NULL)
-      {
-        D = getDistance(V);
-        if(D != 0)
-        {
-          setX((getX() - V->getX()) / D);
-          setY((getY() - V->getY()) / D);
-          setZ((getZ() - V->getZ()) / D);
-        }
-      }else{
-        D = getDistance();
-        if(D != 0)
-        {
-          setX(getX() / D);
-          setY(getY() / D);
-          setZ(getZ() / D);
-        }
-      }
-      return *this;
+      if(v == NULL){ return getDirection(); }
+      f32 D = getDistance(v);
+      if(D == 0){ return Vec("FAIL"); }
+      return Vec((getX() - v->getX()) / D, (getY() - v->getY()) / D, (getZ() - v->getZ()) / D);
     }
 
-    Vec& Vec::Direction(class Vec &V)
+    Vec Vec::getDirection(class Vec &v)
     {
-      f32 D = getDistance(&V);
-      if(D != 0)
-      {
-        setX((getX() - V.getX()) / D);
-        setY((getY() - V.getY()) / D);
-        setZ((getZ() - V.getZ()) / D);
-      }
-      return *this;
+      f32 D = getDistance(&v);
+      if(D == 0){ return Vec("FAIL"); }
+      return Vec((getX() - v.getX()) / D, (getY() - v.getY()) / D, (getZ() - v.getZ()) / D);
     }
 
     Vec& Vec::Direction(void)
     {
       f32 D = getDistance();
-      if(D != 0)
-      {
-        setX(getX() / D);
-        setY(getY() / D);
-        setZ(getZ() / D);
-      }
+      if(D == 0){ return *this; }
+      setX(getX() / D);
+      setY(getY() / D);
+      setZ(getZ() / D);
+      return *this;
+    }
+
+    Vec& Vec::Direction(class Vec *v)
+    {
+      if(v == NULL){ return Direction(); }
+      f32 D = getDistance(v);
+      if(D == 0){ return *this; }
+      setX((getX() - v->getX()) / D);
+      setY((getY() - v->getY()) / D);
+      setZ((getZ() - v->getZ()) / D);
+      return *this;
+    }
+
+    Vec& Vec::Direction(class Vec &v)
+    {
+      f32 D = getDistance(&v);
+      if(D == 0){ return *this; }
+      setX((getX() - v.getX()) / D);
+      setY((getY() - v.getY()) / D);
+      setZ((getZ() - v.getZ()) / D);
       return *this;
     }
 
@@ -394,16 +351,21 @@
 
     Vec operator+(Vec a, Vec b)
     {
-      return  Vec("+",a.getX() + b.getX(),
-                      a.getY() + b.getY(),
-                      a.getZ() + b.getZ());
+      return  Vec(a.getX() + b.getX(),
+                  a.getY() + b.getY(),
+                  a.getZ() + b.getZ());
     }
 
     Vec operator-(Vec a, Vec b)
     {
-      return  Vec("-",a.getX() - b.getX(),
-                      a.getY() - b.getY(),
-                      a.getZ() - b.getZ());
+      return  Vec(a.getX() - b.getX(),
+                  a.getY() - b.getY(),
+                  a.getZ() - b.getZ());
+    }
+
+    void operator+=(Vec &a, f32 b)
+    {
+      a.setX(a.getX() + b);
     }
 
     void operator+=(Vec &a, Vec b)
@@ -423,6 +385,11 @@
       a.Mul(a.getDot(&b));
     }
 
+    void operator-=(Vec &a, f32 b)
+    {
+      a.setX(a.getX() - b);
+    }
+
     void operator-=(Vec &a, Vec b)
     {
       a.setX(a.getX() - b.getX());
@@ -432,27 +399,24 @@
 
     Vec operator*(f32 a, Vec b)
     {
-      return Vec("*",a * b.getX(),
-                     a * b.getY(),
-                     a * b.getZ());
+      return Vec(a * b.getX(),
+                 a * b.getY(),
+                 a * b.getZ());
     }
 
     Vec operator*(Vec b, f32 a)
     {
-      return Vec("*",a * b.getX(),
-                     a * b.getY(),
-                     a * b.getZ());
+      return Vec(a * b.getX(),
+                 a * b.getY(),
+                 a * b.getZ());
     }
 
     Vec  operator/(Vec b, f32 a)
     {
-      if(a != 0)
-      {
-        return Vec("/",b.getX() / a,
-                       b.getY() / a,
-                       b.getZ() / a);
-      }
-      return Vec("FAIL",0.0,0.0,0.0);
+      if(a == 0){ return Vec("FAIL"); }
+      return Vec(b.getX() / a,
+                 b.getY() / a,
+                 b.getZ() / a);
     }
 
     void operator*=(Vec &a, f32 b)
@@ -464,12 +428,10 @@
 
     void operator/=(Vec &a, f32 b)
     {
-      if(b != 0)
-      {
-        a.setX(a.getX() / b);
-        a.setY(a.getY() / b);
-        a.setZ(a.getZ() / b);
-      }
+      if(b == 0){ return; }
+      a.setX(a.getX() / b);
+      a.setY(a.getY() / b);
+      a.setZ(a.getZ() / b);
     }
 
     u8 operator==(Vec a, Vec b)
@@ -520,7 +482,7 @@
 
     void operator++(Vec &v, s32 a)
     {
-      cVec Dr = v.getDirection(NULL);
+      cVec Dr = v.getDirection();
       v.setX(v.getX() + Dr.getX());
       v.setY(v.getY() + Dr.getY());
       v.setZ(v.getZ() + Dr.getZ());
@@ -528,7 +490,7 @@
 
     void operator--(Vec &v, s32 a)
     {
-      cVec Dr = v.getDirection(NULL);
+      cVec Dr = v.getDirection();
       v.setX(v.getX() - Dr.getX());
       v.setY(v.getY() - Dr.getY());
       v.setZ(v.getZ() - Dr.getZ());
@@ -536,7 +498,7 @@
 
     void operator++(Vec &v)
     {
-      cVec Dr = v.getDirection(NULL);
+      cVec Dr = v.getDirection();
       v.setX(v.getX() + Dr.getX());
       v.setY(v.getY() + Dr.getY());
       v.setZ(v.getZ() + Dr.getZ());
@@ -544,284 +506,219 @@
 
     void operator--(Vec &v)
     {
-      cVec Dr = v.getDirection(NULL);
+      cVec Dr = v.getDirection();
       v.setX(v.getX() - Dr.getX());
       v.setY(v.getY() - Dr.getY());
       v.setZ(v.getZ() - Dr.getZ());
     }
 
-    f32 Vec::getAngleRad(class Vec *V)
+    f32 Vec::getAngleRad(class Vec *v)
     {
-      f32 Dot, AbsA, AbsB;
-      if(V != NULL)
-      {
-        Dot = getDot(V);
-        AbsA = getDistance();
-        AbsB = V->getDistance();
-        if((AbsA != 0) && (AbsB != 0))
-        {
-          return acos(Dot / ( AbsA * AbsB ));
-        }
-        return 0;
-      }
-      return 0;
+      if(v == NULL){ return 0; }
+      f32 Dot = getDot(v);
+      f32 Abs = getDistance();
+      f32 Abv = v->getDistance();
+      if(Abs == 0 || Abv == 0){ return 0; }
+      return acos(Dot / ( Abs * Abv ));
     }
 
-    f32 Vec::getAngleRad(class Vec &V)
+    f32 Vec::getAngleRad(class Vec &v)
     {
-      f32 Dot  = getDot(&V);
-      f32 AbsA = getDistance();
-      f32 AbsB = V.getDistance();
-      if((AbsA != 0) && (AbsB != 0))
-      {
-        return acos(Dot / ( AbsA * AbsB ));
-      }
-      return 0;
+      f32 Dot = getDot(&v);
+      f32 Abs = getDistance();
+      f32 Abv = v.getDistance();
+      if(Abs == 0 || Abv == 0){ return 0; }
+      return acos(Dot / ( Abs * Abv ));
     }
 
-    f32 Vec::getAngleDeg(class Vec &V)
+    f32 Vec::getAngleDeg(class Vec &v)
     {
-      return ( getAngleRad(&V) * ( 180 / TSP_PI));
+      return ( getAngleRad(&v) * ( 180 / TSP_PI));
     }
 
-    f32 Vec::getAngleDeg(class Vec *V)
+    f32 Vec::getAngleDeg(class Vec *v)
     {
-      if(V != NULL)
-      {
-        return ( getAngleRad(V) * ( 180 / TSP_PI));
-      }
-      return 0;
+      if(v == NULL){ return 0; }
+      return ( getAngleRad(v) * ( 180 / TSP_PI));
     }
 
-    Vec& Vec::Project(class Vec *V)
+    Vec& Vec::Project(class Vec *v)
     {
-      f32 Dotp, Dst2;
-      f32 CpyX, CpyY, CpyZ;
-      if(V != NULL)
-      {
-        CpyX = V->getX();
-        CpyY = V->getY();
-        CpyZ = V->getZ();
-        Dst2 = CpyX*CpyX + CpyY*CpyY + CpyZ*CpyZ;
-        if(Dst2 != 0)
-        {
-          Dotp  = getDot(V) / Dst2;
-          setName("PROJ");
-          Set(Dotp*CpyX, Dotp*CpyY, Dotp*CpyZ);
-          return *this;
-        }
-        return *this;
-      }
+      if(v == NULL){ return *this; }
+      f32 CpyX = v->getX();
+      f32 CpyY = v->getY();
+      f32 CpyZ = v->getZ();
+      f32 Dst2 = CpyX*CpyX + CpyY*CpyY + CpyZ*CpyZ;
+      if(Dst2 == 0){ return *this; }
+      f32 Dotp = getDot(v) / Dst2;
+      Set(Dotp*CpyX, Dotp*CpyY, Dotp*CpyZ);
       return *this;
     }
 
-    Vec& Vec::Project(class Vec &V)
+    Vec& Vec::Project(class Vec &v)
     {
-      f32 Dotp, Dst2;
-      f32 CpyX = V.getX();
-      f32 CpyY = V.getY();
-      f32 CpyZ = V.getZ();
-      Dst2 = CpyX*CpyX + CpyY*CpyY + CpyZ*CpyZ;
-      if(Dst2 != 0)
-      {
-        Dotp  = getDot(V) / Dst2;
-        setName("PROJ");
-        Set(Dotp*CpyX, Dotp*CpyY, Dotp*CpyZ);
-      }
+      f32 CpyX = v.getX();
+      f32 CpyY = v.getY();
+      f32 CpyZ = v.getZ();
+      f32 Dst2 = CpyX*CpyX + CpyY*CpyY + CpyZ*CpyZ;
+      if(Dst2 == 0){ return*this; }
+      f32 Dotp = getDot(v) / Dst2;
+      Set(Dotp*CpyX, Dotp*CpyY, Dotp*CpyZ);
       return*this;
     }
 
-    Vec Vec::getProject(class Vec *V)
+    Vec Vec::getProject(class Vec *v)
     {
-      f32 Dotp, Dst2;
-      f32 CpyX, CpyY, CpyZ;
-      if(V != NULL)
-      {
-        CpyX = V->getX();
-        CpyY = V->getY();
-        CpyZ = V->getZ();
-        Dst2 = CpyX*CpyX + CpyY*CpyY + CpyZ*CpyZ;
-        if(Dst2 != 0)
-        {
-          Dotp  = getDot(V) / Dst2;
-          return Vec("PROJ",Dotp*CpyX, Dotp*CpyY, Dotp*CpyZ);
-        }
-        return Vec("FAIL",0.0,0.0,0.0);
-      }
-      return Vec("FAIL",0.0,0.0,0.0);
+      if(v == NULL){ return Vec("FAIL"); }
+      f32 CpyX = v->getX();
+      f32 CpyY = v->getY();
+      f32 CpyZ = v->getZ();
+      f32 Dst2 = CpyX*CpyX + CpyY*CpyY + CpyZ*CpyZ;
+      if(Dst2 == 0){ return Vec("FAIL"); }
+      f32 Dotp  = getDot(v) / Dst2;
+      return Vec(Dotp*CpyX, Dotp*CpyY, Dotp*CpyZ);
     }
 
-    Vec Vec::getProject(class Vec &V)
+    Vec Vec::getProject(class Vec &v)
     {
-      f32 Dotp, Dst2;
-      f32 CpyX = V.getX();
-      f32 CpyY = V.getY();
-      f32 CpyZ = V.getZ();
-      Dst2 = CpyX*CpyX + CpyY*CpyY + CpyZ*CpyZ;
-      if(Dst2 != 0)
-      {
-        Dotp  = getDot(V) / Dst2;
-        return Vec("PROJ",Dotp*CpyX, Dotp*CpyY, Dotp*CpyZ);
-      }
-      return Vec("FAIL",0.0,0.0,0.0);
+      f32 CpyX = v.getX();
+      f32 CpyY = v.getY();
+      f32 CpyZ = v.getZ();
+      f32 Dst2 = CpyX*CpyX + CpyY*CpyY + CpyZ*CpyZ;
+      if(Dst2 == 0){ return Vec("FAIL"); }
+      f32 Dotp = getDot(v) / Dst2;
+      return Vec(Dotp*CpyX, Dotp*CpyY, Dotp*CpyZ);
     }
 
-    Vec Vec::getCross(class Vec *V)
+    Vec Vec::getCross(class Vec *v)
     {
-      if(V != NULL)
-      {
-        return Vec("CROSS",
-                   (getY() * V->getZ()) - (getZ() * V->getY()),
-                   (getZ() * V->getX()) - (getX() * V->getZ()),
-                   (getX() * V->getY()) - (getY() * V->getX()));
-      }
-      return Vec("FAIL");
+      if(v == NULL){ return Vec("FAIL"); }
+      return Vec((getY() * v->getZ()) - (getZ() * v->getY()),
+                 (getZ() * v->getX()) - (getX() * v->getZ()),
+                 (getX() * v->getY()) - (getY() * v->getX()));
     }
 
-    Vec Vec::getCross(class Vec &V)
+    Vec Vec::getCross(class Vec &v)
     {
-      return Vec("CROSS",
-                 (getY() * V.getZ()) - (getZ() * V.getY()),
-                 (getZ() * V.getX()) - (getX() * V.getZ()),
-                 (getX() * V.getY()) - (getY() * V.getX()));
+      return Vec((getY() * v.getZ()) - (getZ() * v.getY()),
+                 (getZ() * v.getX()) - (getX() * v.getZ()),
+                 (getX() * v.getY()) - (getY() * v.getX()));
     }
 
-    Vec& Vec::Cross(class Vec *V)
+    Vec& Vec::Cross(class Vec *v)
     {
-      if(V != NULL)
-      {
-        Set((getY() * V->getZ()) - (getZ() * V->getY()),
-            (getZ() * V->getX()) - (getX() * V->getZ()),
-            (getX() * V->getY()) - (getY() * V->getX()));
-      }
+      if(v == NULL){ return *this; }
+      Set((getY() * v->getZ()) - (getZ() * v->getY()),
+          (getZ() * v->getX()) - (getX() * v->getZ()),
+          (getX() * v->getY()) - (getY() * v->getX()));
       return *this;
     }
 
-    Vec& Vec::Cross(class Vec &V)
+    Vec& Vec::Cross(class Vec &v)
     {
-      Set((getY() * V.getZ()) - (getZ() * V.getY()),
-          (getZ() * V.getX()) - (getX() * V.getZ()),
-          (getX() * V.getY()) - (getY() * V.getX()));
+      Set((getY() * v.getZ()) - (getZ() * v.getY()),
+          (getZ() * v.getX()) - (getX() * v.getZ()),
+          (getX() * v.getY()) - (getY() * v.getX()));
       return *this;
     }
 
-
-    f32 Vec::getDot(class Vec *V)
+    f32 Vec::getDot(class Vec *v)
     {
-      if(V != NULL)
-      {
-        return (getX()*V->getX() +
-                getY()*V->getY() +
-                getZ()*V->getZ());
-      }
-      return 0;
+      if(v == NULL){ return 0; }
+      return (getX()*v->getX() +
+              getY()*v->getY() +
+              getZ()*v->getZ());
     }
 
-    f32 Vec::getDot(class Vec &V)
+    f32 Vec::getDot(class Vec &v)
     {
-      return (getX()*V.getX() +
-              getY()*V.getY() +
-              getZ()*V.getZ());
+      return (getX()*v.getX() +
+              getY()*v.getY() +
+              getZ()*v.getZ());
     }
 
-    Vec& Vec::Add(class Vec *V)
+    Vec& Vec::Add(class Vec *v)
     {
-      if(V != NULL)
-      {
-        setX(getX() + V->getX());
-        setY(getY() + V->getY());
-        setZ(getZ() + V->getZ());
-      }
+      if(v == NULL){ return *this; }
+      setX(getX() + v->getX());
+      setY(getY() + v->getY());
+      setZ(getZ() + v->getZ());
       return *this;
     }
 
-    Vec& Vec::Add(class Vec &V)
+    Vec& Vec::Add(class Vec &v)
     {
-      setX(getX() + V.getX());
-      setY(getY() + V.getY());
-      setZ(getZ() + V.getZ());
+      setX(getX() + v.getX());
+      setY(getY() + v.getY());
+      setZ(getZ() + v.getZ());
       return *this;
     }
 
-    Vec Vec::getAdd(class Vec *V)
+    Vec Vec::getAdd(class Vec *v)
     {
-      if(V != NULL)
-      {
-        f32 x, y, z;
-        x = getX() + V->getX();
-        y = getY() + V->getY();
-        z = getZ() + V->getZ();
-        return Vec("ADD", x, y, z);
-      }
-      return Vec("FAIL");
+      if(v == NULL){ return Vec("FAIL"); }
+      f32 x = getX() + v->getX();
+      f32 y = getY() + v->getY();
+      f32 z = getZ() + v->getZ();
+      return Vec(x, y, z);
     }
 
-    Vec Vec::getAdd(class Vec &V)
+    Vec Vec::getAdd(class Vec &v)
     {
-      f32 x, y, z;
-      x = getX() + V.getX();
-      y = getY() + V.getY();
-      z = getZ() + V.getZ();
-      return Vec("ADD", x, y, z);
+      f32 x = getX() + v.getX();
+      f32 y = getY() + v.getY();
+      f32 z = getZ() + v.getZ();
+      return Vec(x, y, z);
     }
 
-    Vec& Vec::Sub(class Vec *V)
+    Vec& Vec::Sub(class Vec *v)
     {
-      if(V != NULL)
-      {
-        setX(getX() - V->getX());
-        setY(getY() - V->getY());
-        setZ(getZ() - V->getZ());
-      }
+      if(v == NULL){ return *this; }
+      setX(getX() - v->getX());
+      setY(getY() - v->getY());
+      setZ(getZ() - v->getZ());
       return *this;
     }
 
-    Vec& Vec::Sub(class Vec &V)
+    Vec& Vec::Sub(class Vec &v)
     {
-      setX(getX() - V.getX());
-      setY(getY() - V.getY());
-      setZ(getZ() - V.getZ());
+      setX(getX() - v.getX());
+      setY(getY() - v.getY());
+      setZ(getZ() - v.getZ());
       return *this;
     }
 
-    Vec Vec::getSub(class Vec *V)
+    Vec Vec::getSub(class Vec *v)
     {
-      if(V != NULL)
-      {
-        f32 x, y, z;
-        x = getX() - V->getX();
-        y = getY() - V->getY();
-        z = getZ() - V->getZ();
-        return Vec("SUB", x, y, z);
-      }
-      return Vec("FAIL");
+      if(v == NULL){ return Vec("FAIL"); }
+      f32 x = getX() - v->getX();
+      f32 y = getY() - v->getY();
+      f32 z = getZ() - v->getZ();
+      return Vec(x, y, z);
   }
 
-    Vec Vec::getSub(class Vec &V)
+    Vec Vec::getSub(class Vec &v)
     {
-      f32 x, y, z;
-      x = getX() - V.getX();
-      y = getY() - V.getY();
-      z = getZ() - V.getZ();
-      return Vec("SUB", x, y, z);
+      f32 x = getX() - v.getX();
+      f32 y = getY() - v.getY();
+      f32 z = getZ() - v.getZ();
+      return Vec(x, y, z);
     }
 
-    Vec& Vec::Set(class Vec *V)
+    Vec& Vec::Set(class Vec *v)
     {
-      if(V != NULL)
-      {
-        setX(V->getX());
-        setY(V->getY());
-        setZ(V->getZ());
-      }
+      if(v == NULL){ return *this; }
+      setX(v->getX());
+      setY(v->getY());
+      setZ(v->getZ());
       return *this;
     }
 
-    Vec& Vec::Set(class Vec &V)
+    Vec& Vec::Set(class Vec &v)
     {
-      setX(V.getX());
-      setY(V.getY());
-      setZ(V.getZ());
+      setX(v.getX());
+      setY(v.getY());
+      setZ(v.getZ());
       return *this;
     }
 
@@ -851,154 +748,173 @@
 
     f32 Vec::getCosine(u8 Axis)
     {
-      f32 AbsA = getDistance();
-      if(AbsA != 0)
-      {
-        if(Axis == 'x') return getX() / AbsA;
-        if(Axis == 'y') return getY() / AbsA;
-        if(Axis == 'z') return getZ() / AbsA;
-      }
+      f32 Abs = getDistance();
+      if(Abs  ==  0 ){ return 0; }
+      if(Axis == 'x'){ return getX() / Abs; }
+      if(Axis == 'y'){ return getY() / Abs; }
+      if(Axis == 'z'){ return getZ() / Abs; }
       return 0;
     }
 
-    Vec& Vec::Mul(f32 Num)
+    Vec& Vec::Mul(f32 n)
     {
-      setX(getX() * Num);
-      setY(getY() * Num);
-      setZ(getZ() * Num);
+      setX(getX() * n);
+      setY(getY() * n);
+      setZ(getZ() * n);
       return *this;
     }
 
-    Vec Vec::getMul(f32 Num)
+    Vec Vec::getMul(f32 n)
     {
-      return Vec("MUL",getX() * Num,
-                       getY() * Num,
-                       getZ() * Num);
+      return Vec(getX() * n, getY() * n, getZ() * n);
     }
 
-    Vec& Vec::Div(f32 Num)
+    Vec& Vec::Div(f32 n)
     {
-      if(Num != 0)
-      {
-        setX(getX() / Num);
-        setY(getY() / Num);
-        setZ(getZ() / Num);
-      }
+      if(n == 0){ return *this; }
+      setX(getX() / n);
+      setY(getY() / n);
+      setZ(getZ() / n);
       return *this;
     }
 
-    Vec Vec::getDiv(f32 Num)
+    Vec Vec::getDiv(f32 n)
     {
-      if(Num != 0)
-      {
-        return Vec("DIV",getX() / Num,
-                         getY() / Num,
-                         getZ() / Num);
-      }
-      return Vec("FAIL");
+      if(n == 0){ return Vec("FAIL"); }
+      return Vec(getX() / n, getY() / n, getZ() / n);
     }
 
-    f32 Vec::getMix(class Vec &A, class Vec &B)
+    f32 Vec::getAreaParallelogram(class Vec *v)
     {
-      cVec T = A.getCross(B);
+      if(v == NULL){ return 0; }
+      return fabs(getCross(v).getDistance());
+    }
+
+    f32 Vec::getAreaParallelogram(class Vec &v)
+    {
+      return fabs(getCross(v).getDistance());
+    }
+
+    f32 Vec::getAreaTriangle(class Vec *v)
+    {
+      if(v == NULL){ return 0; }
+      return fabs(0.5 * getAreaParallelogram(v));
+    }
+
+    f32 Vec::getAreaTriangle(class Vec &v)
+    {
+      return fabs(0.5 * getAreaParallelogram(v));
+    }
+
+    f32 Vec::getMix(class Vec &a, class Vec &b)
+    {
+      cVec T = a.getCross(b);
       return getDot(T);
     }
 
-    f32 Vec::getMix(class Vec *A, class Vec *B)
+    f32 Vec::getMix(class Vec *a, class Vec *b)
     {
-      if(A != NULL && B != NULL)
-      {
-        cVec T = A->getCross(B);
-        return getDot(T);
-      }
-      return 0.0;
+      if(a == NULL || b == NULL){ return 0.0; }
+      cVec T = a->getCross(b);
+      return getDot(T);
     }
 
-    f32 Vec::getMix(class Vec *A, class Vec &B)
+    f32 Vec::getMix(class Vec *a, class Vec &b)
     {
-      if(A != NULL)
-      {
-        cVec T = A->getCross(B);
-        return getDot(T);
-      }
-      return 0.0;
+      if(a == NULL){ return 0.0; }
+      cVec T = a->getCross(b);
+      return getDot(T);
     }
 
-    f32 Vec::getMix(class Vec &A, class Vec *B)
+    f32 Vec::getMix(class Vec &a, class Vec *b)
     {
-      if(B != NULL)
-      {
-        cVec T = A.getCross(B);
-        return getDot(T);
-      }
-      return 0.0;
+      if(b == NULL){ return 0.0; }
+      cVec T = a.getCross(b);
+      return getDot(T);
     }
 
-    u8 Vec::isCoplanar(class Vec &A, class Vec &B)
+    f32 Vec::getVolumeTetrahedron(class Vec &a, class Vec &b)
     {
-      if(getMix(A,B) == 0){ return 0xFF; }
+      return fabs(getMix(a,b) / 6);
+    }
+
+    f32 Vec::getVolumeTetrahedron(class Vec *a, class Vec *b)
+    {
+      if(a == NULL || b == NULL){ return 0; }
+      return fabs(getMix(a,b) / 6);
+    }
+
+    f32 Vec::getVolumeTetrahedron(class Vec *a, class Vec &b)
+    {
+      if(a == NULL){ return 0; }
+      return fabs(getMix(a,b) / 6);
+    }
+
+    f32 Vec::getVolumeTetrahedron(class Vec &a, class Vec *b)
+    {
+      if(b == NULL){ return 0; }
+      return fabs(getMix(a,b) / 6);
+    }
+
+    u8 Vec::isCoplanar(class Vec &a, class Vec &b)
+    {
+      if(getMix(a,b) == 0){ return 0xFF; }
       return 0x00;
     }
 
-    u8 Vec::isCoplanar(class Vec *A, class Vec *B)
+    u8 Vec::isCoplanar(class Vec *a, class Vec *b)
     {
-      if(getMix(A,B) == 0){ return 0xFF; }
+      if(getMix(a,b) == 0){ return 0xFF; }
       return 0x00;
     }
 
-    u8 Vec::isCoplanar(class Vec &A, class Vec *B)
+    u8 Vec::isCoplanar(class Vec &a, class Vec *b)
     {
-      if(getMix(A,B) == 0){ return 0xFF; }
+      if(getMix(a,b) == 0){ return 0xFF; }
       return 0x00;
     }
 
-    u8 Vec::isCoplanar(class Vec *A, class Vec &B)
+    u8 Vec::isCoplanar(class Vec *a, class Vec &b)
     {
-      if(getMix(A,B) == 0){ return 0xFF; }
+      if(getMix(a,b) == 0){ return 0xFF; }
       return 0x00;
     }
 
-    Vec& Vec::Offset(class Vec *Dir, f32 Num)
+    Vec& Vec::Offset(class Vec *Dir, f32 n)
     {
-      cVec D;
-      if(Dir != NULL)
-      {
-        D = Dir->getDirection();
-        D.Mul(Num);
-        setX(getX() + D.getX());
-        setY(getY() + D.getY());
-        setZ(getZ() + D.getZ());
-      }
-      return *this;
-    }
-
-    Vec& Vec::Offset(class Vec &Dir, f32 Num)
-    {
-      cVec D = Dir.getDirection();
-           D.Mul(Num);
+      if(Dir == NULL){ return *this; }
+      cVec D = Dir->getDirection();
+           D.Mul(n);
       setX(getX() + D.getX());
       setY(getY() + D.getY());
       setZ(getZ() + D.getZ());
       return *this;
     }
 
-    Vec Vec::getOffset(class Vec *Dir, f32 Num)
-    {
-      if(Dir != NULL)
-      {
-        cVec D = Dir->getDirection();
-             D.Mul(Num);
-        return Vec((getX() + D.getX()),
-                   (getY() + D.getY()),
-                   (getZ() + D.getZ()));
-      }
-      return Vec("FAIL");
-    }
-
-    Vec Vec::getOffset(class Vec &Dir, f32 Num)
+    Vec& Vec::Offset(class Vec &Dir, f32 n)
     {
       cVec D = Dir.getDirection();
-           D.Mul(Num);
+           D.Mul(n);
+      setX(getX() + D.getX());
+      setY(getY() + D.getY());
+      setZ(getZ() + D.getZ());
+      return *this;
+    }
+
+    Vec Vec::getOffset(class Vec *Dir, f32 n)
+    {
+      if(Dir == NULL){ return Vec("FAIL"); }
+      cVec D = Dir->getDirection();
+           D.Mul(n);
+      return Vec((getX() + D.getX()),
+                 (getY() + D.getY()),
+                 (getZ() + D.getZ()));
+    }
+
+    Vec Vec::getOffset(class Vec &Dir, f32 n)
+    {
+      cVec D = Dir.getDirection();
+           D.Mul(n);
       return Vec((getX() + D.getX()),
                  (getY() + D.getY()),
                  (getZ() + D.getZ()));
@@ -1014,7 +930,7 @@
 
     Vec Vec::getNeg(void)
     {
-      return Vec("NEG",-getX(),-getY(),-getZ());
+      return Vec(-getX(),-getY(),-getZ());
     }
 
     Vec& Vec::RollL(void)
@@ -1052,7 +968,7 @@
       f32 T = 0;
       u8  arswap[3] = {0};
       u32 len = strlen(Comp);
-      if(len == 2)
+      if(len >= 2)
       {
         arswap[0] = Comp[0] | 0x20;
         arswap[1] = Comp[1] | 0x20;
@@ -1082,15 +998,15 @@
         arswap[1] = Comp[1] | 0x20;
         if(!memcmp(arswap,"xy",2) || !memcmp(arswap,"yx",2))
         {
-          return Vec("SWXY",getY(),getX(),getZ());
+          return Vec(getY(),getX(),getZ());
         }
         if(!memcmp(arswap,"yz",2) || !memcmp(arswap,"zy",2))
         {
-            return Vec("SWYZ",getX(),getZ(),getY());
+            return Vec(getX(),getZ(),getY());
         }
         if(!memcmp(arswap,"zx",2) || !memcmp(arswap,"xz",2))
         {
-          return Vec("SWZX",getZ(),getY(),getX());
+          return Vec(getZ(),getY(),getX());
         }
       }
       return Vec("FAIL");

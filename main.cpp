@@ -9,42 +9,62 @@
 
 int main()
 {
-/* Coplanarity
-  cVec A = Vec("A", 1, 2, 3);
-  cVec B = Vec("B", 4, 5, 6);
-  cVec C = Vec("C", 7, 8, 9);
+  char border[] = "------------------";
+
+  printf("%30.28lf\n", ((double)TSP_PI));
+
+  cVec A, B, C;
+
+  printf("\n%sIncrementsDecrements%s",border,border);
+  A = Vec("A", 1, 2, 3);
+  B = Vec("B", 4, 5, 6);
+  C = Vec("C", 0, 0, 0);
+  C.Set(A);
+  C++;
+  C.Print();
+  C.Set(A);
+  C--;
+  C.Print();
+
+  printf("\n%sDistance%s",border,border);
+  A = Vec("A", 1, 2, 3);
+  B = Vec("B", 4, 5, 6);
+  C = Vec("C", 0, 0, 0);
+
+  printf("\nRelative\n%30.28lf, \n%30.28lf",A.getDistance(B),A.getDistance(&B));
+  printf("\nNoOrigin\n%30.28lf, \n%30.28lf",A.getDistance(NULL),A.getDistance());
+
+  printf("\n%sCoplanarity%s",border,border);
+  A = Vec("A", 1, 2, 3);
+  B = Vec("B", 4, 5, 6);
+  C = Vec("C", 7, 8, 9);
   printf("\nCoplan: %u",A.isCoplanar(&B,&C));
   printf("\nCoplan: %u",A.isCoplanar(B,C));
   printf("\nCoplan: %u",A.isCoplanar(B,&C));
   printf("\nCoplan: %u",A.isCoplanar(&B,C));
-*/
-/* Mixed product (18)
-  cVec A = Vec("A", 1, 2, 3);
-  cVec B = Vec("B", 4, 5, 6);
-  cVec C = Vec("C", 3, 5, 1);
 
+
+  printf("\n%sMixed Product%s",border,border);
+  A = Vec("A", 1, 2, 3);
+  B = Vec("B", 4, 5, 6);
+  C = Vec("C", 3, 5, 1);
   printf("\nMix: %f",A.getMix(B,C));
   printf("\nMix: %f",A.getMix(&B,&C));
   printf("\nMix: %f",A.getMix(&B,C));
   printf("\nMix: %f",A.getMix(B,&C));
-*/
 
-/* Orthogonal (255)
-  cVec A = Vec("A", 1, 2, 3);
-  cVec B = Vec("B", 5, -1, -1);
 
-  printf("\nOrth: %u",A.isOrthogonal(B));
-  printf("\nOrth: %u",A.isOrthogonal(&B));
-*/
-/* Collinear
-  cVec A = Vec("A", 1, 2, 3);
-  cVec B = Vec("B", -2, -4, -6);
+  printf("\n%sOrthogonality%s",border,border);
+  A = Vec("A", 1, 2, 3);
+  B = Vec("B", 5, -1, -1);
+  printf("\nOrth: %u, %u",A.isOrthogonal(B),A.isOrthogonal(&B));
 
-  printf("\nColl: %u",A.isCollinear(B));
-  printf("\nColl: %u",A.isCollinear(&B));
-*/
+  printf("\n%sCollinearity%s",border,border);
+  A = Vec("A", 1, 2, 3);
+  B = Vec("B", -2, -4, -6);
+  printf("\nColl: %u, %u",A.isCollinear(B), A.isCollinear(&B));
 
-/* Swap
+  printf("\n%sSwapping%s",border,border);
   A.getSwap("xy").Print();
   A.getSwap("xY").Print();
   A.getSwap("Xy").Print();
@@ -53,48 +73,60 @@ int main()
   C.Set(A).Swap("xY").Print();
   C.Set(A).Swap("Xy").Print();
   C.Set(A).Swap("XY").Print();
- */
 
-/* Direction
+  printf("\n%sDirection%s",border,border);
+  A = Vec("A", 1, 2, 3);
+  B = Vec("B", 3, 2, 1);
+  C = Vec("C", 0, 0, 0);
   A.getDirection().Print();
+  A.getDirection(NULL).Print();
   C.Set(A).Direction().Print();
-
-  C.Set(A).Direction(B).Print();
-  C.Set(A).Direction(&B).Print();
+  C.Set(A).Direction(NULL).Print();
   A.getDirection(B).Print();
   A.getDirection(&B).Print();
-*/
+  C.Set(A).Direction(B).Print();
+  C.Set(A).Direction(&B).Print();
 
-/* Projections
+  printf("\n%sProject%s",border,border);
+  A = Vec("A", 1, 2, 3);
+  B = Vec("B", 3, 2, 1);
+  C = Vec("C", 0, 0, 0);
   A.getProject(&B).Print();
   A.getProject( B).Print();
   C.Set(A).Project(&B).Print();
   C.Set(A).Project( B).Print();
-*/
 
-/* Angles
-printf("\n%f, %f, %f, %f",A.getAngleDeg(B),A.getAngleDeg(&B),A.getAngleRad(&B),A.getAngleRad(B));
-*/
 
-/* Div
+  printf("\n%sAngles%s",border,border);
+  printf("\n%f, %f, %f, %f",A.getAngleDeg(B),A.getAngleDeg(&B),A.getAngleRad(&B),A.getAngleRad(B));
+
+  printf("\n%sDivide%s",border,border);
+  A = Vec("A", 1, 2, 3);
+  B = Vec("B", 3, 2, 1);
+  C = Vec("C", 0, 0, 0);
   A.getDiv(2).Print();
   C.Set(&A).Div(2).Print();
   C.Set(&A) /= 2;
   C.Print();
   C = A / 2;
   C.Print();
-*/
 
-/* Mul
+
+  printf("\n%sMultiply%s",border,border);
+  A = Vec("A", 1, 2, 3);
+  B = Vec("B", 3, 2, 1);
+  C = Vec("C", 0, 0, 0);
   A.getMul(2).Print();
   C.Set(&A).Mul(2).Print();
   C.Set(&A) *= 2;
   C.Print();
   C = A * 2;
   C.Print();
-*/
 
-/* Sub
+  printf("\n%sSubstract%s",border,border);
+  A = Vec("A", 1, 2, 3);
+  B = Vec("B", 3, 2, 1);
+  C = Vec("C", 0, 0, 0);
   A.getSub(&B).Print();
   A.getSub (B).Print();
   C.Set(&A).Sub(B).Print();
@@ -103,9 +135,11 @@ printf("\n%f, %f, %f, %f",A.getAngleDeg(B),A.getAngleDeg(&B),A.getAngleRad(&B),A
   C.Print();
   C = A - B;
   C.Print();
-*/
 
-/* Add
+  printf("\n%sAddition%s",border,border);
+  A = Vec("A", 1, 2, 3);
+  B = Vec("B", 3, 2, 1);
+  C = Vec("C", 0, 0, 0);
   A.getAdd(&B).Print();
   A.getAdd (B).Print();
   C.Set(&A).Add(B).Print();
@@ -114,13 +148,11 @@ printf("\n%f, %f, %f, %f",A.getAngleDeg(B),A.getAngleDeg(&B),A.getAngleRad(&B),A
   C.Print();
   C = A + B;
   C.Print();
-*/
 
-/* Cross product
-  cVec A = Vec("A", 1, 2, 3);
-  cVec B = Vec("B", 3, 2, 1);
-  cVec C = Vec("C");
-
+  printf("\n%sCross%s",border,border);
+  A = Vec("A", 1, 2, 3);
+  B = Vec("B", 3, 2, 1);
+  C = Vec("C");
   A.getCross(&B).Print();
   A.getCross (B).Print();
   C.Set(&A).Cross(B).Print();
@@ -129,6 +161,38 @@ printf("\n%f, %f, %f, %f",A.getAngleDeg(B),A.getAngleDeg(&B),A.getAngleRad(&B),A
   C.Print();
   C = A ^ B;
   C.Print();
-*/
+
+  printf("\n%sArea%s",border,border);
+  A = Vec("A", 1, 2, 3);
+  B = Vec("B", 3, 2, 1);
+  C = Vec("C",4,-10,4);
+  printf("\nTri = \n%30.28lf, \n%30.28lf, \n%30.28lf",
+         A.getAreaTriangle(B),
+         A.getAreaTriangle(&B),
+         A.getAreaTriangle(NULL));
+  printf("\nPar = \n%30.28lf, \n%30.28lf, \n%30.28lf",
+         A.getAreaParallelogram(B),
+         A.getAreaParallelogram(&B),
+         A.getAreaParallelogram(NULL));
+
+  printf("\n%sVolume%s",border,border);
+  printf("\nHyd = \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf",
+         A.getVolumeTetrahedron(B,C),
+         A.getVolumeTetrahedron(&B,&C),
+         A.getVolumeTetrahedron(&B,C),
+         A.getVolumeTetrahedron(B,&C),
+         A.getVolumeTetrahedron(NULL,C),
+         A.getVolumeTetrahedron(B,NULL),
+         A.getVolumeTetrahedron(NULL,NULL));
+
+
+
   return 0;
 }
+
+
+
+
+
+
+
