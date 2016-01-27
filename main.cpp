@@ -9,8 +9,6 @@
 
 int main()
 {
-  cVec A = Vec("A", 1, 2, 3);
-
 /* Coplanarity
   cVec A = Vec("A", 1, 2, 3);
   cVec B = Vec("B", 4, 5, 6);
@@ -119,6 +117,10 @@ printf("\n%f, %f, %f, %f",A.getAngleDeg(B),A.getAngleDeg(&B),A.getAngleRad(&B),A
 */
 
 /* Cross product
+  cVec A = Vec("A", 1, 2, 3);
+  cVec B = Vec("B", 3, 2, 1);
+  cVec C = Vec("C");
+
   A.getCross(&B).Print();
   A.getCross (B).Print();
   C.Set(&A).Cross(B).Print();
@@ -128,6 +130,5 @@ printf("\n%f, %f, %f, %f",A.getAngleDeg(B),A.getAngleDeg(&B),A.getAngleRad(&B),A
   C = A ^ B;
   C.Print();
 */
-
   return 0;
 }

@@ -226,19 +226,16 @@
 
     u8 Vec::isOrthogonal(class Vec *V)
     {
-      f32 Dot;
       if(V != NULL)
       {
-        Dot = getDot(V);
-        if(Dot == 0){ return 0xFF; }
+        if(getDot(V) == 0){ return 0xFF; }
       }
       return 0x00;
     }
 
     u8 Vec::isOrthogonal(class Vec &V)
     {
-      f32 Dot = getDot(V);
-      if(Dot == 0){ return 0xFF; }
+      if(getDot(V) == 0){ return 0xFF; }
       return 0x00;
     }
 
@@ -418,15 +415,12 @@
 
     void operator^=(Vec &a, Vec b)
     {
-      cVec C;
-      C = a.getCross(&b);
-      a.Set(&C);
+      a.Cross(&b);
     }
 
     void operator*=(Vec &a, Vec b)
     {
-      f32 Dot = a.getDot(&b);
-      a.Mul(Dot);
+      a.Mul(a.getDot(&b));
     }
 
     void operator-=(Vec &a, Vec b)
@@ -824,7 +818,7 @@
     }
 
     Vec& Vec::Set(class Vec &V)
-  {
+    {
       setX(V.getX());
       setY(V.getY());
       setZ(V.getZ());
