@@ -551,10 +551,10 @@
       f32 CpyY = v.getY();
       f32 CpyZ = v.getZ();
       f32 Dst2 = CpyX*CpyX + CpyY*CpyY + CpyZ*CpyZ;
-      if(Dst2 == 0){ return*this; }
+      if(Dst2 == 0){ return *this; }
       f32 Dotp = getDot(v) / Dst2;
       Set(Dotp*CpyX, Dotp*CpyY, Dotp*CpyZ);
-      return*this;
+      return *this;
     }
 
     Vec Vec::getProject(class Vec *v)
