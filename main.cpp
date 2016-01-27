@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
-#include "common.h"
 #include "mytypes.h"
 #include "vector3.h"
 
