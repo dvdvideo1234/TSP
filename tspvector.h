@@ -1,5 +1,5 @@
-#ifndef __VECTOR3__H_
-    #define __VECTOR3__H_
+#ifndef __TSP_VECTOR__H_
+    #define __TSP_VECTOR__H_
     #define TSP_PI 3.141592653589793238462643383279502884197169399375105820974944
     typedef class Vec
     {
@@ -121,8 +121,8 @@
             class Vec   getRollL(void);
             Vec&           Swap(const char* Comp);
             class Vec   getSwap(const char* Comp);
-            void           Print(void);
-            void           PrintTrajectory(void);
+            Vec&           Print(void);
+            Vec&           PrintTrajectory(void);
                            Vec(const char *N, f32 x, f32 y, f32 z, u32 k, class Vec *Next);
                            Vec(const char *N, f32 x, f32 y, f32 z, class Vec *Next);
                            Vec(const char *N, f32 x, f32 y, f32 z);
@@ -134,13 +134,14 @@
                           ~Vec();
     } cVec;
 
-    void Vec::Print(void)
+    Vec& Vec::Print(void)
     {
       printf("\n\rVec %p > %p --> %s, %u\n\rXYZ = { %10.4f, %10.4f, %10.4f }\n\r",
          this,getNext(),getName(),getKey(),getX(),getY(),getZ());
+      return *this;
     }
 
-    void Vec::PrintTrajectory(void)
+    Vec& Vec::PrintTrajectory(void)
     {
       cVec *v = this;
       while(v != NULL)
@@ -148,6 +149,7 @@
         v->Print();
         v = v->getNext();
       }
+      return *this;
     }
 
     Vec::Vec(const char *Name, f32 x, f32 y, f32 z, u32 k, class Vec *Next)

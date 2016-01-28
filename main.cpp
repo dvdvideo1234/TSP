@@ -4,7 +4,7 @@
 #include <math.h>
 #include <string.h>
 #include "mytypes.h"
-#include "vector3.h"
+#include "tspvector.h"
 
 int main()
 {
@@ -13,6 +13,10 @@ int main()
   printf("%30.28lf\n", ((double)TSP_PI));
 
   cVec A, B, C;
+  printf("\n%sStagePrint%s",border,border);
+  A = Vec("A", 1, 2, 3);
+  B = Vec("B", 3, 2, 1);
+  C.Set(A).Print().Add(B).Print().Div(4).Print();
 
   printf("\n%sIncrementsDecrements%s",border,border);
   A = Vec("A", 1, 2, 3);
