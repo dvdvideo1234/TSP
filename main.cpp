@@ -13,19 +13,65 @@ int main()
   printf("%30.28lf\n", ((double)TSP_PI));
 
   cVec A, B, C;
+
+  printf("\n%sFriend Operators%s",border,border);
+  A = Vec("A", 1, 2, 3);
+  B = Vec("B", 3, 2, 1);
+
+  (A + B).setName("A + B").Print();
+  C.setName("A += B");
+  C.Set(A) += B;
+  C.Print();
+  C.setName("A += 4");
+  C.Set(A) += 4;
+  C.Print();
+
+  (A - B).setName("A - B").Print();
+  C.setName("A -= B");
+  C.Set(A) -= B;
+  C.Print();
+  C.setName("A -= 4");
+  C.Set(A) -= 4;
+  C.Print();
+
+  (A ^ B).setName("A x B").Print();
+  C.setName("A x= B");
+  C.Set(A) ^= B;
+  C.Print();
+
+  (4 * A).setName("4 * A").Print();
+  (A * 4).setName("A * 4").Print();
+  C.setName("A *= 4");
+  C.Set(A) *= 4;
+  C.Print();
+  C.setName("A = A.Mul(A * B)");
+  C.Set(A) *= B;
+  C.Print();
+
+  (A / 2).setName("A / 2").Print();
+  C.Set(A).setName("A /= 2") /= 2;
+  C.Print();
+
+  printf("\n A <  B: %d",A <  B);
+  printf("\n A <= B: %d",A <= B);
+  printf("\n A >  B: %d",A >  B);
+  printf("\n A >= B: %d",A >= B);
+  B = Vec("B", 1, 2, 3); printf("\n A == B: %d",A == B);
+  B = Vec("B", 1, 3, 3); printf("\n A != B: %d",A != B);
+
   printf("\n%sStagePrint%s",border,border);
   A = Vec("A", 1, 2, 3);
   B = Vec("B", 3, 2, 1);
-  C.Set(A).Print().Add(B).Print().Div(4).Print();
+  C.Set(A).setName("A").Print().Add(B).setName("A + B").Print().Div(4).setName("A / 4").Print();
 
   printf("\n%sIncrementsDecrements%s",border,border);
   A = Vec("A", 1, 2, 3);
   B = Vec("B", 4, 5, 6);
   C = Vec("C", 0, 0, 0);
-  C.Set(A);
+  C.Set(A).setName("C++");
   C++;
   C.Print();
-  C.Set(A);
+  C.Set(A).setName("C--");
   C--;
   C.Print();
 
@@ -187,8 +233,6 @@ int main()
          A.getVolumeTetrahedron(NULL,C),
          A.getVolumeTetrahedron(B,NULL),
          A.getVolumeTetrahedron(NULL,NULL));
-
-
 
   return 0;
 }

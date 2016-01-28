@@ -1,137 +1,140 @@
 #ifndef __TSP_VECTOR__H_
     #define __TSP_VECTOR__H_
+    #define TSP_NUM float
+    #define TSP_STR unsigned char
+    #define TSP_KEY unsigned int
     #define TSP_PI 3.141592653589793238462643383279502884197169399375105820974944
     typedef class Vec
     {
         private:
-            u32 Key;
-            f32 X;
-            f32 Y;
-            f32 Z;
-            u8 *Name;
+            TSP_KEY Key;
+            TSP_NUM X;
+            TSP_NUM Y;
+            TSP_NUM Z;
+            TSP_STR *Name;
             class Vec *Next;
         public:
-            friend Vec  operator+ (Vec,  Vec);
-            friend Vec  operator- (Vec,  Vec);
-            friend void operator+=(Vec&, f32);
-            friend void operator+=(Vec&, Vec);
-            friend void operator-=(Vec&, f32);
-            friend void operator-=(Vec&, Vec);
-            friend Vec  operator^ (Vec,  Vec);
-            friend void operator^=(Vec&, Vec);
-            friend f32  operator* (Vec,  Vec);
-            friend Vec  operator* (f32,  Vec);
-            friend Vec  operator* (Vec,  f32);
-            friend void operator*=(Vec&, f32);
-            friend void operator*=(Vec&, Vec);
-            friend Vec  operator/ (Vec,  f32);
-            friend void operator/=(Vec&, f32);
-            friend u8   operator==(Vec, Vec);
-            friend u8   operator!=(Vec, Vec);
-            friend u8   operator>=(Vec, Vec);
-            friend u8   operator<=(Vec, Vec);
-            friend u8   operator> (Vec, Vec);
-            friend u8   operator< (Vec, Vec);
-            friend void operator++(Vec&, s32);
-            friend void operator--(Vec&, s32);
-            friend void operator++(Vec&);
-            friend void operator--(Vec&);
-            u8          isCollinear (class Vec *v);
-            u8          isCollinear (class Vec &v);
-            u8          isOrthogonal(class Vec *v);
-            u8          isOrthogonal(class Vec &v);
-            u8          isCoplanar  (class Vec &a, class Vec &b);
-            u8          isCoplanar  (class Vec *a, class Vec *b);
-            u8          isCoplanar  (class Vec *a, class Vec &b);
-            u8          isCoplanar  (class Vec &a, class Vec *b);
-            f32         getDistance (class Vec *v);
-            f32         getDistance (class Vec &v);
-            f32         getDistance (void);
-            Vec&           Direction(class Vec *v);
-            Vec&           Direction(class Vec &v);
-            Vec&           Direction(void);
-            class Vec   getDirection(class Vec *v);
-            class Vec   getDirection(class Vec &v);
-            class Vec   getDirection(void);
-            f32         getX(){ return X; };
-            f32         getY(){ return Y; };
-            f32         getZ(){ return Z; };
-            u32         getKey(){ return Key; };
-            u8         *getName(){ return Name; };
-            class Vec  *getNext(){ return Next; };
-            Vec&        setX(f32 x){ X = x; return *this; };
-            Vec&        setY(f32 y){ Y = y; return *this; };
-            Vec&        setZ(f32 z){ Z = z; return *this; };
-            Vec&        setKey(u32 k){ Key = k; return *this; };
-            Vec&        setName(const char *pcName){ Name = (u8*)pcName; return *this; };
-            Vec&        setNext(class  Vec *pvNext){ Next = pvNext;      return *this; };
-            f32         getAngleDeg(class  Vec *v);
-            f32         getAngleDeg(class  Vec &v);
-            f32         getAngleRad(class  Vec *v);
-            f32         getAngleRad(class  Vec &v);
-            f32         getAreaTriangle(class Vec *v);
-            f32         getAreaTriangle(class Vec &v);
-            f32         getAreaParallelogram(class Vec *v);
-            f32         getAreaParallelogram(class Vec &v);
-            f32         getVolumeTetrahedron(class Vec &a, class Vec &b);
-            f32         getVolumeTetrahedron(class Vec *a, class Vec *b);
-            f32         getVolumeTetrahedron(class Vec *a, class Vec &b);
-            f32         getVolumeTetrahedron(class Vec &a, class Vec *b);
-            Vec&           Project(class Vec *v);
-            Vec&           Project(class Vec &v);
-            class Vec   getProject(class Vec *v);
-            class Vec   getProject(class Vec &v);
-            Vec&           Add(class Vec *v);
-            Vec&           Add(class Vec &v);
-            class Vec   getAdd(class Vec *v);
-            class Vec   getAdd(class Vec &v);
-            Vec&           Sub(class Vec *v);
-            Vec&           Sub(class Vec &v);
-            class Vec   getSub(class Vec *v);
-            class Vec   getSub(class Vec &v);
-            f32         getCosine(u8);
-            Vec&           Neg(void);
-            class Vec   getNeg(void);
-            Vec&           Mul(f32 n);
-            class Vec   getMul(f32 n);
-            Vec&           Div(f32 n);
-            class Vec   getDiv(f32 n);
-            f32         getMix(class Vec &a, class Vec &b);
-            f32         getMix(class Vec *a, class Vec *b);
-            f32         getMix(class Vec *a, class Vec &b);
-            f32         getMix(class Vec &a, class Vec *b);
-            Vec&           Set(class Vec &v);
-            Vec&           Set(class Vec *v);
-            Vec&           Set(f32 x, f32 y, f32 z);
-            Vec&           Set(f32 x, f32 y);
-            Vec&           Set(f32 x);
-            Vec&           Offset(class Vec &Dir, f32 n);
-            Vec&           Offset(class Vec *Dir, f32 n);
-            class Vec   getOffset(class Vec &Dir, f32 n);
-            class Vec   getOffset(class Vec *Dir, f32 n);
-            Vec&           Cross(class Vec *v);
-            Vec&           Cross(class Vec &v);
-            class Vec   getCross(class Vec *v);
-            class Vec   getCross(class Vec &v);
-            f32         getDot(class Vec *v);
-            f32         getDot(class Vec &v);
-            Vec&           RollR(void);
-            class Vec   getRollR(void);
-            Vec&           RollL(void);
-            class Vec   getRollL(void);
-            Vec&           Swap(const char* Comp);
-            class Vec   getSwap(const char* Comp);
-            Vec&           Print(void);
-            Vec&           PrintTrajectory(void);
-                           Vec(const char *N, f32 x, f32 y, f32 z, u32 k, class Vec *Next);
-                           Vec(const char *N, f32 x, f32 y, f32 z, class Vec *Next);
-                           Vec(const char *N, f32 x, f32 y, f32 z);
-                           Vec(const char *N);
-                           Vec(f32 x, f32 y, f32 z);
-                           Vec(f32 x, f32 y);
-                           Vec(f32 x);
-                           Vec();
-                          ~Vec();
+            friend Vec     operator+ (Vec&, Vec&);
+            friend Vec     operator- (Vec&, Vec&);
+            friend void    operator+=(Vec&, TSP_NUM);
+            friend void    operator+=(Vec&, Vec&);
+            friend void    operator-=(Vec&, TSP_NUM);
+            friend void    operator-=(Vec&, Vec&);
+            friend Vec     operator^ (Vec&, Vec&);
+            friend void    operator^=(Vec&, Vec&);
+            friend TSP_NUM operator* (Vec&, Vec&);
+            friend Vec     operator* (TSP_NUM , Vec&);
+            friend Vec     operator* (Vec&, TSP_NUM);
+            friend void    operator*=(Vec&, TSP_NUM);
+            friend void    operator*=(Vec&, Vec&);
+            friend Vec     operator/ (Vec&, TSP_NUM);
+            friend void    operator/=(Vec&, TSP_NUM);
+            friend TSP_STR operator==(Vec&, Vec&);
+            friend TSP_STR operator!=(Vec&, Vec&);
+            friend TSP_STR operator>=(Vec&, Vec&);
+            friend TSP_STR operator<=(Vec&, Vec&);
+            friend TSP_STR operator> (Vec&, Vec&);
+            friend TSP_STR operator< (Vec&, Vec&);
+            friend void    operator++(Vec&, s32);
+            friend void    operator--(Vec&, s32);
+            friend void    operator++(Vec&);
+            friend void    operator--(Vec&);
+            TSP_STR         isCollinear (class Vec *v);
+            TSP_STR         isCollinear (class Vec &v);
+            TSP_STR         isOrthogonal(class Vec *v);
+            TSP_STR         isOrthogonal(class Vec &v);
+            TSP_STR         isCoplanar  (class Vec &a, class Vec &b);
+            TSP_STR         isCoplanar  (class Vec *a, class Vec *b);
+            TSP_STR         isCoplanar  (class Vec *a, class Vec &b);
+            TSP_STR         isCoplanar  (class Vec &a, class Vec *b);
+            TSP_NUM        getDistance (class Vec *v);
+            TSP_NUM        getDistance (class Vec &v);
+            TSP_NUM        getDistance (void);
+            Vec&              Direction(class Vec *v);
+            Vec&              Direction(class Vec &v);
+            Vec&              Direction(void);
+            class Vec      getDirection(class Vec *v);
+            class Vec      getDirection(class Vec &v);
+            class Vec      getDirection(void);
+            TSP_NUM        getX(){ return X; };
+            TSP_NUM        getY(){ return Y; };
+            TSP_NUM        getZ(){ return Z; };
+            TSP_KEY        getKey(){ return Key; };
+            TSP_STR       *getName(){ return Name; };
+            class Vec     *getNext(){ return Next; };
+            Vec&           setX(TSP_NUM x){ X = x; return *this; };
+            Vec&           setY(TSP_NUM y){ Y = y; return *this; };
+            Vec&           setZ(TSP_NUM z){ Z = z; return *this; };
+            Vec&           setKey(TSP_KEY k){ Key = k; return *this; };
+            Vec&           setName(const char *pcName){ Name = (TSP_STR*)pcName; return *this; };
+            Vec&           setNext(class  Vec *pvNext){ Next = pvNext;      return *this; };
+            TSP_NUM        getAngleDeg(class  Vec *v);
+            TSP_NUM        getAngleDeg(class  Vec &v);
+            TSP_NUM        getAngleRad(class  Vec *v);
+            TSP_NUM        getAngleRad(class  Vec &v);
+            TSP_NUM        getAreaTriangle(class Vec *v);
+            TSP_NUM        getAreaTriangle(class Vec &v);
+            TSP_NUM        getAreaParallelogram(class Vec *v);
+            TSP_NUM        getAreaParallelogram(class Vec &v);
+            TSP_NUM        getVolumeTetrahedron(class Vec &a, class Vec &b);
+            TSP_NUM        getVolumeTetrahedron(class Vec *a, class Vec *b);
+            TSP_NUM        getVolumeTetrahedron(class Vec *a, class Vec &b);
+            TSP_NUM        getVolumeTetrahedron(class Vec &a, class Vec *b);
+            Vec&              Project(class Vec *v);
+            Vec&              Project(class Vec &v);
+            class Vec      getProject(class Vec *v);
+            class Vec      getProject(class Vec &v);
+            Vec&              Add(class Vec *v);
+            Vec&              Add(class Vec &v);
+            class Vec      getAdd(class Vec *v);
+            class Vec      getAdd(class Vec &v);
+            Vec&              Sub(class Vec *v);
+            Vec&              Sub(class Vec &v);
+            class Vec      getSub(class Vec *v);
+            class Vec      getSub(class Vec &v);
+            TSP_NUM        getCosine(TSP_STR);
+            Vec&              Neg(void);
+            class Vec      getNeg(void);
+            Vec&              Mul(TSP_NUM n);
+            class Vec      getMul(TSP_NUM n);
+            Vec&              Div(TSP_NUM n);
+            class Vec      getDiv(TSP_NUM n);
+            TSP_NUM        getMix(class Vec &a, class Vec &b);
+            TSP_NUM        getMix(class Vec *a, class Vec *b);
+            TSP_NUM        getMix(class Vec *a, class Vec &b);
+            TSP_NUM        getMix(class Vec &a, class Vec *b);
+            Vec&              Set(class Vec &v);
+            Vec&              Set(class Vec *v);
+            Vec&              Set(TSP_NUM x, TSP_NUM y, TSP_NUM z);
+            Vec&              Set(TSP_NUM x, TSP_NUM y);
+            Vec&              Set(TSP_NUM x);
+            Vec&              Offset(class Vec &Dir, TSP_NUM n);
+            Vec&              Offset(class Vec *Dir, TSP_NUM n);
+            class Vec      getOffset(class Vec &Dir, TSP_NUM n);
+            class Vec      getOffset(class Vec *Dir, TSP_NUM n);
+            Vec&              Cross(class Vec *v);
+            Vec&              Cross(class Vec &v);
+            class Vec      getCross(class Vec *v);
+            class Vec      getCross(class Vec &v);
+            TSP_NUM        getDot(class Vec *v);
+            TSP_NUM        getDot(class Vec &v);
+            Vec&              RollR(void);
+            class Vec      getRollR(void);
+            Vec&              RollL(void);
+            class Vec      getRollL(void);
+            Vec&              Swap(const char* Comp);
+            class Vec      getSwap(const char* Comp);
+            Vec&              Print(void);
+            Vec&              PrintTrajectory(void);
+                              Vec(const char *N, TSP_NUM x, TSP_NUM y, TSP_NUM z, TSP_KEY k, class Vec *Next);
+                              Vec(const char *N, TSP_NUM x, TSP_NUM y, TSP_NUM z, class Vec *Next);
+                              Vec(const char *N, TSP_NUM x, TSP_NUM y, TSP_NUM z);
+                              Vec(const char *N);
+                              Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z);
+                              Vec(TSP_NUM x, TSP_NUM y);
+                              Vec(TSP_NUM x);
+                              Vec();
+                             ~Vec();
     } cVec;
 
     Vec& Vec::Print(void)
@@ -152,7 +155,7 @@
       return *this;
     }
 
-    Vec::Vec(const char *Name, f32 x, f32 y, f32 z, u32 k, class Vec *Next)
+    Vec::Vec(const char *Name, TSP_NUM x, TSP_NUM y, TSP_NUM z, TSP_KEY k, class Vec *Next)
     {
       setX(x);
       setY(y);
@@ -162,7 +165,7 @@
       setNext(Next);
     }
 
-    Vec::Vec(const char *Name, f32 x, f32 y, f32 z, class Vec *Next)
+    Vec::Vec(const char *Name, TSP_NUM x, TSP_NUM y, TSP_NUM z, class Vec *Next)
     {
       setX(x);
       setY(y);
@@ -181,7 +184,7 @@
       setNext(NULL);
     }
 
-    Vec::Vec(const char *Name, f32 x, f32 y, f32 z)
+    Vec::Vec(const char *Name, TSP_NUM x, TSP_NUM y, TSP_NUM z)
     {
       setX(x);
       setY(y);
@@ -191,7 +194,7 @@
       setNext(NULL);
     }
 
-    Vec::Vec(f32 x, f32 y, f32 z)
+    Vec::Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z)
     {
       setX(x);
       setY(y);
@@ -201,7 +204,7 @@
       setNext(NULL);
     }
 
-    Vec::Vec(f32 x, f32 y)
+    Vec::Vec(TSP_NUM x, TSP_NUM y)
     {
       setX(x);
       setY(y);
@@ -211,7 +214,7 @@
       setNext(NULL);
     }
 
-    Vec::Vec(f32 x)
+    Vec::Vec(TSP_NUM x)
     {
       setX(x);
       setY(0.0);
@@ -236,44 +239,44 @@
       free(getName());
     }
 
-    u8 Vec::isOrthogonal(class Vec *v)
+    TSP_STR Vec::isOrthogonal(class Vec *v)
     {
       if(v == NULL){ return 0x00; }
       if(getDot(v) == 0){ return 0xFF; }
       return 0x00;
     }
 
-    u8 Vec::isOrthogonal(class Vec &v)
+    TSP_STR Vec::isOrthogonal(class Vec &v)
     {
       if(getDot(v) == 0){ return 0xFF; }
       return 0x00;
     }
 
-    u8 Vec::isCollinear(class Vec *v)
+    TSP_STR Vec::isCollinear(class Vec *v)
     {
       if(v == NULL){ return 0x00; }
-      f32 x = getX() / v->getX();
-      f32 y = getY() / v->getY();
-      f32 z = getZ() / v->getZ();
+      TSP_NUM x = getX() / v->getX();
+      TSP_NUM y = getY() / v->getY();
+      TSP_NUM z = getZ() / v->getZ();
       if(x == y && y == z && z == x){ return 0xFF; }
       return 0x00;
     }
 
-    u8 Vec::isCollinear(class Vec &v)
+    TSP_STR Vec::isCollinear(class Vec &v)
     {
-      f32 x = getX() / v.getX();
-      f32 y = getY() / v.getY();
-      f32 z = getZ() / v.getZ();
+      TSP_NUM x = getX() / v.getX();
+      TSP_NUM y = getY() / v.getY();
+      TSP_NUM z = getZ() / v.getZ();
       if(x == y && y == z && z == x){ return 0xFF; }
       return 0x00;
     }
 
-    f32 Vec::getDistance(void)
+    TSP_NUM Vec::getDistance(void)
     {
       return sqrt(getX()*getX() + getY()*getY() + getZ()*getZ());
     }
 
-    f32 Vec::getDistance(class Vec *v)
+    TSP_NUM Vec::getDistance(class Vec *v)
     {
       if(v == NULL){ return getDistance(); }
       return sqrt((getX() - v->getX()) * (getX() - v->getX()) +
@@ -281,7 +284,7 @@
                   (getZ() - v->getZ()) * (getZ() - v->getZ()));
     }
 
-    f32 Vec::getDistance(class Vec &v)
+    TSP_NUM Vec::getDistance(class Vec &v)
     {
       return sqrt((getX() - v.getX()) * (getX() - v.getX()) +
                   (getY() - v.getY()) * (getY() - v.getY()) +
@@ -290,7 +293,7 @@
 
     Vec Vec::getDirection(void)
     {
-      f32 D = getDistance();
+      TSP_NUM D = getDistance();
       if(D == 0){ return Vec("FAIL"); }
       return Vec(getX() / D, getY() / D, getZ() / D);
     }
@@ -298,21 +301,21 @@
     Vec Vec::getDirection(class Vec *v)
     {
       if(v == NULL){ return getDirection(); }
-      f32 D = getDistance(v);
+      TSP_NUM D = getDistance(v);
       if(D == 0){ return Vec("FAIL"); }
       return Vec((getX() - v->getX()) / D, (getY() - v->getY()) / D, (getZ() - v->getZ()) / D);
     }
 
     Vec Vec::getDirection(class Vec &v)
     {
-      f32 D = getDistance(&v);
+      TSP_NUM D = getDistance(&v);
       if(D == 0){ return Vec("FAIL"); }
       return Vec((getX() - v.getX()) / D, (getY() - v.getY()) / D, (getZ() - v.getZ()) / D);
     }
 
     Vec& Vec::Direction(void)
     {
-      f32 D = getDistance();
+      TSP_NUM D = getDistance();
       if(D == 0){ return *this; }
       setX(getX() / D);
       setY(getY() / D);
@@ -323,7 +326,7 @@
     Vec& Vec::Direction(class Vec *v)
     {
       if(v == NULL){ return Direction(); }
-      f32 D = getDistance(v);
+      TSP_NUM D = getDistance(v);
       if(D == 0){ return *this; }
       setX((getX() - v->getX()) / D);
       setY((getY() - v->getY()) / D);
@@ -333,7 +336,7 @@
 
     Vec& Vec::Direction(class Vec &v)
     {
-      f32 D = getDistance(&v);
+      TSP_NUM D = getDistance(&v);
       if(D == 0){ return *this; }
       setX((getX() - v.getX()) / D);
       setY((getY() - v.getY()) / D);
@@ -341,84 +344,84 @@
       return *this;
     }
 
-    Vec operator^(Vec a, Vec b)
+    Vec operator^(Vec &a, Vec &b)
     {
-      return a.getCross(&b);
+      return a.getCross(b);
     }
 
-    f32 operator*(Vec a, Vec b)
+    TSP_NUM operator*(Vec &a, Vec &b)
     {
-      return a.getDot(&b);
+      return a.getDot(b);
     }
 
-    Vec operator+(Vec a, Vec b)
+    Vec operator+(Vec &a, Vec &b)
     {
       return  Vec(a.getX() + b.getX(), a.getY() + b.getY(), a.getZ() + b.getZ());
     }
 
-    Vec operator-(Vec a, Vec b)
+    Vec operator-(Vec &a, Vec &b)
     {
       return  Vec(a.getX() - b.getX(), a.getY() - b.getY(), a.getZ() - b.getZ());
     }
 
-    void operator+=(Vec &a, f32 b)
+    void operator+=(Vec &a, TSP_NUM b)
     {
       a.setX(a.getX() + b);
     }
 
-    void operator+=(Vec &a, Vec b)
+    void operator+=(Vec &a, Vec &b)
     {
       a.setX(a.getX() + b.getX());
       a.setY(a.getY() + b.getY());
       a.setZ(a.getZ() + b.getZ());
     }
 
-    void operator^=(Vec &a, Vec b)
+    void operator^=(Vec &a, Vec &b)
     {
-      a.Cross(&b);
+      a.Cross(b);
     }
 
-    void operator*=(Vec &a, Vec b)
+    void operator*=(Vec &a, Vec &b)
     {
-      a.Mul(a.getDot(&b));
+      a.Mul(a.getDot(b));
     }
 
-    void operator-=(Vec &a, f32 b)
+    void operator-=(Vec &a, TSP_NUM b)
     {
       a.setX(a.getX() - b);
     }
 
-    void operator-=(Vec &a, Vec b)
+    void operator-=(Vec &a, Vec &b)
     {
       a.setX(a.getX() - b.getX());
       a.setY(a.getY() - b.getY());
       a.setZ(a.getZ() - b.getZ());
     }
 
-    Vec operator*(f32 a, Vec b)
+    Vec operator*(TSP_NUM a, Vec &b)
     {
       return Vec(a * b.getX(), a * b.getY(), a * b.getZ());
     }
 
-    Vec operator*(Vec b, f32 a)
+    Vec operator*(Vec &b, TSP_NUM a)
     {
       return Vec(a * b.getX(), a * b.getY(), a * b.getZ());
     }
 
-    Vec  operator/(Vec b, f32 a)
+    Vec  operator/(Vec &b, TSP_NUM a)
     {
       if(a == 0){ return Vec("FAIL"); }
       return Vec(b.getX() / a, b.getY() / a, b.getZ() / a);
     }
 
-    void operator*=(Vec &a, f32 b)
+    void operator*=(Vec &a, TSP_NUM b)
     {
       a.setX(a.getX() * b);
       a.setY(a.getY() * b);
       a.setZ(a.getZ() * b);
     }
 
-    void operator/=(Vec &a, f32 b)
+    void operator/=(Vec &a, TSP_NUM b)
     {
       if(b == 0){ return; }
       a.setX(a.getX() / b);
@@ -426,49 +429,43 @@
       a.setZ(a.getZ() / b);
     }
 
-    u8 operator==(Vec a, Vec b)
+    TSP_STR operator==(Vec &a, Vec &b)
     {
       if((a.getX() == b.getX()) &&
          (a.getY() == b.getY()) &&
-         (a.getZ() == b.getZ()))
-          return 0xFF;
+         (a.getZ() == b.getZ())){ return 0xFF; }
       return 0x00;
     }
 
-    u8 operator!=(Vec a, Vec b)
+    TSP_STR operator!=(Vec &a, Vec &b)
     {
       if((a.getX() != b.getX()) ||
          (a.getY() != b.getY()) ||
-         (a.getZ() != b.getZ()))
-          return 0xFF;
+         (a.getZ() != b.getZ())){ return 0xFF; }
       return 0x00;
     }
 
-    u8 operator>=(Vec a, Vec b)
+    TSP_STR operator>=(Vec &a, Vec &b)
     {
-      if(a.getDistance() >= b.getDistance())
-        return 0xFF;
+      if(a.getDistance() >= b.getDistance()){ return 0xFF; }
       return 0x00;
     }
 
-    u8 operator<=(Vec a, Vec b)
+    TSP_STR operator<=(Vec &a, Vec &b)
     {
-      if(a.getDistance() <= b.getDistance())
-        return 0xFF;
+      if(a.getDistance() <= b.getDistance()){ return 0xFF; }
       return 0x00;
     }
 
-    u8 operator>(Vec a, Vec b)
+    TSP_STR operator>(Vec &a, Vec &b)
     {
-      if(a.getDistance() > b.getDistance())
-        return 0xFF;
+      if(a.getDistance() > b.getDistance()){ return 0xFF; }
       return 0x00;
     }
 
-    u8 operator<(Vec a, Vec b)
+    TSP_STR operator<(Vec &a, Vec &b)
     {
-      if(a.getDistance() < b.getDistance())
-        return 0xFF;
+      if(a.getDistance() < b.getDistance()){ return 0xFF; }
       return 0x00;
     }
 
@@ -504,31 +501,31 @@
       v.setZ(v.getZ() - Dr.getZ());
     }
 
-    f32 Vec::getAngleRad(class Vec *v)
+    TSP_NUM Vec::getAngleRad(class Vec *v)
     {
       if(v == NULL){ return 0; }
-      f32 Dot = getDot(v);
-      f32 Abs = getDistance();
-      f32 Abv = v->getDistance();
+      TSP_NUM Dot = getDot(v);
+      TSP_NUM Abs = getDistance();
+      TSP_NUM Abv = v->getDistance();
       if(Abs == 0 || Abv == 0){ return 0; }
       return acos(Dot / ( Abs * Abv ));
     }
 
-    f32 Vec::getAngleRad(class Vec &v)
+    TSP_NUM Vec::getAngleRad(class Vec &v)
     {
-      f32 Dot = getDot(&v);
-      f32 Abs = getDistance();
-      f32 Abv = v.getDistance();
+      TSP_NUM Dot = getDot(&v);
+      TSP_NUM Abs = getDistance();
+      TSP_NUM Abv = v.getDistance();
       if(Abs == 0 || Abv == 0){ return 0; }
       return acos(Dot / ( Abs * Abv ));
     }
 
-    f32 Vec::getAngleDeg(class Vec &v)
+    TSP_NUM Vec::getAngleDeg(class Vec &v)
     {
       return ( getAngleRad(&v) * ( 180 / TSP_PI));
     }
 
-    f32 Vec::getAngleDeg(class Vec *v)
+    TSP_NUM Vec::getAngleDeg(class Vec *v)
     {
       if(v == NULL){ return 0; }
       return ( getAngleRad(v) * ( 180 / TSP_PI));
@@ -537,24 +534,24 @@
     Vec& Vec::Project(class Vec *v)
     {
       if(v == NULL){ return *this; }
-      f32 CpyX = v->getX();
-      f32 CpyY = v->getY();
-      f32 CpyZ = v->getZ();
-      f32 Dst2 = CpyX*CpyX + CpyY*CpyY + CpyZ*CpyZ;
+      TSP_NUM CpyX = v->getX();
+      TSP_NUM CpyY = v->getY();
+      TSP_NUM CpyZ = v->getZ();
+      TSP_NUM Dst2 = CpyX*CpyX + CpyY*CpyY + CpyZ*CpyZ;
       if(Dst2 == 0){ return *this; }
-      f32 Dotp = getDot(v) / Dst2;
+      TSP_NUM Dotp = getDot(v) / Dst2;
       Set(Dotp*CpyX, Dotp*CpyY, Dotp*CpyZ);
       return *this;
     }
 
     Vec& Vec::Project(class Vec &v)
     {
-      f32 CpyX = v.getX();
-      f32 CpyY = v.getY();
-      f32 CpyZ = v.getZ();
-      f32 Dst2 = CpyX*CpyX + CpyY*CpyY + CpyZ*CpyZ;
+      TSP_NUM CpyX = v.getX();
+      TSP_NUM CpyY = v.getY();
+      TSP_NUM CpyZ = v.getZ();
+      TSP_NUM Dst2 = CpyX*CpyX + CpyY*CpyY + CpyZ*CpyZ;
       if(Dst2 == 0){ return *this; }
-      f32 Dotp = getDot(v) / Dst2;
+      TSP_NUM Dotp = getDot(v) / Dst2;
       Set(Dotp*CpyX, Dotp*CpyY, Dotp*CpyZ);
       return *this;
     }
@@ -562,23 +559,23 @@
     Vec Vec::getProject(class Vec *v)
     {
       if(v == NULL){ return Vec("FAIL"); }
-      f32 CpyX = v->getX();
-      f32 CpyY = v->getY();
-      f32 CpyZ = v->getZ();
-      f32 Dst2 = CpyX*CpyX + CpyY*CpyY + CpyZ*CpyZ;
+      TSP_NUM CpyX = v->getX();
+      TSP_NUM CpyY = v->getY();
+      TSP_NUM CpyZ = v->getZ();
+      TSP_NUM Dst2 = CpyX*CpyX + CpyY*CpyY + CpyZ*CpyZ;
       if(Dst2 == 0){ return Vec("FAIL"); }
-      f32 Dotp  = getDot(v) / Dst2;
+      TSP_NUM Dotp  = getDot(v) / Dst2;
       return Vec(Dotp*CpyX, Dotp*CpyY, Dotp*CpyZ);
     }
 
     Vec Vec::getProject(class Vec &v)
     {
-      f32 CpyX = v.getX();
-      f32 CpyY = v.getY();
-      f32 CpyZ = v.getZ();
-      f32 Dst2 = CpyX*CpyX + CpyY*CpyY + CpyZ*CpyZ;
+      TSP_NUM CpyX = v.getX();
+      TSP_NUM CpyY = v.getY();
+      TSP_NUM CpyZ = v.getZ();
+      TSP_NUM Dst2 = CpyX*CpyX + CpyY*CpyY + CpyZ*CpyZ;
       if(Dst2 == 0){ return Vec("FAIL"); }
-      f32 Dotp = getDot(v) / Dst2;
+      TSP_NUM Dotp = getDot(v) / Dst2;
       return Vec(Dotp*CpyX, Dotp*CpyY, Dotp*CpyZ);
     }
 
@@ -614,7 +611,7 @@
       return *this;
     }
 
-    f32 Vec::getDot(class Vec *v)
+    TSP_NUM Vec::getDot(class Vec *v)
     {
       if(v == NULL){ return 0; }
       return (getX()*v->getX() +
@@ -622,7 +619,7 @@
               getZ()*v->getZ());
     }
 
-    f32 Vec::getDot(class Vec &v)
+    TSP_NUM Vec::getDot(class Vec &v)
     {
       return (getX()*v.getX() +
               getY()*v.getY() +
@@ -649,17 +646,17 @@
     Vec Vec::getAdd(class Vec *v)
     {
       if(v == NULL){ return Vec("FAIL"); }
-      f32 x = getX() + v->getX();
-      f32 y = getY() + v->getY();
-      f32 z = getZ() + v->getZ();
+      TSP_NUM x = getX() + v->getX();
+      TSP_NUM y = getY() + v->getY();
+      TSP_NUM z = getZ() + v->getZ();
       return Vec(x, y, z);
     }
 
     Vec Vec::getAdd(class Vec &v)
     {
-      f32 x = getX() + v.getX();
-      f32 y = getY() + v.getY();
-      f32 z = getZ() + v.getZ();
+      TSP_NUM x = getX() + v.getX();
+      TSP_NUM y = getY() + v.getY();
+      TSP_NUM z = getZ() + v.getZ();
       return Vec(x, y, z);
     }
 
@@ -683,17 +680,17 @@
     Vec Vec::getSub(class Vec *v)
     {
       if(v == NULL){ return Vec("FAIL"); }
-      f32 x = getX() - v->getX();
-      f32 y = getY() - v->getY();
-      f32 z = getZ() - v->getZ();
+      TSP_NUM x = getX() - v->getX();
+      TSP_NUM y = getY() - v->getY();
+      TSP_NUM z = getZ() - v->getZ();
       return Vec(x, y, z);
   }
 
     Vec Vec::getSub(class Vec &v)
     {
-      f32 x = getX() - v.getX();
-      f32 y = getY() - v.getY();
-      f32 z = getZ() - v.getZ();
+      TSP_NUM x = getX() - v.getX();
+      TSP_NUM y = getY() - v.getY();
+      TSP_NUM z = getZ() - v.getZ();
       return Vec(x, y, z);
     }
 
@@ -714,7 +711,7 @@
       return *this;
     }
 
-    Vec& Vec::Set(f32 x, f32 y, f32 z)
+    Vec& Vec::Set(TSP_NUM x, TSP_NUM y, TSP_NUM z)
     {
       setX(x);
       setY(y);
@@ -722,7 +719,7 @@
       return *this;
     }
 
-    Vec& Vec::Set(f32 x, f32 y)
+    Vec& Vec::Set(TSP_NUM x, TSP_NUM y)
     {
       setX(x);
       setY(y);
@@ -730,7 +727,7 @@
       return *this;
     }
 
-    Vec& Vec::Set(f32 x)
+    Vec& Vec::Set(TSP_NUM x)
     {
       setX(x);
       setY(0);
@@ -738,9 +735,9 @@
       return *this;
     }
 
-    f32 Vec::getCosine(u8 Axis)
+    TSP_NUM Vec::getCosine(TSP_STR Axis)
     {
-      f32 Abs = getDistance();
+      TSP_NUM Abs = getDistance();
       if(Abs  ==  0 ){ return 0; }
       if(Axis == 'x'){ return getX() / Abs; }
       if(Axis == 'y'){ return getY() / Abs; }
@@ -748,7 +745,7 @@
       return 0;
     }
 
-    Vec& Vec::Mul(f32 n)
+    Vec& Vec::Mul(TSP_NUM n)
     {
       setX(getX() * n);
       setY(getY() * n);
@@ -756,12 +753,12 @@
       return *this;
     }
 
-    Vec Vec::getMul(f32 n)
+    Vec Vec::getMul(TSP_NUM n)
     {
       return Vec(getX() * n, getY() * n, getZ() * n);
     }
 
-    Vec& Vec::Div(f32 n)
+    Vec& Vec::Div(TSP_NUM n)
     {
       if(n == 0){ return *this; }
       setX(getX() / n);
@@ -770,109 +767,109 @@
       return *this;
     }
 
-    Vec Vec::getDiv(f32 n)
+    Vec Vec::getDiv(TSP_NUM n)
     {
       if(n == 0){ return Vec("FAIL"); }
       return Vec(getX() / n, getY() / n, getZ() / n);
     }
 
-    f32 Vec::getAreaParallelogram(class Vec *v)
+    TSP_NUM Vec::getAreaParallelogram(class Vec *v)
     {
       if(v == NULL){ return 0; }
       return fabs(getCross(v).getDistance());
     }
 
-    f32 Vec::getAreaParallelogram(class Vec &v)
+    TSP_NUM Vec::getAreaParallelogram(class Vec &v)
     {
       return fabs(getCross(v).getDistance());
     }
 
-    f32 Vec::getAreaTriangle(class Vec *v)
+    TSP_NUM Vec::getAreaTriangle(class Vec *v)
     {
       if(v == NULL){ return 0; }
       return fabs(0.5 * getAreaParallelogram(v));
     }
 
-    f32 Vec::getAreaTriangle(class Vec &v)
+    TSP_NUM Vec::getAreaTriangle(class Vec &v)
     {
       return fabs(0.5 * getAreaParallelogram(v));
     }
 
-    f32 Vec::getMix(class Vec &a, class Vec &b)
+    TSP_NUM Vec::getMix(class Vec &a, class Vec &b)
     {
       cVec T = a.getCross(b);
       return getDot(T);
     }
 
-    f32 Vec::getMix(class Vec *a, class Vec *b)
+    TSP_NUM Vec::getMix(class Vec *a, class Vec *b)
     {
       if(a == NULL || b == NULL){ return 0.0; }
       cVec T = a->getCross(b);
       return getDot(T);
     }
 
-    f32 Vec::getMix(class Vec *a, class Vec &b)
+    TSP_NUM Vec::getMix(class Vec *a, class Vec &b)
     {
       if(a == NULL){ return 0.0; }
       cVec T = a->getCross(b);
       return getDot(T);
     }
 
-    f32 Vec::getMix(class Vec &a, class Vec *b)
+    TSP_NUM Vec::getMix(class Vec &a, class Vec *b)
     {
       if(b == NULL){ return 0.0; }
       cVec T = a.getCross(b);
       return getDot(T);
     }
 
-    f32 Vec::getVolumeTetrahedron(class Vec &a, class Vec &b)
+    TSP_NUM Vec::getVolumeTetrahedron(class Vec &a, class Vec &b)
     {
       return fabs(getMix(a,b) / 6);
     }
 
-    f32 Vec::getVolumeTetrahedron(class Vec *a, class Vec *b)
+    TSP_NUM Vec::getVolumeTetrahedron(class Vec *a, class Vec *b)
     {
       if(a == NULL || b == NULL){ return 0; }
       return fabs(getMix(a,b) / 6);
     }
 
-    f32 Vec::getVolumeTetrahedron(class Vec *a, class Vec &b)
+    TSP_NUM Vec::getVolumeTetrahedron(class Vec *a, class Vec &b)
     {
       if(a == NULL){ return 0; }
       return fabs(getMix(a,b) / 6);
     }
 
-    f32 Vec::getVolumeTetrahedron(class Vec &a, class Vec *b)
+    TSP_NUM Vec::getVolumeTetrahedron(class Vec &a, class Vec *b)
     {
       if(b == NULL){ return 0; }
       return fabs(getMix(a,b) / 6);
     }
 
-    u8 Vec::isCoplanar(class Vec &a, class Vec &b)
+    TSP_STR Vec::isCoplanar(class Vec &a, class Vec &b)
     {
       if(getMix(a,b) == 0){ return 0xFF; }
       return 0x00;
     }
 
-    u8 Vec::isCoplanar(class Vec *a, class Vec *b)
+    TSP_STR Vec::isCoplanar(class Vec *a, class Vec *b)
     {
       if(getMix(a,b) == 0){ return 0xFF; }
       return 0x00;
     }
 
-    u8 Vec::isCoplanar(class Vec &a, class Vec *b)
+    TSP_STR Vec::isCoplanar(class Vec &a, class Vec *b)
     {
       if(getMix(a,b) == 0){ return 0xFF; }
       return 0x00;
     }
 
-    u8 Vec::isCoplanar(class Vec *a, class Vec &b)
+    TSP_STR Vec::isCoplanar(class Vec *a, class Vec &b)
     {
       if(getMix(a,b) == 0){ return 0xFF; }
       return 0x00;
     }
 
-    Vec& Vec::Offset(class Vec *Dir, f32 n)
+    Vec& Vec::Offset(class Vec *Dir, TSP_NUM n)
     {
       if(Dir == NULL){ return *this; }
       cVec D = Dir->getDirection();
@@ -883,7 +880,7 @@
       return *this;
     }
 
-    Vec& Vec::Offset(class Vec &Dir, f32 n)
+    Vec& Vec::Offset(class Vec &Dir, TSP_NUM n)
     {
       cVec D = Dir.getDirection();
            D.Mul(n);
@@ -893,7 +890,7 @@
       return *this;
     }
 
-    Vec Vec::getOffset(class Vec *Dir, f32 n)
+    Vec Vec::getOffset(class Vec *Dir, TSP_NUM n)
     {
       if(Dir == NULL){ return Vec("FAIL"); }
       cVec D = Dir->getDirection();
@@ -903,7 +900,7 @@
                  (getZ() + D.getZ()));
     }
 
-    Vec Vec::getOffset(class Vec &Dir, f32 n)
+    Vec Vec::getOffset(class Vec &Dir, TSP_NUM n)
     {
       cVec D = Dir.getDirection();
            D.Mul(n);
@@ -927,7 +924,7 @@
 
     Vec& Vec::RollL(void)
     {  // X Y Z  ->  Z X Y
-      f32 T = Z;
+      TSP_NUM T = Z;
           Z = Y;
           Y = X;
           X = T;
@@ -941,7 +938,7 @@
 
     Vec& Vec::RollR(void)
     {  // X Y Z  ->  Y Z X
-      f32 T = X;
+      TSP_NUM T = X;
           X = Y;
           Y = Z;
           Z = T;
@@ -955,9 +952,9 @@
 
     Vec& Vec::Swap(const char* Comp)
     {
-      f32 T = 0;
-      u8  arswap[3] = {0};
-      u32 len = strlen(Comp);
+      TSP_NUM T = 0;
+      TSP_STR  arswap[3] = {0};
+      TSP_KEY len = strlen(Comp);
       if(len >= 2)
       {
         arswap[0] = Comp[0] | 0x20;
@@ -980,8 +977,8 @@
 
     Vec Vec::getSwap(const char* Comp)
     {
-      u8  arswap[3] = {0};
-      u32 len = strlen(Comp);
+      TSP_STR  arswap[3] = {0};
+      TSP_KEY len = strlen(Comp);
       if(len >= 2)
       {
         arswap[0] = Comp[0] | 0x20;
