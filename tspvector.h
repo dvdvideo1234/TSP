@@ -1,8 +1,9 @@
 #ifndef __TSP_VECTOR__H_
     #define __TSP_VECTOR__H_
-    #define TSP_NUM float
-    #define TSP_STR unsigned char
-    #define TSP_KEY unsigned int
+    #define TSP_NUM float                  // General type for floating point number MCU dependent
+    #define TSP_STR unsigned char          // General type for strings storage in vector names
+    #define TSP_BUL unsigned char          // General type for representing booleans
+    #define TSP_KEY unsigned int           // General type for storing vectors unique key set by user
     #define TSP_PI 3.141592653589793238462643383279502884197169399375105820974944
     typedef class Vec
     {
@@ -29,24 +30,24 @@
             friend void    operator*=(Vec&, Vec&);
             friend Vec     operator/ (Vec&, TSP_NUM);
             friend void    operator/=(Vec&, TSP_NUM);
-            friend TSP_STR operator==(Vec&, Vec&);
-            friend TSP_STR operator!=(Vec&, Vec&);
-            friend TSP_STR operator>=(Vec&, Vec&);
-            friend TSP_STR operator<=(Vec&, Vec&);
-            friend TSP_STR operator> (Vec&, Vec&);
-            friend TSP_STR operator< (Vec&, Vec&);
-            friend void    operator++(Vec&, s32);
-            friend void    operator--(Vec&, s32);
+            friend TSP_BUL operator==(Vec&, Vec&);
+            friend TSP_BUL operator!=(Vec&, Vec&);
+            friend TSP_BUL operator>=(Vec&, Vec&);
+            friend TSP_BUL operator<=(Vec&, Vec&);
+            friend TSP_BUL operator> (Vec&, Vec&);
+            friend TSP_BUL operator< (Vec&, Vec&);
+            friend void    operator++(Vec&, int);
+            friend void    operator--(Vec&, int);
             friend void    operator++(Vec&);
             friend void    operator--(Vec&);
-            TSP_STR         isCollinear (class Vec *v);
-            TSP_STR         isCollinear (class Vec &v);
-            TSP_STR         isOrthogonal(class Vec *v);
-            TSP_STR         isOrthogonal(class Vec &v);
-            TSP_STR         isCoplanar  (class Vec &a, class Vec &b);
-            TSP_STR         isCoplanar  (class Vec *a, class Vec *b);
-            TSP_STR         isCoplanar  (class Vec *a, class Vec &b);
-            TSP_STR         isCoplanar  (class Vec &a, class Vec *b);
+            TSP_BUL         isCollinear (class Vec *v);
+            TSP_BUL         isCollinear (class Vec &v);
+            TSP_BUL         isOrthogonal(class Vec *v);
+            TSP_BUL         isOrthogonal(class Vec &v);
+            TSP_BUL         isCoplanar  (class Vec &a, class Vec &b);
+            TSP_BUL         isCoplanar  (class Vec *a, class Vec *b);
+            TSP_BUL         isCoplanar  (class Vec *a, class Vec &b);
+            TSP_BUL         isCoplanar  (class Vec &a, class Vec *b);
             TSP_NUM        getDistance (class Vec *v);
             TSP_NUM        getDistance (class Vec &v);
             TSP_NUM        getDistance (void);
@@ -239,20 +240,20 @@
       free(getName());
     }
 
-    TSP_STR Vec::isOrthogonal(class Vec *v)
+    TSP_BUL Vec::isOrthogonal(class Vec *v)
     {
       if(v == NULL){ return 0x00; }
       if(getDot(v) == 0){ return 0xFF; }
       return 0x00;
     }
 
-    TSP_STR Vec::isOrthogonal(class Vec &v)
+    TSP_BUL Vec::isOrthogonal(class Vec &v)
     {
       if(getDot(v) == 0){ return 0xFF; }
       return 0x00;
     }
 
-    TSP_STR Vec::isCollinear(class Vec *v)
+    TSP_BUL Vec::isCollinear(class Vec *v)
     {
       if(v == NULL){ return 0x00; }
       TSP_NUM x = getX() / v->getX();
@@ -262,7 +263,7 @@
       return 0x00;
     }
 
-    TSP_STR Vec::isCollinear(class Vec &v)
+    TSP_BUL Vec::isCollinear(class Vec &v)
     {
       TSP_NUM x = getX() / v.getX();
       TSP_NUM y = getY() / v.getY();
@@ -429,7 +430,7 @@
       a.setZ(a.getZ() / b);
     }
 
-    TSP_STR operator==(Vec &a, Vec &b)
+    TSP_BUL operator==(Vec &a, Vec &b)
     {
       if((a.getX() == b.getX()) &&
          (a.getY() == b.getY()) &&
@@ -437,7 +438,7 @@
       return 0x00;
     }
 
-    TSP_STR operator!=(Vec &a, Vec &b)
+    TSP_BUL operator!=(Vec &a, Vec &b)
     {
       if((a.getX() != b.getX()) ||
          (a.getY() != b.getY()) ||
@@ -445,31 +446,31 @@
       return 0x00;
     }
 
-    TSP_STR operator>=(Vec &a, Vec &b)
+    TSP_BUL operator>=(Vec &a, Vec &b)
     {
       if(a.getDistance() >= b.getDistance()){ return 0xFF; }
       return 0x00;
     }
 
-    TSP_STR operator<=(Vec &a, Vec &b)
+    TSP_BUL operator<=(Vec &a, Vec &b)
     {
       if(a.getDistance() <= b.getDistance()){ return 0xFF; }
       return 0x00;
     }
 
-    TSP_STR operator>(Vec &a, Vec &b)
+    TSP_BUL operator>(Vec &a, Vec &b)
     {
       if(a.getDistance() > b.getDistance()){ return 0xFF; }
       return 0x00;
     }
 
-    TSP_STR operator<(Vec &a, Vec &b)
+    TSP_BUL operator<(Vec &a, Vec &b)
     {
       if(a.getDistance() < b.getDistance()){ return 0xFF; }
       return 0x00;
     }
 
-    void operator++(Vec &v, s32 a)
+    void operator++(Vec &v, int a)
     {
       cVec Dr = v.getDirection();
       v.setX(v.getX() + Dr.getX());
@@ -477,7 +478,7 @@
       v.setZ(v.getZ() + Dr.getZ());
     }
 
-    void operator--(Vec &v, s32 a)
+    void operator--(Vec &v, int a)
     {
       cVec Dr = v.getDirection();
       v.setX(v.getX() - Dr.getX());
@@ -845,25 +846,25 @@
       return fabs(getMix(a,b) / 6);
     }
 
-    TSP_STR Vec::isCoplanar(class Vec &a, class Vec &b)
+    TSP_BUL Vec::isCoplanar(class Vec &a, class Vec &b)
     {
       if(getMix(a,b) == 0){ return 0xFF; }
       return 0x00;
     }
 
-    TSP_STR Vec::isCoplanar(class Vec *a, class Vec *b)
+    TSP_BUL Vec::isCoplanar(class Vec *a, class Vec *b)
     {
       if(getMix(a,b) == 0){ return 0xFF; }
       return 0x00;
     }
 
-    TSP_STR Vec::isCoplanar(class Vec &a, class Vec *b)
+    TSP_BUL Vec::isCoplanar(class Vec &a, class Vec *b)
     {
       if(getMix(a,b) == 0){ return 0xFF; }
       return 0x00;
     }
 
-    TSP_STR Vec::isCoplanar(class Vec *a, class Vec &b)
+    TSP_BUL Vec::isCoplanar(class Vec *a, class Vec &b)
     {
       if(getMix(a,b) == 0){ return 0xFF; }
       return 0x00;

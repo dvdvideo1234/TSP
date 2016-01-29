@@ -32,11 +32,8 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="common.h" />
 		<Unit filename="main.cpp" />
-		<Unit filename="main_back.h" />
-		<Unit filename="mytypes.h" />
-		<Unit filename="vector3.h" />
+		<Unit filename="tspvector.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

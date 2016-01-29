@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
-#include "mytypes.h"
 #include "tspvector.h"
 
 int main()
