@@ -232,6 +232,22 @@ int main()
          A.getVolumeTetrahedron(NULL,C),
          A.getVolumeTetrahedron(B,NULL),
          A.getVolumeTetrahedron(NULL,NULL));
+  printf("\nPara = \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf",
+         A.getVolumeParallelepiped(B,C),
+         A.getVolumeParallelepiped(&B,&C),
+         A.getVolumeParallelepiped(&B,C),
+         A.getVolumeParallelepiped(B,&C),
+         A.getVolumeParallelepiped(NULL,C),
+         A.getVolumeParallelepiped(B,NULL),
+         A.getVolumeParallelepiped(NULL,NULL));
+
+
+// TODO https://en.wikipedia.org/wiki/Triple_product
+
+  A = Vec("A", 1, 2, 3);
+  B = Vec("B", 1, -3, 4);
+  C = Vec("C", 2, 4, -2);
+  A.Dix(B,C).Print();
 
   return 0;
 }
