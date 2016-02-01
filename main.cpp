@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#include <iostream>
+#include <iomanip>
 #include "tspvector.h"
 
 int main()
@@ -14,8 +16,8 @@ int main()
   cVec A, B, C;
 
   printf("\n%sFriend Operators%s",border,border);
-  A = Vec("A", 1, 2, 3);
-  B = Vec("B", 3, 2, 1);
+  A = Vec(1, 2, 3,"A");
+  B = Vec(3, 2, 1,"B");
 
   (A + B).setName("A + B").Print();
   C.setName("A += B");
@@ -55,18 +57,18 @@ int main()
   printf("\n A <= B: %d",A <= B);
   printf("\n A >  B: %d",A >  B);
   printf("\n A >= B: %d",A >= B);
-  B = Vec("B", 1, 2, 3); printf("\n A == B: %d",A == B);
-  B = Vec("B", 1, 3, 3); printf("\n A != B: %d",A != B);
+  B = Vec(1, 2, 3,"B"); printf("\n A == B: %d",A == B);
+  B = Vec(1, 3, 3,"B"); printf("\n A != B: %d",A != B);
 
   printf("\n%sStagePrint%s",border,border);
-  A = Vec("A", 1, 2, 3);
-  B = Vec("B", 3, 2, 1);
+  A = Vec(1, 2, 3, "A");
+  B = Vec(3, 2, 1, "B");
   C.Set(A).setName("A").Print().Add(B).setName("A + B").Print().Div(4).setName("A / 4").Print();
 
   printf("\n%sIncrementsDecrements%s",border,border);
-  A = Vec("A", 1, 2, 3);
-  B = Vec("B", 4, 5, 6);
-  C = Vec("C", 0, 0, 0);
+  A = Vec(1, 2, 3, "A");
+  B = Vec(4, 5, 6, "B");
+  C = Vec(0, 0, 0, "C");
   C.Set(A).setName("C++");
   C++;
   C.Print();
@@ -75,17 +77,17 @@ int main()
   C.Print();
 
   printf("\n%sDistance%s",border,border);
-  A = Vec("A", 1, 2, 3);
-  B = Vec("B", 4, 5, 6);
-  C = Vec("C", 0, 0, 0);
+  A = Vec(1, 2, 3, "A");
+  B = Vec(4, 5, 6, "B");
+  C = Vec(0, 0, 0, "C");
 
   printf("\nRelative\n%30.28lf, \n%30.28lf",A.getDistance(B),A.getDistance(&B));
   printf("\nNoOrigin\n%30.28lf, \n%30.28lf",A.getDistance(NULL),A.getDistance());
 
   printf("\n%sCoplanarity%s",border,border);
-  A = Vec("A", 1, 2, 3);
-  B = Vec("B", 4, 5, 6);
-  C = Vec("C", 7, 8, 9);
+  A = Vec(1, 2, 3, "A");
+  B = Vec(4, 5, 6, "B");
+  C = Vec(7, 8, 9, "C");
   printf("\nCoplan: %u",A.isCoplanar(&B,&C));
   printf("\nCoplan: %u",A.isCoplanar(B,C));
   printf("\nCoplan: %u",A.isCoplanar(B,&C));
@@ -93,23 +95,23 @@ int main()
 
 
   printf("\n%sMixed Product%s",border,border);
-  A = Vec("A", 1, 2, 3);
-  B = Vec("B", 4, 5, 6);
-  C = Vec("C", 3, 5, 1);
-  printf("\nMix: %f",A.getMix(B,C));
-  printf("\nMix: %f",A.getMix(&B,&C));
-  printf("\nMix: %f",A.getMix(&B,C));
-  printf("\nMix: %f",A.getMix(B,&C));
+  A = Vec(1, 2, 3, "A");
+  B = Vec(4, 5, 6, "B");
+  C = Vec(3, 5, 1, "C");
+  printf("\nMix: %f",A.getMixed(B,C));
+  printf("\nMix: %f",A.getMixed(&B,&C));
+  printf("\nMix: %f",A.getMixed(&B,C));
+  printf("\nMix: %f",A.getMixed(B,&C));
 
 
   printf("\n%sOrthogonality%s",border,border);
-  A = Vec("A", 1, 2, 3);
-  B = Vec("B", 5, -1, -1);
+  A = Vec(1,  2,  3, "A");
+  B = Vec(5, -1, -1, "B");
   printf("\nOrth: %u, %u",A.isOrthogonal(B),A.isOrthogonal(&B));
 
   printf("\n%sCollinearity%s",border,border);
-  A = Vec("A", 1, 2, 3);
-  B = Vec("B", -2, -4, -6);
+  A = Vec( 1,  2,  3, "A");
+  B = Vec(-2, -4, -6, "B");
   printf("\nColl: %u, %u",A.isCollinear(B), A.isCollinear(&B));
 
   printf("\n%sSwapping%s",border,border);
@@ -123,9 +125,9 @@ int main()
   C.Set(A).Swap("XY").Print();
 
   printf("\n%sDirection%s",border,border);
-  A = Vec("A", 1, 2, 3);
-  B = Vec("B", 3, 2, 1);
-  C = Vec("C", 0, 0, 0);
+  A = Vec(1, 2, 3, "A");
+  B = Vec(3, 2, 1, "B");
+  C = Vec(0, 0, 0, "C");
   A.getDirection().Print();
   A.getDirection(NULL).Print();
   C.Set(A).Direction().Print();
@@ -136,9 +138,9 @@ int main()
   C.Set(A).Direction(&B).Print();
 
   printf("\n%sProject%s",border,border);
-  A = Vec("A", 1, 2, 3);
-  B = Vec("B", 3, 2, 1);
-  C = Vec("C", 0, 0, 0);
+  A = Vec(1, 2, 3, "A");
+  B = Vec(3, 2, 1, "B");
+  C = Vec(0, 0, 0, "C");
   A.getProject(&B).Print();
   A.getProject( B).Print();
   C.Set(A).Project(&B).Print();
@@ -149,9 +151,9 @@ int main()
   printf("\n%f, %f, %f, %f",A.getAngleDeg(B),A.getAngleDeg(&B),A.getAngleRad(&B),A.getAngleRad(B));
 
   printf("\n%sDivide%s",border,border);
-  A = Vec("A", 1, 2, 3);
-  B = Vec("B", 3, 2, 1);
-  C = Vec("C", 0, 0, 0);
+  A = Vec(1, 2, 3, "A");
+  B = Vec(3, 2, 1, "B");
+  C = Vec(0, 0, 0, "C");
   A.getDiv(2).Print();
   C.Set(&A).Div(2).Print();
   C.Set(&A) /= 2;
@@ -161,9 +163,9 @@ int main()
 
 
   printf("\n%sMultiply%s",border,border);
-  A = Vec("A", 1, 2, 3);
-  B = Vec("B", 3, 2, 1);
-  C = Vec("C", 0, 0, 0);
+  A = Vec(1, 2, 3, "A");
+  B = Vec(3, 2, 1, "B");
+  C = Vec(0, 0, 0, "C");
   A.getMul(2).Print();
   C.Set(&A).Mul(2).Print();
   C.Set(&A) *= 2;
@@ -172,9 +174,9 @@ int main()
   C.Print();
 
   printf("\n%sSubstract%s",border,border);
-  A = Vec("A", 1, 2, 3);
-  B = Vec("B", 3, 2, 1);
-  C = Vec("C", 0, 0, 0);
+  A = Vec(1, 2, 3, "A");
+  B = Vec(3, 2, 1, "B");
+  C = Vec(0, 0, 0, "C");
   A.getSub(&B).Print();
   A.getSub (B).Print();
   C.Set(&A).Sub(B).Print();
@@ -185,9 +187,9 @@ int main()
   C.Print();
 
   printf("\n%sAddition%s",border,border);
-  A = Vec("A", 1, 2, 3);
-  B = Vec("B", 3, 2, 1);
-  C = Vec("C", 0, 0, 0);
+  A = Vec(1, 2, 3, "A");
+  B = Vec(3, 2, 1, "B");
+  C = Vec(0, 0, 0, "C");
   A.getAdd(&B).Print();
   A.getAdd (B).Print();
   C.Set(&A).Add(B).Print();
@@ -198,8 +200,8 @@ int main()
   C.Print();
 
   printf("\n%sCross%s",border,border);
-  A = Vec("A", 1, 2, 3);
-  B = Vec("B", 3, 2, 1);
+  A = Vec(1, 2, 3, "A");
+  B = Vec(3, 2, 1, "B");
   C = Vec("C");
   A.getCross(&B).Print();
   A.getCross (B).Print();
@@ -211,9 +213,9 @@ int main()
   C.Print();
 
   printf("\n%sArea%s",border,border);
-  A = Vec("A", 1, 2, 3);
-  B = Vec("B", 3, 2, 1);
-  C = Vec("C",4,-10,4);
+  A = Vec(1,  2, 3, "A");
+  B = Vec(3,  2, 1, "B");
+  C = Vec(4,-10, 4, "C");
   printf("\nTri = \n%30.28lf, \n%30.28lf, \n%30.28lf",
          A.getAreaTriangle(B),
          A.getAreaTriangle(&B),
@@ -241,13 +243,40 @@ int main()
          A.getVolumeParallelepiped(B,NULL),
          A.getVolumeParallelepiped(NULL,NULL));
 
+  A = Vec(1,  2, 3, "A");
+  B = Vec(1, -3, 4, "B");
+  C = Vec(2,  4,-2, "C");
+  A.CrossTriple(B,C).Print();
 
-// TODO https://en.wikipedia.org/wiki/Triple_product
+  printf("\n%sUser data%s",border,border);
 
-  A = Vec("A", 1, 2, 3);
-  B = Vec("B", 1, -3, 4);
-  C = Vec("C", 2, 4, -2);
-  A.Dix(B,C).Print();
+  int b = 6;
+
+  struct test
+  {
+    int a;
+    int b;
+    int c;
+    char name[100];
+  };
+
+  struct test Test;
+  B = Vec(7.376732e-039, -3, 4, "B");
+  Test.a = 1;
+  Test.b = 10;
+  Test.c = 100;
+  strcpy(Test.name,"I will not throw paper in class !");
+
+  A.setUser(&b);
+  B.setUser(&Test);
+  C.setUser(&B);
+
+  printf("\nTreat the user data in A as a binary integer: %d",*(int *)A.getUser());
+  printf("\nTreat the user data in B as (struct test *) : %s",((struct test *)B.getUser())->name);
+  printf("\nTreat the user data in C as a vector then get its user data as integer: %d",((struct test *)(((cVec *)C.getUser())->getUser()))->c);
+  printf("\nTreat the address of the user data of C as char: <%s> %d",(char*)((cVec *)C.getUser()),*((int *)&B));
+
+  printf("\n");
 
   return 0;
 }

@@ -1,18 +1,17 @@
 #ifndef __TSP_VECTOR__H_
-    #define __TSP_VECTOR__H_
-    #define TSP_NUM float                  // General type for floating point number MCU dependent
+    #define __TSP_VECTOR__H_               // Types are MCU dependent
+    #define TSP_NUM float                  // General type for floating point number
     #define TSP_STR unsigned char          // General type for strings storage in vector names
     #define TSP_BUL unsigned char          // General type for representing booleans
-    #define TSP_KEY unsigned int           // General type for storing vectors unique key set by user
     #define TSP_PI 3.141592653589793238462643383279502884197169399375105820974944
     typedef class Vec
     {
         private:
-            TSP_KEY Key;
             TSP_NUM X;
             TSP_NUM Y;
             TSP_NUM Z;
-            TSP_STR *Name;
+            void      *User;
+            TSP_STR   *Name;
             class Vec *Next;
         public:
             friend Vec     operator+ (Vec&, Vec&);
@@ -44,13 +43,13 @@
             TSP_BUL         isCollinear (class Vec &b);
             TSP_BUL         isOrthogonal(class Vec *b);
             TSP_BUL         isOrthogonal(class Vec &b);
-            TSP_BUL         isCoplanar  (class Vec &a, class Vec &b);
-            TSP_BUL         isCoplanar  (class Vec *a, class Vec *b);
-            TSP_BUL         isCoplanar  (class Vec *a, class Vec &b);
-            TSP_BUL         isCoplanar  (class Vec &a, class Vec *b);
-            TSP_NUM        getDistance (class Vec *b);
-            TSP_NUM        getDistance (class Vec &b);
-            TSP_NUM        getDistance (void);
+            TSP_BUL         isCoplanar(class Vec &a, class Vec &b);
+            TSP_BUL         isCoplanar(class Vec *a, class Vec *b);
+            TSP_BUL         isCoplanar(class Vec *a, class Vec &b);
+            TSP_BUL         isCoplanar(class Vec &a, class Vec *b);
+            TSP_NUM        getDistance(class Vec *b);
+            TSP_NUM        getDistance(class Vec &b);
+            TSP_NUM        getDistance(void);
             class Vec&        Direction(class Vec *b);
             class Vec&        Direction(class Vec &b);
             class Vec&        Direction(void);
@@ -60,15 +59,15 @@
             TSP_NUM        getX(){ return X; };
             TSP_NUM        getY(){ return Y; };
             TSP_NUM        getZ(){ return Z; };
-            TSP_KEY        getKey(){ return Key; };
+            void          *getUser(){ return User; };
             TSP_STR       *getName(){ return Name; };
             class Vec     *getNext(){ return Next; };
             class Vec&     setX(TSP_NUM x){ X = x; return *this; };
             class Vec&     setY(TSP_NUM y){ Y = y; return *this; };
             class Vec&     setZ(TSP_NUM z){ Z = z; return *this; };
-            class Vec&     setKey(TSP_KEY k){ Key = k; return *this; };
-            class Vec&     setName(const char *pcName){ Name = (TSP_STR*)pcName; return *this; };
-            class Vec&     setNext(class  Vec *pvNext){ Next = pvNext;      return *this; };
+            class Vec&     setUser(void *pUser){ User = pUser; return *this; };
+            class Vec&     setName(const char *pName){ Name = (TSP_STR*)pName; return *this; };
+            class Vec&     setNext(class  Vec *pNext){ Next = pNext;      return *this; };
             TSP_NUM        getAngleDeg(class  Vec *b);
             TSP_NUM        getAngleDeg(class  Vec &b);
             TSP_NUM        getAngleRad(class  Vec *b);
@@ -104,18 +103,18 @@
             class Vec      getMul(TSP_NUM n);
             class Vec&        Div(TSP_NUM n);
             class Vec      getDiv(TSP_NUM n);
-            TSP_NUM        getMix(class Vec &b, class Vec &c);
-            TSP_NUM        getMix(class Vec *b, class Vec *c);
-            TSP_NUM        getMix(class Vec *b, class Vec &c);
-            TSP_NUM        getMix(class Vec &b, class Vec *c);
-            class Vec&        Dix(class Vec &b, class Vec &c);
-            class Vec&        Dix(class Vec *b, class Vec *c);
-            class Vec&        Dix(class Vec *b, class Vec &c);
-            class Vec&        Dix(class Vec &b, class Vec *c);
-            class Vec      getDix(class Vec &b, class Vec &c);
-            class Vec      getDix(class Vec *b, class Vec *c);
-            class Vec      getDix(class Vec *b, class Vec &c);
-            class Vec      getDix(class Vec &b, class Vec *c);
+            TSP_NUM        getMixed(class Vec &b, class Vec &c);
+            TSP_NUM        getMixed(class Vec *b, class Vec *c);
+            TSP_NUM        getMixed(class Vec *b, class Vec &c);
+            TSP_NUM        getMixed(class Vec &b, class Vec *c);
+            class Vec&        CrossTriple(class Vec &b, class Vec &c);
+            class Vec&        CrossTriple(class Vec *b, class Vec *c);
+            class Vec&        CrossTriple(class Vec *b, class Vec &c);
+            class Vec&        CrossTriple(class Vec &b, class Vec *c);
+            class Vec      getCrossTriple(class Vec &b, class Vec &c);
+            class Vec      getCrossTriple(class Vec *b, class Vec *c);
+            class Vec      getCrossTriple(class Vec *b, class Vec &c);
+            class Vec      getCrossTriple(class Vec &b, class Vec *c);
             class Vec&        Set(class Vec &b);
             class Vec&        Set(class Vec *b);
             class Vec&        Set(TSP_NUM x, TSP_NUM y, TSP_NUM z);
@@ -139,9 +138,9 @@
             class Vec      getSwap(const char* Comp);
             class Vec&        Print(void);
             class Vec&        PrintTrajectory(void);
-                              Vec(const char *N, TSP_NUM x, TSP_NUM y, TSP_NUM z, TSP_KEY k, class Vec *Next);
-                              Vec(const char *N, TSP_NUM x, TSP_NUM y, TSP_NUM z, class Vec *Next);
-                              Vec(const char *N, TSP_NUM x, TSP_NUM y, TSP_NUM z);
+                              Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const char *name, void *user, class Vec *next);
+                              Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const char *name, class Vec *next);
+                              Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const char *name);
                               Vec(const char *N);
                               Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z);
                               Vec(TSP_NUM x, TSP_NUM y);
@@ -152,8 +151,8 @@
 
     Vec& Vec::Print(void)
     {
-      printf("\n\rVec %p > %p --> %s, %u\n\rXYZ = { %10.4f, %10.4f, %10.4f }\n\r",
-         this,getNext(),getName(),getKey(),getX(),getY(),getZ());
+      printf("\n\rVec %p > %p --> %s, %p\n\rXYZ = { %10.4f, %10.4f, %10.4f }\n\r",
+         this,getNext(),getName(),getUser(),getX(),getY(),getZ());
       return *this;
     }
 
@@ -168,42 +167,42 @@
       return *this;
     }
 
-    Vec::Vec(const char *Name, TSP_NUM x, TSP_NUM y, TSP_NUM z, TSP_KEY k, class Vec *Next)
+    Vec::Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const char *name, void *user, class Vec *next)
     {
       setX(x);
       setY(y);
       setZ(z);
-      setKey(k);
-      setName(Name);
-      setNext(Next);
+      setUser(user);
+      setName(name);
+      setNext(next);
     }
 
-    Vec::Vec(const char *Name, TSP_NUM x, TSP_NUM y, TSP_NUM z, class Vec *Next)
+    Vec::Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const char *name, class Vec *next)
     {
       setX(x);
       setY(y);
       setZ(z);
-      setKey(0);
-      setName(Name);
-      setNext(Next);
+      setUser(NULL);
+      setName(name);
+      setNext(next);
     }
-    Vec::Vec(const char *Name)
+    Vec::Vec(const char *name)
     {
       setX(0.0);
       setY(0.0);
       setZ(0.0);
-      setKey(0);
-      setName(Name);
+      setUser(NULL);
+      setName(name);
       setNext(NULL);
     }
 
-    Vec::Vec(const char *Name, TSP_NUM x, TSP_NUM y, TSP_NUM z)
+    Vec::Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const char *name)
     {
       setX(x);
       setY(y);
       setZ(z);
-      setKey(0);
-      setName(Name);
+      setUser(NULL);
+      setName(name);
       setNext(NULL);
     }
 
@@ -212,7 +211,7 @@
       setX(x);
       setY(y);
       setZ(z);
-      setKey(0);
+      setUser(NULL);
       setName(NULL);
       setNext(NULL);
     }
@@ -222,7 +221,7 @@
       setX(x);
       setY(y);
       setZ(0.0);
-      setKey(0);
+      setUser(NULL);
       setName(NULL);
       setNext(NULL);
     }
@@ -232,7 +231,7 @@
       setX(x);
       setY(0.0);
       setZ(0.0);
-      setKey(0);
+      setUser(NULL);
       setName(NULL);
       setNext(NULL);
     }
@@ -242,7 +241,7 @@
       setX(0.0);
       setY(0.0);
       setZ(0.0);
-      setKey(0);
+      setUser(NULL);
       setName(NULL);
       setNext(NULL);
     }
@@ -624,7 +623,7 @@
       return *this;
     }
 
-    Vec& Vec::Dix(class Vec &b, class Vec &c)
+    Vec& Vec::CrossTriple(class Vec &b, class Vec &c)
     {
       TSP_NUM ac = getDot(c);
       TSP_NUM ab = getDot(b);
@@ -634,7 +633,7 @@
       return *this;
     }
 
-    Vec& Vec::Dix(class Vec *b, class Vec *c)
+    Vec& Vec::CrossTriple(class Vec *b, class Vec *c)
     {
       if(b == NULL || c == NULL){ return *this; }
       TSP_NUM ac = getDot(c);
@@ -644,7 +643,7 @@
           (ac * b->getZ()) - (ab * c->getZ()));
       return *this;
     }
-    Vec& Vec::Dix(class Vec *b, class Vec &c)
+    Vec& Vec::CrossTriple(class Vec *b, class Vec &c)
     {
       if(b == NULL){ return *this; }
       TSP_NUM ac = getDot(c);
@@ -655,7 +654,7 @@
       return *this;
     }
 
-    Vec& Vec::Dix(class Vec &b, class Vec *c)
+    Vec& Vec::CrossTriple(class Vec &b, class Vec *c)
     {
       if(c == NULL){ return *this; }
       TSP_NUM ac = getDot(c);
@@ -666,7 +665,7 @@
       return *this;
     }
 
-    Vec Vec::getDix(class Vec &b, class Vec &c)
+    Vec Vec::getCrossTriple(class Vec &b, class Vec &c)
     {
       TSP_NUM ac = getDot(c);
       TSP_NUM ab = getDot(b);
@@ -675,7 +674,7 @@
                  (ac * b.getZ()) - (ab * c.getZ()));
     }
 
-    Vec Vec::getDix(class Vec *b, class Vec *c)
+    Vec Vec::getCrossTriple(class Vec *b, class Vec *c)
     {
       if(b == NULL || c == NULL){ return Vec("FAIL"); }
       TSP_NUM ac = getDot(c);
@@ -685,7 +684,7 @@
                  (ac * b->getZ()) - (ab * c->getZ()));
     }
 
-    Vec Vec::getDix(class Vec *b, class Vec &c)
+    Vec Vec::getCrossTriple(class Vec *b, class Vec &c)
     {
       if(b == NULL){ return Vec("FAIL"); }
       TSP_NUM ac = getDot(c);
@@ -695,7 +694,7 @@
                  (ac * b->getZ()) - (ab * c.getZ()));
     }
 
-    Vec Vec::getDix(class Vec &b, class Vec *c)
+    Vec Vec::getCrossTriple(class Vec &b, class Vec *c)
     {
       if(c == NULL){ return Vec("FAIL"); }
       TSP_NUM ac = getDot(c);
@@ -889,27 +888,27 @@
       return fabs(0.5 * getAreaParallelogram(b));
     }
 
-    TSP_NUM Vec::getMix(class Vec &b, class Vec &c)
+    TSP_NUM Vec::getMixed(class Vec &b, class Vec &c)
     {
       cVec T = b.getCross(c);
       return getDot(T);
     }
 
-    TSP_NUM Vec::getMix(class Vec *b, class Vec *c)
+    TSP_NUM Vec::getMixed(class Vec *b, class Vec *c)
     {
       if(b == NULL || c == NULL){ return 0.0; }
       cVec T = b->getCross(c);
       return getDot(T);
     }
 
-    TSP_NUM Vec::getMix(class Vec *b, class Vec &c)
+    TSP_NUM Vec::getMixed(class Vec *b, class Vec &c)
     {
       if(b == NULL){ return 0.0; }
       cVec T = b->getCross(c);
       return getDot(T);
     }
 
-    TSP_NUM Vec::getMix(class Vec &b, class Vec *c)
+    TSP_NUM Vec::getMixed(class Vec &b, class Vec *c)
     {
       if(c == NULL){ return 0.0; }
       cVec T = b.getCross(c);
@@ -918,25 +917,25 @@
 
     TSP_NUM Vec::getVolumeParallelepiped(class Vec &b, class Vec &c)
     {
-      return fabs(getMix(b,c));
+      return fabs(getMixed(b,c));
     }
 
     TSP_NUM Vec::getVolumeParallelepiped(class Vec *b, class Vec *c)
     {
       if(b == NULL || c == NULL){ return 0; }
-      return fabs(getMix(b,c));
+      return fabs(getMixed(b,c));
     }
 
     TSP_NUM Vec::getVolumeParallelepiped(class Vec *b, class Vec &c)
     {
       if(b == NULL){ return 0; }
-      return fabs(getMix(b,c));
+      return fabs(getMixed(b,c));
     }
 
     TSP_NUM Vec::getVolumeParallelepiped(class Vec &b, class Vec *c)
     {
       if(c == NULL){ return 0; }
-      return fabs(getMix(b,c));
+      return fabs(getMixed(b,c));
     }
 
     TSP_NUM Vec::getVolumeTetrahedron(class Vec &b, class Vec &c)
@@ -964,25 +963,25 @@
 
     TSP_BUL Vec::isCoplanar(class Vec &a, class Vec &b)
     {
-      if(getMix(a,b) == 0){ return 0xFF; }
+      if(getMixed(a,b) == 0){ return 0xFF; }
       return 0x00;
     }
 
     TSP_BUL Vec::isCoplanar(class Vec *a, class Vec *b)
     {
-      if(getMix(a,b) == 0){ return 0xFF; }
+      if(getMixed(a,b) == 0){ return 0xFF; }
       return 0x00;
     }
 
     TSP_BUL Vec::isCoplanar(class Vec &a, class Vec *b)
     {
-      if(getMix(a,b) == 0){ return 0xFF; }
+      if(getMixed(a,b) == 0){ return 0xFF; }
       return 0x00;
     }
 
     TSP_BUL Vec::isCoplanar(class Vec *a, class Vec &b)
     {
-      if(getMix(a,b) == 0){ return 0xFF; }
+      if(getMixed(a,b) == 0){ return 0xFF; }
       return 0x00;
     }
 
@@ -1071,7 +1070,7 @@
     {
       TSP_NUM T = 0;
       TSP_STR  arswap[3] = {0};
-      TSP_KEY len = strlen(Comp);
+      unsigned int len = strlen(Comp);
       if(len >= 2)
       {
         arswap[0] = Comp[0] | 0x20;
@@ -1095,7 +1094,7 @@
     Vec Vec::getSwap(const char* Comp)
     {
       TSP_STR  arswap[3] = {0};
-      TSP_KEY len = strlen(Comp);
+      unsigned int len = strlen(Comp);
       if(len >= 2)
       {
         arswap[0] = Comp[0] | 0x20;
