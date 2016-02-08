@@ -1046,9 +1046,9 @@
     Vec& Vec::RollL(void)
     {  // X Y Z  ->  Z X Y
       TSP_NUM T = Z;
-          Z = Y;
-          Y = X;
-          X = T;
+              Z = Y;
+              Y = X;
+              X = T;
       return *this;
     }
 
@@ -1060,9 +1060,9 @@
     Vec& Vec::RollR(void)
     {  // X Y Z  ->  Y Z X
       TSP_NUM T = X;
-          X = Y;
-          Y = Z;
-          Z = T;
+              X = Y;
+              Y = Z;
+              Z = T;
       return *this;
     }
 
@@ -1074,7 +1074,7 @@
     Vec& Vec::Swap(const char* Comp)
     {
       TSP_NUM T = 0;
-      TSP_STR  arswap[3] = {0};
+      TSP_STR arswap[3] = {0};
       unsigned int len = strlen(Comp);
       if(len >= 2)
       {
@@ -1098,7 +1098,7 @@
 
     Vec Vec::getSwap(const char* Comp)
     {
-      TSP_STR  arswap[3] = {0};
+      TSP_STR arswap[3] = {0};
       unsigned int len = strlen(Comp);
       if(len >= 2)
       {
