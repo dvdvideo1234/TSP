@@ -373,12 +373,12 @@
 
     Vec operator+(Vec &a, Vec &b)
     {
-      return  Vec(a.getX() + b.getX(), a.getY() + b.getY(), a.getZ() + b.getZ());
+      return Vec(a.getX() + b.getX(), a.getY() + b.getY(), a.getZ() + b.getZ());
     }
 
     Vec operator-(Vec &a, Vec &b)
     {
-      return  Vec(a.getX() - b.getX(), a.getY() - b.getY(), a.getZ() - b.getZ());
+      return Vec(a.getX() - b.getX(), a.getY() - b.getY(), a.getZ() - b.getZ());
     }
 
     void operator+=(Vec &a, TSP_NUM b)
