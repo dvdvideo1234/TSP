@@ -297,7 +297,7 @@
       TSP_NUM x = getX() - b->getX();
       TSP_NUM y = getY() - b->getY();
       TSP_NUM z = getZ() - b->getZ();
-      return sqrt(x*x + y*y + z*z));
+      return sqrt(x*x + y*y + z*z);
     }
 
     TSP_NUM Vec::getDistance(class Vec &b)
@@ -305,7 +305,7 @@
       TSP_NUM x = getX() - b.getX();
       TSP_NUM y = getY() - b.getY();
       TSP_NUM z = getZ() - b.getZ();
-      return sqrt(x*x + y*y + z*z));
+      return sqrt(x*x + y*y + z*z);
     }
 
     Vec Vec::getDirection(void)
