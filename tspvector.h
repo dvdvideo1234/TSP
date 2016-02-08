@@ -285,22 +285,27 @@
 
     TSP_NUM Vec::getDistance(void)
     {
-      return sqrt(getX()*getX() + getY()*getY() + getZ()*getZ());
+      TSP_NUM x = getX();
+      TSP_NUM y = getY();
+      TSP_NUM z = getZ();
+      return sqrt(x*x + y*y + z*z);
     }
 
     TSP_NUM Vec::getDistance(class Vec *b)
     {
       if(b == NULL){ return getDistance(); }
-      return sqrt((getX() - b->getX()) * (getX() - b->getX()) +
-                  (getY() - b->getY()) * (getY() - b->getY()) +
-                  (getZ() - b->getZ()) * (getZ() - b->getZ()));
+      TSP_NUM x = getX() - b->getX();
+      TSP_NUM y = getY() - b->getY();
+      TSP_NUM z = getZ() - b->getZ();
+      return sqrt(x*x + y*y + z*z));
     }
 
     TSP_NUM Vec::getDistance(class Vec &b)
     {
-      return sqrt((getX() - b.getX()) * (getX() - b.getX()) +
-                  (getY() - b.getY()) * (getY() - b.getY()) +
-                  (getZ() - b.getZ()) * (getZ() - b.getZ()));
+      TSP_NUM x = getX() - b.getX();
+      TSP_NUM y = getY() - b.getY();
+      TSP_NUM z = getZ() - b.getZ();
+      return sqrt(x*x + y*y + z*z));
     }
 
     Vec Vec::getDirection(void)
