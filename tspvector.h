@@ -1110,7 +1110,7 @@
         }
         if(!memcmp(arswap,"yz",2) || !memcmp(arswap,"zy",2))
         {
-            return Vec(getX(),getZ(),getY());
+          return Vec(getX(),getZ(),getY());
         }
         if(!memcmp(arswap,"zx",2) || !memcmp(arswap,"xz",2))
         {
