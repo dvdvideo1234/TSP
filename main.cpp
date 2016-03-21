@@ -9,11 +9,14 @@
 
 int main()
 {
+
+  float t;
+
   char border[] = "------------------";
 
   printf("%30.28lf\n", ((double)TSP_PI));
 
-  cVec A, B, C;
+  cVec A, B, C, D;
 
   printf("\n%sFriend Operators%s",border,border);
   A = Vec(1, 2, 3,"A");
@@ -132,6 +135,8 @@ int main()
   A.getDirection(NULL).Print();
   C.Set(A).Direction().Print();
   C.Set(A).Direction(NULL).Print();
+
+  printf("\n%sDirection origin%s",border,border);
   A.getDirection(B).Print();
   A.getDirection(&B).Print();
   C.Set(A).Direction(B).Print();
@@ -212,6 +217,22 @@ int main()
   C = A ^ B;
   C.Print();
 
+  printf("\n%sTriple cross product%s",border,border);
+
+  A = Vec(1,  2, 3, "A");
+  B = Vec(1, -3, 4, "B");
+  C = Vec(2,  4,-2, "C");
+  D = Vec(0,0,0,"D");
+
+  D.Set(A).CrossTriple(B,C).Print();
+  D.Set(A).CrossTriple(B,&C).Print();
+  D.Set(A).CrossTriple(&B,C).Print();
+  D.Set(A).CrossTriple(&B,&C).Print();
+  D = A.getCrossTriple(B,C); D.Print();
+  D = A.getCrossTriple(B,&C); D.Print();
+  D = A.getCrossTriple(&B,C); D.Print();
+  D = A.getCrossTriple(&B,&C); D.Print();
+
   printf("\n%sArea%s",border,border);
   A = Vec(1,  2, 3, "A");
   B = Vec(3,  2, 1, "B");
@@ -243,11 +264,6 @@ int main()
          A.getVolumeParallelepiped(B,NULL),
          A.getVolumeParallelepiped(NULL,NULL));
 
-  A = Vec(1,  2, 3, "A");
-  B = Vec(1, -3, 4, "B");
-  C = Vec(2,  4,-2, "C");
-  A.CrossTriple(B,C).Print();
-
   printf("\n%sUser data%s",border,border);
 
   int b = 6;
@@ -276,8 +292,29 @@ int main()
   printf("\nTreat the user data in C as a vector then get its user data as integer: %d",((struct test *)(((cVec *)C.getUser())->getUser()))->c);
   printf("\nTreat the address of the user data of C as char: <%s> %d",(char*)((cVec *)C.getUser()),*((int *)&B));
 
-  printf("\n");
+  printf("\n%sPost Increment%s",border,border);
+  A = Vec(1,0,0,"A");
+  B = Vec(2,0,0,"B");
 
+  (A++).setName("A++").Print();
+  A.setName("A Print").Print();
+  (B--).setName("B--").Print();
+  B.setName("B Print").Print();
+
+  printf("\n%sNegate%s",border,border);
+  A = Vec(1,1,1,"A");
+  B.Set(A).Neg().Print();
+  B = A.getNeg(); B.Print();
+
+  printf("\n%sOffset%s",border,border);
+  t = sqrt(3);
+  A = Vec(1,1,1,"A");
+  B.Set(A).Offset(A,t).Print();
+  B.Set(A).Offset(&A,t).Print();
+  B = A.getOffset(A,t); B.Print();
+  B = A.getOffset(&A,t); B.Print();
+
+  printf("\n");
   return 0;
 }
 
