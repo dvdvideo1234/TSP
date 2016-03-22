@@ -120,6 +120,7 @@
             class Vec&        Set(TSP_NUM x, TSP_NUM y, TSP_NUM z);
             class Vec&        Set(TSP_NUM x, TSP_NUM y);
             class Vec&        Set(TSP_NUM x);
+            class Vec&        Set(void);
             class Vec&        Offset(class Vec &Dir, TSP_NUM n);
             class Vec&        Offset(class Vec *Dir, TSP_NUM n);
             class Vec      getOffset(class Vec &Dir, TSP_NUM n);
@@ -777,6 +778,14 @@
     Vec& Vec::Set(TSP_NUM x)
     {
       setX(x);
+      setY(0);
+      setZ(0);
+      return *this;
+    }
+
+    Vec& Vec::Set(void)
+    {
+      setX(0);
       setY(0);
       setZ(0);
       return *this;
