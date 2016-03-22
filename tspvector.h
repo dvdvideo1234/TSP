@@ -146,7 +146,7 @@
                               Vec(TSP_NUM x, TSP_NUM y);
                               Vec(TSP_NUM x);
                               Vec();
-                             ~Vec();
+                             ~Vec(){};
     } cVec;
 
     Vec& Vec::Print(void)
@@ -246,11 +246,6 @@
       setNext(NULL);
     }
 
-    Vec::~Vec()
-    {
-      free(getName());
-    }
-
     TSP_BUL Vec::isOrthogonal(class Vec *b)
     {
       if(b == NULL){ return 0x00; }
@@ -308,28 +303,6 @@
       return sqrt(x*x + y*y + z*z);
     }
 
-    Vec Vec::getDirection(void)
-    {
-      TSP_NUM D = getDistance();
-      if(D == 0){ return Vec("FAIL"); }
-      return Vec(getX() / D, getY() / D, getZ() / D);
-    }
-
-    Vec Vec::getDirection(class Vec *b)
-    {
-      if(b == NULL){ return getDirection(); }
-      TSP_NUM D = getDistance(b);
-      if(D == 0){ return Vec("FAIL"); }
-      return Vec((getX() - b->getX()) / D, (getY() - b->getY()) / D, (getZ() - b->getZ()) / D);
-    }
-
-    Vec Vec::getDirection(class Vec &b)
-    {
-      TSP_NUM D = getDistance(&b);
-      if(D == 0){ return Vec("FAIL"); }
-      return Vec((getX() - b.getX()) / D, (getY() - b.getY()) / D, (getZ() - b.getZ()) / D);
-    }
-
     Vec& Vec::Direction(void)
     {
       TSP_NUM D = getDistance();
@@ -359,6 +332,28 @@
       setY((getY() - b.getY()) / D);
       setZ((getZ() - b.getZ()) / D);
       return *this;
+    }
+
+    Vec Vec::getDirection(void)
+    {
+      TSP_NUM D = getDistance();
+      if(D == 0){ return Vec("FAIL"); }
+      cVec v = Vec().Set(this).Direction(); return v;
+    }
+
+    Vec Vec::getDirection(class Vec *b)
+    {
+      if(b == NULL){ return getDirection(); }
+      TSP_NUM D = getDistance(b);
+      if(D == 0){ return Vec("FAIL"); }
+      cVec v = Vec().Set(this).Direction(b); return v;
+    }
+
+    Vec Vec::getDirection(class Vec &b)
+    {
+      TSP_NUM D = getDistance(&b);
+      if(D == 0){ return Vec("FAIL"); }
+      cVec v = Vec().Set(this).Direction(b); return v;
     }
 
     Vec operator^(Vec &a, Vec &b)

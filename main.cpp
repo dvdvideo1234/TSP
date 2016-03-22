@@ -166,7 +166,6 @@ int main()
   C = A / 2;
   C.Print();
 
-
   printf("\n%sMultiply%s",border,border);
   A = Vec(1, 2, 3, "A");
   B = Vec(3, 2, 1, "B");
@@ -304,15 +303,15 @@ int main()
   printf("\n%sNegate%s",border,border);
   A = Vec(1,1,1,"A");
   B.Set(A).Neg().Print();
-  B = A.getNeg(); B.Print();
+  A.getNeg().Print();
 
   printf("\n%sOffset%s",border,border);
   t = sqrt(3);
   A = Vec(1,1,1,"A");
   B.Set(A).Offset(A,t).Print();
   B.Set(A).Offset(&A,t).Print();
-  B = A.getOffset(A,t); B.Print();
-  B = A.getOffset(&A,t); B.Print();
+  A.getOffset(A,t).Print();
+  A.getOffset(&A,t).Print();
 
   printf("\n");
   return 0;
