@@ -3,16 +3,20 @@
     #define TSP_NUM float                  // General type for floating point number
     #define TSP_STR unsigned char          // General type for strings storage in vector names
     #define TSP_BUL unsigned char          // General type for representing booleans
+    #define TSP_ERR_COD "TSP_ERROR: "      // General error message prefix
     #define TSP_PI 3.141592653589793238462643383279502884197169399375105820974944
+
     typedef class Vec
     {
         private:
             TSP_NUM X;
             TSP_NUM Y;
             TSP_NUM Z;
-            void      *User;
             TSP_STR   *Name;
+            void      *User;
             class Vec *Next;
+     protected:
+            Vec&           setError(const void *msg);
         public:
             friend Vec     operator+ (Vec&, Vec&);
             friend Vec     operator- (Vec&, Vec&);
@@ -39,6 +43,8 @@
             friend class Vec  operator--(Vec&, int);
             friend class Vec& operator++(Vec&);
             friend class Vec& operator--(Vec&);
+            TSP_BUL         isZero(void);
+            TSP_BUL         isValid(void);
             TSP_BUL         isCollinear (class Vec *b);
             TSP_BUL         isCollinear (class Vec &b);
             TSP_BUL         isOrthogonal(class Vec *b);
@@ -62,11 +68,12 @@
             void          *getUser(){ return User; };
             TSP_STR       *getName(){ return Name; };
             class Vec     *getNext(){ return Next; };
+            TSP_STR       *getError(){ return Name+sizeof(TSP_ERR_COD)-1; }
             class Vec&     setX(TSP_NUM x){ X = x; return *this; };
             class Vec&     setY(TSP_NUM y){ Y = y; return *this; };
             class Vec&     setZ(TSP_NUM z){ Z = z; return *this; };
             class Vec&     setUser(void *pUser){ User = pUser; return *this; };
-            class Vec&     setName(const char *pName){ Name = (TSP_STR*)pName; return *this; };
+            class Vec&     setName(const void *pName){ Name = (TSP_STR*)pName; return *this; };
             class Vec&     setNext(class  Vec *pNext){ Next = pNext;      return *this; };
             TSP_NUM        getAngleDeg(class  Vec *b);
             TSP_NUM        getAngleDeg(class  Vec &b);
@@ -84,6 +91,16 @@
             TSP_NUM        getVolumeParallelepiped(class Vec *b, class Vec *c);
             TSP_NUM        getVolumeParallelepiped(class Vec *b, class Vec &c);
             TSP_NUM        getVolumeParallelepiped(class Vec &b, class Vec *c);
+            class Vec&        Round(void){ X = roundf(X); Y = round(Y); Z = roundf(Z); return *this; };
+            class Vec      getRound(void){ return Vec(roundf(X),roundf(Y),roundf(Z)); };
+            class Vec&        RoundDigit(unsigned int d);
+            class Vec      getRoundDigit(unsigned int d);
+            class Vec&        Trunc(void){ X = truncf(X); Y = truncf(Y); Z = truncf(Z);return *this; };
+            class Vec      getTrunc(void){ return Vec(truncf(X),truncf(Y),truncf(Z)); };
+            class Vec&        Floor(void){ X = floorf(X); Y = floorf(Y); Z = floorf(Z);return *this; };
+            class Vec      getFloor(void){ return Vec(floorf(X),floorf(Y),floorf(Z)); };
+            class Vec&        Ceil(void) { X = ceilf(X); Y = ceilf(Y); Z = ceilf(Z); return *this; };
+            class Vec      getCeil(void) { return Vec(ceilf(X),ceilf(Y),ceilf(Z)); };
             class Vec&        Project(class Vec *b);
             class Vec&        Project(class Vec &b);
             class Vec      getProject(class Vec *b);
@@ -135,24 +152,24 @@
             class Vec      getRollR(void);
             class Vec&        RollL(void);
             class Vec      getRollL(void);
-            class Vec&        Swap(const char* Comp);
-            class Vec      getSwap(const char* Comp);
+            class Vec&        Swap(const void* Comp);
+            class Vec      getSwap(const void* Comp);
             class Vec&        Print(void);
             class Vec&        PrintTrajectory(void);
-                              Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const char *name, void *user, class Vec *next);
-                              Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const char *name, class Vec *next);
-                              Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const char *name);
-                              Vec(const char *N);
+                              Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const void *name, void *user, class Vec *next);
+                              Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const void *name, class Vec *next);
+                              Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const void *name);
+                              Vec(const void *name);
                               Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z);
                               Vec(TSP_NUM x, TSP_NUM y);
                               Vec(TSP_NUM x);
                               Vec();
-                             ~Vec(){};
+                             ~Vec(){ free(Name); };
     } cVec;
 
     Vec& Vec::Print(void)
     {
-      printf("\n\rVec %p > %p --> %s, %p\n\rXYZ = { %10.4f, %10.4f, %10.4f }\n\r",
+      printf("\n\rVec %p > %p --> %s, %p\n\rXYZ = { %15.8f, %15.8f, %15.8f }\n\r",
          this,getNext(),getName(),getUser(),getX(),getY(),getZ());
       return *this;
     }
@@ -168,42 +185,42 @@
       return *this;
     }
 
-    Vec::Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const char *name, void *user, class Vec *next)
+    Vec::Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const void *name, void *user, class Vec *next)
     {
       setX(x);
       setY(y);
       setZ(z);
       setUser(user);
-      setName(name);
+      setName((const TSP_STR*)name);
       setNext(next);
     }
 
-    Vec::Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const char *name, class Vec *next)
+    Vec::Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const void *name, class Vec *next)
     {
       setX(x);
       setY(y);
       setZ(z);
       setUser(NULL);
-      setName(name);
+      setName((const TSP_STR*)name);
       setNext(next);
     }
-    Vec::Vec(const char *name)
+    Vec::Vec(const void *name)
     {
       setX(0.0);
       setY(0.0);
       setZ(0.0);
       setUser(NULL);
-      setName(name);
+      setName((const TSP_STR*)name);
       setNext(NULL);
     }
 
-    Vec::Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const char *name)
+    Vec::Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const void *name)
     {
       setX(x);
       setY(y);
       setZ(z);
       setUser(NULL);
-      setName(name);
+      setName((const TSP_STR*)name);
       setNext(NULL);
     }
 
@@ -247,27 +264,69 @@
       setNext(NULL);
     }
 
+    Vec& Vec::setError(const void *msg)
+    {
+      TSP_STR *smsg = (TSP_STR*)msg;
+      unsigned int len = sizeof(TSP_ERR_COD), cnt = 0, mln = 0;
+      while(smsg[mln++]); free(Name);
+      if(NULL == (Name = (TSP_STR*)malloc((mln+len-1)*sizeof(TSP_STR)))){ return *this; }
+      memset(Name,0,mln+len-1);
+      memcpy(Name,TSP_ERR_COD,--len);
+      while(smsg[cnt] != 0)
+      { memcpy(&Name[len+cnt],&smsg[cnt],1); cnt++; } Name[len+cnt] = '\0';
+      return *this;
+    }
+
+    Vec& Vec::RoundDigit(unsigned int d)
+    {
+      if(d == 0){ return *this; }
+      TSP_NUM mul = pow(10,d);
+      X = roundf(X * mul) / mul;
+      Y = roundf(Y * mul) / mul;
+      Z = roundf(Z * mul) / mul;
+      return *this;
+    }
+
+    Vec Vec::getRoundDigit(unsigned int d)
+    {
+      cVec v = Vec();
+      if(d == 0){ return v; }
+      TSP_NUM mul = pow(10,d);
+      v.setX(roundf(X * mul) / mul);
+      v.setY(roundf(Y * mul) / mul);
+      v.setZ(roundf(Z * mul) / mul);
+      return v;
+    }
+
+    TSP_BUL Vec::isValid(void)
+    {
+      if(NULL == Name){ return (1==1); }
+      return memcmp(Name,"TSP_ERROR: ",sizeof(TSP_ERR_COD)-1);
+    }
+
+    TSP_BUL Vec::isZero(void)
+    {
+      return (X==0 && Y==0 && Z==0);
+    }
+
     TSP_BUL Vec::isOrthogonal(class Vec *b)
     {
-      if(b == NULL){ return 0x00; }
-      if(getDot(b) == 0){ return 0xFF; }
-      return 0x00;
+      if(b == NULL){ return 0; }
+      return (getDot(b) == 0);
     }
 
     TSP_BUL Vec::isOrthogonal(class Vec &b)
     {
-      if(getDot(b) == 0){ return 0xFF; }
-      return 0x00;
+      return (getDot(b) == 0);
     }
 
     TSP_BUL Vec::isCollinear(class Vec *b)
     {
-      if(b == NULL){ return 0x00; }
+      if(b == NULL){ return 0; }
       TSP_NUM x = getX() / b->getX();
       TSP_NUM y = getY() / b->getY();
       TSP_NUM z = getZ() / b->getZ();
-      if(x == y && y == z && z == x){ return 0xFF; }
-      return 0x00;
+      return (x == y && y == z && z == x);
     }
 
     TSP_BUL Vec::isCollinear(class Vec &b)
@@ -275,8 +334,7 @@
       TSP_NUM x = getX() / b.getX();
       TSP_NUM y = getY() / b.getY();
       TSP_NUM z = getZ() / b.getZ();
-      if(x == y && y == z && z == x){ return 0xFF; }
-      return 0x00;
+      return (x == y && y == z && z == x);
     }
 
     TSP_NUM Vec::getDistance(void)
@@ -337,24 +395,27 @@
 
     Vec Vec::getDirection(void)
     {
+      cVec v = Vec();
       TSP_NUM D = getDistance();
-      if(D == 0){ return Vec("FAIL"); }
-      cVec v = Vec().Set(this).Direction(); return v;
+      if(D == 0){ v.setError("getDirection(void): Vector module is zero"); return v; }
+      v.Set(this).Direction(); return v;
     }
 
     Vec Vec::getDirection(class Vec *b)
     {
       if(b == NULL){ return getDirection(); }
+      cVec v = Vec();
       TSP_NUM D = getDistance(b);
-      if(D == 0){ return Vec("FAIL"); }
-      cVec v = Vec().Set(this).Direction(b); return v;
+      if(D == 0){ v.setError("getDirection(*vec): Argument module is zero"); return v; }
+      v.Set(this).Direction(b); return v;
     }
 
     Vec Vec::getDirection(class Vec &b)
     {
+      cVec v = Vec();
       TSP_NUM D = getDistance(&b);
-      if(D == 0){ return Vec("FAIL"); }
-      cVec v = Vec().Set(this).Direction(b); return v;
+      if  (D == 0){ v.setError("getDirection(&vec): Argument module is zero"); return v; }
+      v.Set(this).Direction(b); return v;
     }
 
     Vec operator^(Vec &a, Vec &b)
@@ -419,8 +480,9 @@
 
     Vec  operator/(Vec &b, TSP_NUM a)
     {
-      if(a == 0){ return Vec("FAIL"); }
-      return Vec(b.getX() / a, b.getY() / a, b.getZ() / a);
+      cVec v = Vec();
+      if(a == 0){ v.setError("operator/(&vec,num): Divide by zero"); return v; }
+      v.Set(b.getX() / a, b.getY() / a, b.getZ() / a); return v;
     }
 
     void operator*=(Vec &a, TSP_NUM b)
@@ -436,42 +498,36 @@
 
     TSP_BUL operator==(Vec &a, Vec &b)
     {
-      if((a.getX() == b.getX()) &&
-         (a.getY() == b.getY()) &&
-         (a.getZ() == b.getZ())){ return 0xFF; }
-      return 0x00;
+      return ((a.getX() == b.getX()) &&
+              (a.getY() == b.getY()) &&
+              (a.getZ() == b.getZ()));
     }
 
     TSP_BUL operator!=(Vec &a, Vec &b)
     {
-      if((a.getX() != b.getX()) ||
-         (a.getY() != b.getY()) ||
-         (a.getZ() != b.getZ())){ return 0xFF; }
-      return 0x00;
+      return ((a.getX() != b.getX()) ||
+              (a.getY() != b.getY()) ||
+              (a.getZ() != b.getZ()));
     }
 
     TSP_BUL operator>=(Vec &a, Vec &b)
     {
-      if(a.getDistance() >= b.getDistance()){ return 0xFF; }
-      return 0x00;
+      return (a.getDistance() >= b.getDistance());
     }
 
     TSP_BUL operator<=(Vec &a, Vec &b)
     {
-      if(a.getDistance() <= b.getDistance()){ return 0xFF; }
-      return 0x00;
+      return (a.getDistance() <= b.getDistance());
     }
 
     TSP_BUL operator>(Vec &a, Vec &b)
     {
-      if(a.getDistance() > b.getDistance()){ return 0xFF; }
-      return 0x00;
+      return (a.getDistance() > b.getDistance());
     }
 
     TSP_BUL operator<(Vec &a, Vec &b)
     {
-      if(a.getDistance() < b.getDistance()){ return 0xFF; }
-      return 0x00;
+      return (a.getDistance() < b.getDistance());
     }
 
     Vec operator++(Vec &b, int a)
@@ -557,25 +613,25 @@
 
     Vec Vec::getProject(class Vec *b)
     {
-      if(b == NULL){ return Vec("FAIL"); }
+      cVec v = Vec();
+      if(b == NULL){ v.setError("getProject(*vec): Argument is null"); return v;}
       TSP_NUM CpyX = b->getX();
       TSP_NUM CpyY = b->getY();
       TSP_NUM CpyZ = b->getZ();
       TSP_NUM Dst2 = CpyX*CpyX + CpyY*CpyY + CpyZ*CpyZ;
-      if(Dst2 == 0){ return Vec("FAIL"); }
-      TSP_NUM Dotp  = getDot(b) / Dst2;
-      return Vec(Dotp*CpyX, Dotp*CpyY, Dotp*CpyZ);
+      if(Dst2 == 0){ v.setError("getProject(*vec): Cannot obtain argument norm"); return v; }
+      TSP_NUM Dotp  = getDot(b) / Dst2; v.Set(Dotp*CpyX, Dotp*CpyY, Dotp*CpyZ); return v;
     }
 
     Vec Vec::getProject(class Vec &b)
     {
+      cVec v = Vec();
       TSP_NUM CpyX = b.getX();
       TSP_NUM CpyY = b.getY();
       TSP_NUM CpyZ = b.getZ();
       TSP_NUM Dst2 = CpyX*CpyX + CpyY*CpyY + CpyZ*CpyZ;
-      if(Dst2 == 0){ return Vec("FAIL"); }
-      TSP_NUM Dotp = getDot(b) / Dst2;
-      return Vec(Dotp*CpyX, Dotp*CpyY, Dotp*CpyZ);
+      if(Dst2 == 0){ v.setError("getProject(&vec): Cannot obtain argument norm"); return v; }
+      TSP_NUM Dotp = getDot(b) / Dst2; v.Set(Dotp*CpyX, Dotp*CpyY, Dotp*CpyZ); return v;
     }
 
     Vec& Vec::Cross(class Vec *b)
@@ -597,8 +653,9 @@
 
     Vec Vec::getCross(class Vec *b)
     {
-      if(b == NULL){ return Vec("FAIL"); }
-      cVec v = Vec().Set(this).Cross(b); return v;
+      cVec v = Vec();
+      if(b == NULL){ v.setError("getCross(*vec): Argument is null"); return v; }
+      v.Set(this).Cross(b); return v;
     }
 
     Vec Vec::getCross(class Vec &b)
@@ -655,20 +712,24 @@
 
     Vec Vec::getCrossTriple(class Vec *b, class Vec *c)
     {
-      if(b == NULL || c == NULL){ return Vec("FAIL"); }
-      cVec v = Vec().Set(this).CrossTriple(b,c); return v;
+      cVec v = Vec();
+      if(b == NULL){ v.setError("getCrossTriple(*vec,*vec): First argument is null"); return v; }
+      if(c == NULL){ v.setError("getCrossTriple(*vec,*vec): Second argument is null"); return v; }
+      v.Set(this).CrossTriple(b,c); return v;
     }
 
     Vec Vec::getCrossTriple(class Vec *b, class Vec &c)
     {
-      if(b == NULL){ return Vec("FAIL"); }
-      cVec v = Vec().Set(this).CrossTriple(b,c); return v;
+      cVec v = Vec();
+      if(b == NULL){ v.setError("getCrossTriple(*vec,&vec): First argument is null"); return v; }
+      v.Set(this).CrossTriple(b,c); return v;
     }
 
     Vec Vec::getCrossTriple(class Vec &b, class Vec *c)
     {
-      if(c == NULL){ return Vec("FAIL"); }
-      cVec v = Vec().Set(this).CrossTriple(b,c); return v;
+      cVec v = Vec();
+      if(c == NULL){ v.setError("getCrossTriple(&vec,*vec): Second argument is null"); return v; }
+      v.Set(this).CrossTriple(b,c); return v;
     }
 
     TSP_NUM Vec::getDot(class Vec *b)
@@ -705,8 +766,9 @@
 
     Vec Vec::getAdd(class Vec *b)
     {
-      if(b == NULL){ return Vec("FAIL"); }
-      cVec v = Vec().Set(this).Add(b); return v;
+      cVec v = Vec();
+      if(b == NULL){ v.setError("getAdd(*vec): Argument is null"); return v; }
+      v.Set(this).Add(b); return v;
     }
 
     Vec Vec::getAdd(class Vec &b)
@@ -733,8 +795,9 @@
 
     Vec Vec::getSub(class Vec *b)
     {
-      if(b == NULL){ return Vec("FAIL"); }
-      cVec v = Vec().Set(this).Sub(b); return v;
+      cVec v = Vec();
+      if(b == NULL){ v.setError("getSub(*vec): Argument is null"); return v; }
+      v.Set(this).Sub(b); return v;
     }
 
     Vec Vec::getSub(class Vec &b)
@@ -825,8 +888,9 @@
 
     Vec Vec::getDiv(TSP_NUM n)
     {
-      if(n == 0){ return Vec("FAIL"); }
-      cVec v = Vec().Set(this).Div(n); return v;
+      cVec v = Vec();
+      if(n == 0){ v.setError("getDiv(num): Divide by zero"); return v; }
+      v.Set(this).Div(n); return v;
     }
 
     TSP_NUM Vec::getAreaParallelogram(class Vec *b)
@@ -926,26 +990,22 @@
 
     TSP_BUL Vec::isCoplanar(class Vec &a, class Vec &b)
     {
-      if(getMixed(a,b) == 0){ return 0xFF; }
-      return 0x00;
+      return (getMixed(a,b) == 0);
     }
 
     TSP_BUL Vec::isCoplanar(class Vec *a, class Vec *b)
     {
-      if(getMixed(a,b) == 0){ return 0xFF; }
-      return 0x00;
+      return (getMixed(a,b) == 0);
     }
 
     TSP_BUL Vec::isCoplanar(class Vec &a, class Vec *b)
     {
-      if(getMixed(a,b) == 0){ return 0xFF; }
-      return 0x00;
+      return (getMixed(a,b) == 0);
     }
 
     TSP_BUL Vec::isCoplanar(class Vec *a, class Vec &b)
     {
-      if(getMixed(a,b) == 0){ return 0xFF; }
-      return 0x00;
+      return (getMixed(a,b) == 0);
     }
 
     Vec& Vec::Offset(class Vec *Dir, TSP_NUM n)
@@ -971,8 +1031,9 @@
 
     Vec Vec::getOffset(class Vec *Dir, TSP_NUM n)
     {
-      if(Dir == NULL){ return Vec("FAIL"); }
-      cVec v = Vec().Set(this).Offset(Dir,n); return v;
+      cVec v = Vec();
+      if(Dir == NULL){ v.setError("getOffset(*vec,num): First argument is null"); return v; }
+      v.Set(this).Offset(Dir,n); return v;
     }
 
     Vec Vec::getOffset(class Vec &Dir, TSP_NUM n)
@@ -1017,35 +1078,33 @@
       return Vec(Y,Z,X);
     }
 
-    Vec& Vec::Swap(const char* cmp)
+    Vec& Vec::Swap(const void* cmp)
     {
-      TSP_NUM T        = 0.0;
-      TSP_STR swp[2]   = {0};
-      unsigned int len = strlen(cmp);
-      if(len >= 2)
+      TSP_NUM T      = 0.0;
+      TSP_STR swp[2] = {0};
+      const TSP_STR *cms   = (const TSP_STR*)cmp;
+      swp[0] = cms[0] | 0x20;
+      swp[1] = cms[1] | 0x20;
+      if(!memcmp(swp,"xy",2) || !memcmp(swp,"yx",2))
       {
-        swp[0] = cmp[0] | 0x20;
-        swp[1] = cmp[1] | 0x20;
-        if(!memcmp(swp,"xy",2) || !memcmp(swp,"yx",2))
-        {
-          T = X; X = Y; Y = T;
-        }
-        if(!memcmp(swp,"yz",2) || !memcmp(swp,"zy",2))
-        {
-          T = Y; Y = Z; Z = T;
-        }
-        if(!memcmp(swp,"zx",2) || !memcmp(swp,"xz",2))
-        {
-          T = Y; Y = Z; Z = T;
-        }
+        T = X; X = Y; Y = T;
+      }
+      if(!memcmp(swp,"yz",2) || !memcmp(swp,"zy",2))
+      {
+        T = Y; Y = Z; Z = T;
+      }
+      if(!memcmp(swp,"zx",2) || !memcmp(swp,"xz",2))
+      {
+        T = Y; Y = Z; Z = T;
       }
       return *this;
     }
 
-    Vec Vec::getSwap(const char* cmp)
+    Vec Vec::getSwap(const void* cmp)
     {
-      unsigned int len = strlen(cmp);
-      if(len <= 1){ return Vec("FAIL"); }
-      cVec v = Vec().Set(this).Swap(cmp); return v;
+      cVec v = Vec();
+      size_t len = sizeof(cmp);
+      if(len <= 1){ v.setError("getSwap(com): Short swap list"); return v; }
+      v.Set(this).Swap(cmp); return v;
     }
 #endif

@@ -7,6 +7,7 @@
 #include <iomanip>
 #include "tspvector.h"
 
+
 int main()
 {
 
@@ -314,6 +315,21 @@ int main()
   A.getOffset(&A,t).Print();
 
   printf("\n");
+
+  int i=10;
+  A.Set(1,1,1);
+  A.Direction();
+  A.Mul(i-1);
+  while(i)
+  {
+    A.RoundDigit(5).Print();
+    cVec B = A.getDirection();
+    if(!B.isValid()){ printf("\nLength is zero [%d]",i); break; }
+    A--;
+    i--;
+    A.Print();
+  }
+
   return 0;
 }
 
