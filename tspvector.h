@@ -1102,9 +1102,6 @@
 
     Vec Vec::getSwap(const void* cmp)
     {
-      cVec v = Vec();
-      size_t len = sizeof(cmp);
-      if(len <= 1){ v.setError("getSwap(com): Short swap list"); return v; }
-      v.Set(this).Swap(cmp); return v;
+      cVec v = Vec(); v.Set(this).Swap(cmp); return v;
     }
 #endif

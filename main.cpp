@@ -18,11 +18,10 @@ int main()
   printf("%30.28lf\n", ((double)TSP_PI));
 
   cVec A, B, C, D;
-
-  printf("\n%sFriend Operators%s",border,border);
   A = Vec(1, 2, 3,"A");
   B = Vec(3, 2, 1,"B");
-
+/*
+  printf("\n%sFriend Operators%s",border,border);
   (A + B).setName("A + B").Print();
   C.setName("A += B");
   C.Set(A) += B;
@@ -57,6 +56,10 @@ int main()
   C.Set(A).setName("A /= 2") /= 2;
   C.Print();
 
+  printf("\n%sCompare Operators%s",border,border);
+  A.Print();
+  B.Print();
+
   printf("\n A <  B: %d",A <  B);
   printf("\n A <= B: %d",A <= B);
   printf("\n A >  B: %d",A >  B);
@@ -68,18 +71,7 @@ int main()
   A = Vec(1, 2, 3, "A");
   B = Vec(3, 2, 1, "B");
   C.Set(A).setName("A").Print().Add(B).setName("A + B").Print().Div(4).setName("A / 4").Print();
-
-  printf("\n%sIncrementsDecrements%s",border,border);
-  A = Vec(1, 2, 3, "A");
-  B = Vec(4, 5, 6, "B");
-  C = Vec(0, 0, 0, "C");
-  C.Set(A).setName("C++");
-  C++;
-  C.Print();
-  C.Set(A).setName("C--");
-  C--;
-  C.Print();
-
+*/
   printf("\n%sDistance%s",border,border);
   A = Vec(1, 2, 3, "A");
   B = Vec(4, 5, 6, "B");
@@ -296,10 +288,16 @@ int main()
   A = Vec(1,0,0,"A");
   B = Vec(2,0,0,"B");
 
+  A.setName("A Print").Print();
   (A++).setName("A++").Print();
   A.setName("A Print").Print();
+  (++A).setName("++A").Print();
+
+  B.setName("B Print").Print();
   (B--).setName("B--").Print();
   B.setName("B Print").Print();
+  (--B).setName("--B").Print();
+
 
   printf("\n%sNegate%s",border,border);
   A = Vec(1,1,1,"A");
@@ -315,20 +313,6 @@ int main()
   A.getOffset(&A,t).Print();
 
   printf("\n");
-
-  int i=10;
-  A.Set(1,1,1);
-  A.Direction();
-  A.Mul(i-1);
-  while(i)
-  {
-    A.RoundDigit(5).Print();
-    cVec B = A.getDirection();
-    if(!B.isValid()){ printf("\nLength is zero [%d]",i); break; }
-    A--;
-    i--;
-    A.Print();
-  }
 
   return 0;
 }
