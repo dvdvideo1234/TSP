@@ -11,7 +11,7 @@
 int main()
 {
 
-  float t;
+  float t = 0;
 
   char border[] = "------------------";
 
@@ -71,7 +71,7 @@ int main()
   A = Vec(1, 2, 3, "A");
   B = Vec(3, 2, 1, "B");
   C.Set(A).setName("A").Print().Add(B).setName("A + B").Print().Div(4).setName("A / 4").Print();
-*/
+
   printf("\n%sDistance%s",border,border);
   A = Vec(1, 2, 3, "A");
   B = Vec(4, 5, 6, "B");
@@ -298,7 +298,6 @@ int main()
   B.setName("B Print").Print();
   (--B).setName("--B").Print();
 
-
   printf("\n%sNegate%s",border,border);
   A = Vec(1,1,1,"A");
   B.Set(A).Neg().Print();
@@ -312,7 +311,25 @@ int main()
   A.getOffset(A,t).Print();
   A.getOffset(&A,t).Print();
 
+  printf("\n%sNumber ops%s",border,border);
+  A = Vec(1.12345,1.34567,1.56789,"A");
+  A.Print();
+  B.Set(A).setName("0").RoundDigit(0).Print();
+  B.Set(A).setName("1").RoundDigit(1).Print();
+  B.Set(A).setName("2").RoundDigit(2).Print();
+  B.Set(A).setName("3").RoundDigit(3).Print();
   printf("\n");
+*/
+  printf("\n%sError handling%s",border,border);
+  if(A.Set(0,0,0).Direction().isValid()){ printf("\nOK."); }
+  else{ printf("\nFailed: %s",A.getError()); }
+  A.Set(1,1,1) /= 0;
+  if(A.isValid()){ printf("\nOK."); }
+  else{ printf("\nFailed: %s",A.getError()); }
+  A.Set(0,0,0);
+  t = A.getAngleRad(B);
+  if(A.isValid()){ printf("\nOK. %14.4f",t); }
+  else{ printf("\nFailed: %s",A.getError()); }
 
   return 0;
 }
