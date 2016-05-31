@@ -21,7 +21,7 @@ int main()
   cVec A, B, C, D;
   A = Vec(1, 2, 3,"A");
   B = Vec(3, 2, 1,"B");
-/*
+
   printf("\n%sFriend Operators%s",border,border);
   (A + B).setName("A + B").Print();
   C.setName("A += B");
@@ -226,39 +226,7 @@ int main()
   D = A.getCrossTriple(&B,C); D.Print();
   D = A.getCrossTriple(&B,&C); D.Print();
 
-  printf("\n%sArea%s",border,border);
-  A = Vec(1,  2, 3, "A");
-  B = Vec(3,  2, 1, "B");
-  C = Vec(4,-10, 4, "C");
-  printf("\nTri = \n%30.28lf, \n%30.28lf, \n%30.28lf",
-         A.getAreaTriangle(B),
-         A.getAreaTriangle(&B),
-         A.getAreaTriangle(NULL));
-  printf("\nPar = \n%30.28lf, \n%30.28lf, \n%30.28lf",
-         A.getAreaParallelogram(B),
-         A.getAreaParallelogram(&B),
-         A.getAreaParallelogram(NULL));
-
-  printf("\n%sVolume%s",border,border);
-  printf("\nHyd = \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf",
-         A.getVolumeTetrahedron(B,C),
-         A.getVolumeTetrahedron(&B,&C),
-         A.getVolumeTetrahedron(&B,C),
-         A.getVolumeTetrahedron(B,&C),
-         A.getVolumeTetrahedron(NULL,C),
-         A.getVolumeTetrahedron(B,NULL),
-         A.getVolumeTetrahedron(NULL,NULL));
-  printf("\nPara = \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf",
-         A.getVolumeParallelepiped(B,C),
-         A.getVolumeParallelepiped(&B,&C),
-         A.getVolumeParallelepiped(&B,C),
-         A.getVolumeParallelepiped(B,&C),
-         A.getVolumeParallelepiped(NULL,C),
-         A.getVolumeParallelepiped(B,NULL),
-         A.getVolumeParallelepiped(NULL,NULL));
-
   printf("\n%sUser data%s",border,border);
-
   int b = 6;
 
   struct test
@@ -320,7 +288,7 @@ int main()
   B.Set(A).setName("2").RoundDigit(2).Print();
   B.Set(A).setName("3").RoundDigit(3).Print();
   printf("\n");
-*/
+
   printf("\n%sError handling%s",border,border);
   if(A.Set(0,0,0).Direction().isValid()){ printf("\nOK."); }
   else{ printf("\nFailed: %s",A.getError()); }
@@ -333,13 +301,36 @@ int main()
   else{ printf("\nFailed: %s",A.getError()); }
   if(A.Swap("ax").isValid()){ printf("\nOK. %14.4f",t); }
   else{ printf("\nFailed: %s",A.getError()); }
-
+/*
+  printf("\n%sArea%s",border,border);
+  A = Vec(1,  2, 3, "A");
+  B = Vec(3,  2, 1, "B");
+  C = Vec(4,-10, 4, "C");
+  printf("\nTri = \n%30.28lf, \n%30.28lf, \n%30.28lf",
+         A.getAreaTriangle(B),
+         A.getAreaTriangle(&B),
+         A.getAreaTriangle(NULL));
+  printf("\nPar = \n%30.28lf, \n%30.28lf, \n%30.28lf",
+         A.getAreaParallelogram(B),
+         A.getAreaParallelogram(&B),
+         A.getAreaParallelogram(NULL));
+  printf("\n%sVolume%s",border,border);
+  printf("\nHyd = \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf",
+         A.getVolumeTetrahedron(B,C),
+         A.getVolumeTetrahedron(&B,&C),
+         A.getVolumeTetrahedron(&B,C),
+         A.getVolumeTetrahedron(B,&C),
+         A.getVolumeTetrahedron(NULL,C),
+         A.getVolumeTetrahedron(B,NULL),
+         A.getVolumeTetrahedron(NULL,NULL));
+  printf("\nPara = \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf",
+         A.getVolumeParallelepiped(B,C),
+         A.getVolumeParallelepiped(&B,&C),
+         A.getVolumeParallelepiped(&B,C),
+         A.getVolumeParallelepiped(B,&C),
+         A.getVolumeParallelepiped(NULL,C),
+         A.getVolumeParallelepiped(B,NULL),
+         A.getVolumeParallelepiped(NULL,NULL));
+*/
   return 0;
 }
-
-
-
-
-
-
-
