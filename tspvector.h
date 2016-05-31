@@ -4,6 +4,7 @@
     #define TSP_STR unsigned char          // General type for strings storage in vector names
     #define TSP_BUL unsigned char          // General type for representing booleans
     #define TSP_ERR_COD "TSP_ERROR: "      // General error message prefix
+    #define TSP_ERR_LEN 50
     #define TSP_PI 3.1415926535897931
 
     typedef class Vec
@@ -16,7 +17,7 @@
             void      *User;
             class Vec *Next;
      protected:
-            Vec&           setError(const void *msg);
+            Vec&           setError(const char *form, ...);
         public:
             friend Vec     operator+ (Vec&, Vec&);
             friend Vec     operator- (Vec&, Vec&);
@@ -62,13 +63,13 @@
             class Vec      getDirection(class Vec *b);
             class Vec      getDirection(class Vec &b);
             class Vec      getDirection(void);
-            TSP_NUM        getX(){ return X; };
-            TSP_NUM        getY(){ return Y; };
-            TSP_NUM        getZ(){ return Z; };
-            void          *getUser(){ return User; };
-            TSP_STR       *getName(){ return Name; };
-            class Vec     *getNext(){ return Next; };
-            TSP_STR       *getError(){ return Name+sizeof(TSP_ERR_COD)-1; }
+            TSP_NUM        getX(void){ return X; };
+            TSP_NUM        getY(void){ return Y; };
+            TSP_NUM        getZ(void){ return Z; };
+            void          *getUser(void){ return User; };
+            TSP_STR       *getName(void){ return Name; };
+            class Vec     *getNext(void){ return Next; };
+            TSP_STR       *getError(void);
             class Vec&     setX(TSP_NUM x){ X = x; return *this; };
             class Vec&     setY(TSP_NUM y){ Y = y; return *this; };
             class Vec&     setZ(TSP_NUM z){ Z = z; return *this; };
@@ -163,87 +164,51 @@
                               Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z);
                               Vec(TSP_NUM x, TSP_NUM y);
                               Vec(TSP_NUM x);
-                              Vec();
-                             ~Vec(){ free(Name); };
+                              Vec(void);
+                             ~Vec(void){ free(Name); };
     } cVec;
 
     Vec::Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const void *name, void *user, class Vec *next)
     {
-      setX(x);
-      setY(y);
-      setZ(z);
-      setUser(user);
-      setName((const TSP_STR*)name);
-      setNext(next);
+      setX(x); setY(y); setZ(z); setUser(user);
+      setName((const TSP_STR*)name); setNext(next);
     }
 
     Vec::Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const void *name, class Vec *next)
     {
-      setX(x);
-      setY(y);
-      setZ(z);
-      setUser(NULL);
-      setName((const TSP_STR*)name);
-      setNext(next);
+      setX(x); setY(y); setZ(z); setUser(NULL);
+      setName((const TSP_STR*)name); setNext(next);
     }
     Vec::Vec(const void *name)
     {
-      setX(0.0);
-      setY(0.0);
-      setZ(0.0);
-      setUser(NULL);
-      setName((const TSP_STR*)name);
-      setNext(NULL);
+      setX(0.0); setY(0.0); setZ(0.0); setUser(NULL);
+      setName((const TSP_STR*)name); setNext(NULL);
     }
 
     Vec::Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const void *name)
     {
-      setX(x);
-      setY(y);
-      setZ(z);
-      setUser(NULL);
-      setName((const TSP_STR*)name);
-      setNext(NULL);
+      setX(x); setY(y); setZ(z); setUser(NULL);
+      setName((const TSP_STR*)name); setNext(NULL);
     }
 
     Vec::Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z)
     {
-      setX(x);
-      setY(y);
-      setZ(z);
-      setUser(NULL);
-      setName(NULL);
-      setNext(NULL);
+      setX(x); setY(y); setZ(z); setUser(NULL); setName(NULL); setNext(NULL);
     }
 
     Vec::Vec(TSP_NUM x, TSP_NUM y)
     {
-      setX(x);
-      setY(y);
-      setZ(0.0);
-      setUser(NULL);
-      setName(NULL);
-      setNext(NULL);
+      setX(x); setY(y); setZ(0.0); setUser(NULL); setName(NULL); setNext(NULL);
     }
 
     Vec::Vec(TSP_NUM x)
     {
-      setX(x);
-      setY(0.0);
-      setZ(0.0);
-      setUser(NULL);
-      setName(NULL);
-      setNext(NULL);
+      setX(x); setY(0.0); setZ(0.0); setUser(NULL); setName(NULL); setNext(NULL);
     }
 
     Vec::Vec()
     {
-      setX(0.0);
-      setY(0.0);
-      setZ(0.0);
-      setUser(NULL);
-      setName(NULL);
-      setNext(NULL);
+      setX(0.0); setY(0.0); setZ(0.0); setUser(NULL); setName(NULL); setNext(NULL);
     }
 
     Vec& Vec::Print(void)
@@ -264,17 +229,19 @@
       return *this;
     }
 
-    Vec& Vec::setError(const void *msg)
+    TSP_STR* Vec::getError(void)
     {
-      TSP_STR *smsg = (TSP_STR*)msg;
-      unsigned int len = sizeof(TSP_ERR_COD), cnt = 0, mln = 0;
-      while(smsg[mln++]); free(Name);
-      if(NULL == (Name = (TSP_STR*)malloc((mln+len-1)*sizeof(TSP_STR)))){ return *this; }
-      memset(Name,0,mln+len-1);
-      memcpy(Name,TSP_ERR_COD,--len);
-      while(smsg[cnt] != '\0')
-      { memcpy(&Name[len+cnt],&smsg[cnt],1); cnt++; } Name[len+cnt] = '\0';
-      return *this;
+      if(!isValid()){ return Name+sizeof(TSP_ERR_COD)-1; }
+      return (TSP_STR*)NULL; // There is no error
+    }
+
+    Vec& Vec::setError(const char *form, ...)
+    {
+      va_list args; unsigned int sz = sizeof(TSP_ERR_COD); free(Name);
+      if(NULL == (Name = (TSP_STR*)malloc((TSP_ERR_LEN + sz)*sizeof(TSP_STR)))){ return *this; }
+      va_start (args, form); memcpy(Name,TSP_ERR_COD,sizeof(TSP_ERR_COD));
+      vsprintf((char*)(Name+sz-1), form, args);
+      va_end(args); return *this;
     }
 
     TSP_BUL Vec::isValid(void)
@@ -511,49 +478,49 @@
 
     Vec operator++(Vec &b, int a)
     {
-      cVec Dr = b.getDirection();
-      b.Add(Dr); Dr.Sub(b).Neg();
-      return Dr;
+      cVec dr = b.getDirection();
+      b.Add(dr); dr.Sub(b).Neg();
+      return dr;
     }
 
     Vec operator--(Vec &b, int a)
     {
-      cVec Dr = b.getDirection();
-      b.Sub(Dr); Dr.Add(b);
-      return Dr;
+      cVec dr = b.getDirection();
+      b.Sub(dr); dr.Add(b);
+      return dr;
     }
 
     Vec& operator++(Vec &b)
     {
-      cVec Dr = b.getDirection();
-      b.Add(Dr); return b;
+      cVec dr = b.getDirection();
+      b.Add(dr); return b;
     }
 
     Vec& operator--(Vec &b)
     {
-      cVec Dr = b.getDirection();
-      b.Sub(Dr); return b;
+      cVec dr = b.getDirection();
+      b.Sub(dr); return b;
     }
 
     TSP_NUM Vec::getAngleRad(class Vec *b)
     {
       if(b == NULL){ setError("getAngleRad(vec*): Argument is null"); return 0; }
-      TSP_NUM Dot = getDot(b);
-      TSP_NUM Abs = getDistance();
-      TSP_NUM Abv = b->getDistance();
-      if(Abs == 0){ setError("getAngleRad(vec*): Source module is zero"); return 0; }
-      if(Abv == 0){ setError("getAngleRad(vec*): Argument module is zero"); return 0; }
-      return acos(Dot / ( Abs * Abv ));
+      TSP_NUM dot = getDot(b);
+      TSP_NUM abs = getDistance();
+      TSP_NUM abv = b->getDistance();
+      if(abs == 0){ setError("getAngleRad(vec*): Base module is zero"); return 0; }
+      if(abv == 0){ setError("getAngleRad(vec*): Argument module is zero"); return 0; }
+      return acos(dot / ( abs * abv ));
     }
 
     TSP_NUM Vec::getAngleRad(class Vec &b)
     {
-      TSP_NUM Dot = getDot(&b);
-      TSP_NUM Abs = getDistance();
-      TSP_NUM Abv = b.getDistance();
-      if(Abs == 0){ setError("getAngleRad(vec*): Source module is zero"); return 0; }
-      if(Abv == 0){ setError("getAngleRad(vec*): Argument module is zero"); return 0; }
-      return acos(Dot / ( Abs * Abv ));
+      TSP_NUM dot = getDot(&b);
+      TSP_NUM abs = getDistance();
+      TSP_NUM abv = b.getDistance();
+      if(abs == 0){ setError("getAngleRad(vec*): Base module is zero"); return 0; }
+      if(abv == 0){ setError("getAngleRad(vec*): Argument module is zero"); return 0; }
+      return acos(dot / ( abs * abv ));
     }
 
     TSP_NUM Vec::getAngleDeg(class Vec &b)
@@ -570,25 +537,25 @@
     Vec& Vec::Project(class Vec *b)
     {
       if(b == NULL){ setError("getAngleDeg(vec*): Argument is null"); return *this; }
-      TSP_NUM CpyX = b->getX();
-      TSP_NUM CpyY = b->getY();
-      TSP_NUM CpyZ = b->getZ();
-      TSP_NUM Dst2 = CpyX*CpyX + CpyY*CpyY + CpyZ*CpyZ;
-      if(Dst2 == 0){ setError("Project(vec*): Argument module is zero"); return *this; }
-      TSP_NUM Dotp = getDot(b) / Dst2;
-      Set(Dotp*CpyX, Dotp*CpyY, Dotp*CpyZ);
+      TSP_NUM cpyX = b->getX();
+      TSP_NUM cpyY = b->getY();
+      TSP_NUM cpyZ = b->getZ();
+      TSP_NUM dst2 = cpyX*cpyX + cpyY*cpyY + cpyZ*cpyZ;
+      if(dst2 == 0){ setError("Project(vec*): Argument module is zero"); return *this; }
+      TSP_NUM dotp = getDot(b) / dst2;
+      Set(dotp*cpyX, dotp*cpyY, dotp*cpyZ);
       return *this;
     }
 
     Vec& Vec::Project(class Vec &b)
     {
-      TSP_NUM CpyX = b.getX();
-      TSP_NUM CpyY = b.getY();
-      TSP_NUM CpyZ = b.getZ();
-      TSP_NUM Dst2 = CpyX*CpyX + CpyY*CpyY + CpyZ*CpyZ;
-      if(Dst2 == 0){ setError("Project(vec&): Argument module is zero"); return *this; }
-      TSP_NUM Dotp = getDot(b) / Dst2;
-      Set(Dotp*CpyX, Dotp*CpyY, Dotp*CpyZ);
+      TSP_NUM cpyX = b.getX();
+      TSP_NUM cpyY = b.getY();
+      TSP_NUM cpyZ = b.getZ();
+      TSP_NUM dst2 = cpyX*cpyX + cpyY*cpyY + cpyZ*cpyZ;
+      if(dst2 == 0){ setError("Project(vec&): Argument module is zero"); return *this; }
+      TSP_NUM dotp = getDot(b) / dst2;
+      Set(dotp*cpyX, dotp*cpyY, dotp*cpyZ);
       return *this;
     }
 
@@ -596,23 +563,23 @@
     {
       cVec v = Vec();
       if(b == NULL){ v.setError("getProject(vec*): Argument is null"); return v;}
-      TSP_NUM CpyX = b->getX();
-      TSP_NUM CpyY = b->getY();
-      TSP_NUM CpyZ = b->getZ();
-      TSP_NUM Dst2 = CpyX*CpyX + CpyY*CpyY + CpyZ*CpyZ;
-      if(Dst2 == 0){ v.setError("getProject(vec*): Argument module is zero"); return v; }
-      TSP_NUM Dotp  = getDot(b) / Dst2; v.Set(Dotp*CpyX, Dotp*CpyY, Dotp*CpyZ); return v;
+      TSP_NUM cpyX = b->getX();
+      TSP_NUM cpyY = b->getY();
+      TSP_NUM cpyZ = b->getZ();
+      TSP_NUM dst2 = cpyX*cpyX + cpyY*cpyY + cpyZ*cpyZ;
+      if(dst2 == 0){ v.setError("getProject(vec*): Argument module is zero"); return v; }
+      TSP_NUM dotp  = getDot(b) / dst2; v.Set(dotp*cpyX, dotp*cpyY, dotp*cpyZ); return v;
     }
 
     Vec Vec::getProject(class Vec &b)
     {
       cVec v = Vec();
-      TSP_NUM CpyX = b.getX();
-      TSP_NUM CpyY = b.getY();
-      TSP_NUM CpyZ = b.getZ();
-      TSP_NUM Dst2 = CpyX*CpyX + CpyY*CpyY + CpyZ*CpyZ;
-      if(Dst2 == 0){ v.setError("getProject(vec&): Argument module is zero"); return v; }
-      TSP_NUM Dotp = getDot(b) / Dst2; v.Set(Dotp*CpyX, Dotp*CpyY, Dotp*CpyZ); return v;
+      TSP_NUM cpyX = b.getX();
+      TSP_NUM cpyY = b.getY();
+      TSP_NUM cpyZ = b.getZ();
+      TSP_NUM dst2 = cpyX*cpyX + cpyY*cpyY + cpyZ*cpyZ;
+      if(dst2 == 0){ v.setError("getProject(vec&): Argument module is zero"); return v; }
+      TSP_NUM dotp = getDot(b) / dst2; v.Set(dotp*cpyX, dotp*cpyY, dotp*cpyZ); return v;
     }
 
     Vec& Vec::Cross(class Vec *b)
@@ -790,68 +757,47 @@
     Vec& Vec::Set(class Vec *b)
     {
       if(b == NULL){ setError("Set(vec*): Argument is null"); return *this; }
-      setX(b->getX());
-      setY(b->getY());
-      setZ(b->getZ());
-      return *this;
+      setX(b->getX()); setY(b->getY()); setZ(b->getZ()); return *this;
     }
 
     Vec& Vec::Set(class Vec &b)
     {
-      setX(b.getX());
-      setY(b.getY());
-      setZ(b.getZ());
-      return *this;
+      setX(b.getX()); setY(b.getY()); setZ(b.getZ()); return *this;
     }
 
     Vec& Vec::Set(TSP_NUM x, TSP_NUM y, TSP_NUM z)
     {
-      setX(x);
-      setY(y);
-      setZ(z);
-      return *this;
+      setX(x); setY(y); setZ(z); return *this;
     }
 
     Vec& Vec::Set(TSP_NUM x, TSP_NUM y)
     {
-      setX(x);
-      setY(y);
-      setZ(0);
-      return *this;
+      setX(x); setY(y); setZ(0); return *this;
     }
 
     Vec& Vec::Set(TSP_NUM x)
     {
-      setX(x);
-      setY(0);
-      setZ(0);
-      return *this;
+      setX(x); setY(0); setZ(0); return *this;
     }
 
     Vec& Vec::Set(void)
     {
-      setX(0);
-      setY(0);
-      setZ(0);
-      return *this;
+      setX(0); setY(0); setZ(0); return *this;
     }
 
-    TSP_NUM Vec::getCosine(TSP_STR Axis)
+    TSP_NUM Vec::getCosine(TSP_STR ax)
     {
-      TSP_NUM Abs = getDistance();
-      if(Abs  ==  0 ){ setError("getCrossTriple(str): Base module is zero"); return 0; }
-      if(Axis == 'x'){ return getX() / Abs; }
-      if(Axis == 'y'){ return getY() / Abs; }
-      if(Axis == 'z'){ return getZ() / Abs; }
+      TSP_NUM ab = getDistance();
+      if(ab ==  0 ){ setError("getCrossTriple(str): Base module is zero"); return 0; }
+      if(ax == 'x'){ return getX() / ab; }
+      if(ax == 'y'){ return getY() / ab; }
+      if(ax == 'z'){ return getZ() / ab; }
       return 0;
     }
 
     Vec& Vec::Mul(TSP_NUM n)
     {
-      setX(getX() * n);
-      setY(getY() * n);
-      setZ(getZ() * n);
-      return *this;
+      setX(getX() * n); setY(getY() * n); setZ(getZ() * n); return *this;
     }
 
     Vec Vec::getMul(TSP_NUM n)
@@ -862,10 +808,7 @@
     Vec& Vec::Div(TSP_NUM n)
     {
       if(n == 0){ setError("Div(num): Divide by zero"); return *this; }
-      setX(getX() / n);
-      setY(getY() / n);
-      setZ(getZ() / n);
-      return *this;
+      setX(getX() / n); setY(getY() / n); setZ(getZ() / n); return *this;
     }
 
     Vec Vec::getDiv(TSP_NUM n)
@@ -940,8 +883,7 @@
 
     TSP_NUM Vec::getMixed(class Vec &b, class Vec &c)
     {
-      cVec T = b.getCross(c);
-      return getDot(T);
+      cVec T = b.getCross(c); return getDot(T);
     }
 
     TSP_NUM Vec::getMixed(class Vec *b, class Vec *c)
@@ -1107,22 +1049,14 @@
     Vec& Vec::Swap(const void* cmp)
     {
       TSP_NUM T      = 0.0;
-      TSP_STR swp[2] = {0};
+      TSP_STR swp[35] = {0};
       const TSP_STR *cms   = (const TSP_STR*)cmp;
       swp[0] = cms[0] | 0x20;
       swp[1] = cms[1] | 0x20;
-      if(!memcmp(swp,"xy",2) || !memcmp(swp,"yx",2))
-      {
-        T = X; X = Y; Y = T;
-      }
-      if(!memcmp(swp,"yz",2) || !memcmp(swp,"zy",2))
-      {
-        T = Y; Y = Z; Z = T;
-      }
-      if(!memcmp(swp,"zx",2) || !memcmp(swp,"xz",2))
-      {
-        T = Y; Y = Z; Z = T;
-      }
+      if     (!memcmp(swp,"xy",2) || !memcmp(swp,"yx",2)){ T = X; X = Y; Y = T; }
+      else if(!memcmp(swp,"yz",2) || !memcmp(swp,"zy",2)){ T = Y; Y = Z; Z = T; }
+      else if(!memcmp(swp,"zx",2) || !memcmp(swp,"xz",2)){ T = Y; Y = Z; Z = T; }
+      else setError("Swap(str*): Wrong components <%c%c>",swp[0],swp[1]);
       return *this;
     }
 

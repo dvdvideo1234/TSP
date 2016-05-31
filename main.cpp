@@ -5,6 +5,7 @@
 #include <string.h>
 #include <iostream>
 #include <iomanip>
+#include <stdarg.h>
 #include "tspvector.h"
 
 
@@ -329,6 +330,8 @@ int main()
   A.Set(0,0,0);
   t = A.getAngleRad(B);
   if(A.isValid()){ printf("\nOK. %14.4f",t); }
+  else{ printf("\nFailed: %s",A.getError()); }
+  if(A.Swap("ax").isValid()){ printf("\nOK. %14.4f",t); }
   else{ printf("\nFailed: %s",A.getError()); }
 
   return 0;
