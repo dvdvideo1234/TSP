@@ -295,11 +295,12 @@ int main()
   A.Set(1,1,1) /= 0;
   if(A.isValid()){ printf("\nOK."); }
   else{ printf("\nFailed: %s",A.getError()); }
-  A.Set(0,0,0);
+  A.Set(5,6,0);
   t = A.getAngleRad(B);
   if(A.isValid()){ printf("\nOK. %14.4f",t); }
   else{ printf("\nFailed: %s",A.getError()); }
-  if(A.Swap("ax").isValid()){ printf("\nOK. %14.4f",t); }
+  A.setName("");
+  if(A.Swap("yx").isValid()){ A.Print(); }
   else{ printf("\nFailed: %s",A.getError()); }
 
   printf("\n%sArea%s",border,border);

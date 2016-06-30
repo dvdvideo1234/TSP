@@ -1028,8 +1028,8 @@
     Vec& Vec::Swap(const void* cmp)
     {
       TSP_NUM T      = 0.0;
-      TSP_STR swp[35] = {0};
-      const TSP_STR *cms   = (const TSP_STR*)cmp;
+      TSP_STR swp[2] = {0};
+      const TSP_STR *cms = (const TSP_STR*)cmp;
       swp[0] = cms[0] | 0x20;
       swp[1] = cms[1] | 0x20;
       if     (!memcmp(swp,"xy",2) || !memcmp(swp,"yx",2)){ T = X; X = Y; Y = T; }
