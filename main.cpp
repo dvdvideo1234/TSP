@@ -301,7 +301,7 @@ int main()
   else{ printf("\nFailed: %s",A.getError()); }
   if(A.Swap("ax").isValid()){ printf("\nOK. %14.4f",t); }
   else{ printf("\nFailed: %s",A.getError()); }
-/*
+
   printf("\n%sArea%s",border,border);
   A = Vec(1,  2, 3, "A");
   B = Vec(3,  2, 1, "B");
@@ -314,23 +314,23 @@ int main()
          A.getAreaParallelogram(B),
          A.getAreaParallelogram(&B),
          A.getAreaParallelogram(NULL));
-  printf("\n%sVolume%s",border,border);
-  printf("\nHyd = \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf",
-         A.getVolumeTetrahedron(B,C),
-         A.getVolumeTetrahedron(&B,&C),
-         A.getVolumeTetrahedron(&B,C),
-         A.getVolumeTetrahedron(B,&C),
-         A.getVolumeTetrahedron(NULL,C),
-         A.getVolumeTetrahedron(B,NULL),
-         A.getVolumeTetrahedron(NULL,NULL));
-  printf("\nPara = \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf, \n%30.28lf",
-         A.getVolumeParallelepiped(B,C),
-         A.getVolumeParallelepiped(&B,&C),
-         A.getVolumeParallelepiped(&B,C),
-         A.getVolumeParallelepiped(B,&C),
-         A.getVolumeParallelepiped(NULL,C),
-         A.getVolumeParallelepiped(B,NULL),
-         A.getVolumeParallelepiped(NULL,NULL));
-*/
+  printf("\n%sVolumeTetrahedron%s",border,border);
+  printf("\ngetVolumeTetrahedron(B,C) = %30.28lf",A.getVolumeTetrahedron(B,C));
+  printf("\ngetVolumeTetrahedron(&B,&C) = %30.28lf",A.getVolumeTetrahedron(&B,&C));
+  printf("\ngetVolumeTetrahedron(&B,C) = %30.28lf",A.getVolumeTetrahedron(&B,C));
+  printf("\ngetVolumeTetrahedron(B,&C) = %30.28lf",A.getVolumeTetrahedron(B,&C));
+  printf("\ngetVolumeTetrahedron(NULL,C) = %30.28lf",A.getVolumeTetrahedron(NULL,C));
+  printf("\ngetVolumeTetrahedron(B,NULL) = %30.28lf",A.getVolumeTetrahedron(B,NULL));
+  printf("\ngetVolumeTetrahedron(NULL,NULL) = %30.28lf",A.getVolumeTetrahedron(NULL,NULL));
+
+  printf("\n%sVolumeParallelepiped%s",border,border);
+  printf("\ngetVolumeParallelepiped(B,C) = %30.28lf",A.getVolumeParallelepiped(B,C));
+  printf("\ngetVolumeParallelepiped(&B,&C) = %30.28lf",A.getVolumeParallelepiped(&B,&C));
+  printf("\ngetVolumeParallelepiped(&B,C) = %30.28lf",A.getVolumeParallelepiped(&B,C));
+  printf("\ngetVolumeParallelepiped(B,&C) = %30.28lf",A.getVolumeParallelepiped(B,&C));
+  printf("\ngetVolumeParallelepiped(NULL,C) = %30.28lf",A.getVolumeParallelepiped(NULL,C));
+  printf("\ngetVolumeParallelepiped(B,NULL) = %30.28lf",A.getVolumeParallelepiped(B,NULL));
+  printf("\ngetVolumeParallelepiped(NULL,NULL) = %30.28lf",A.getVolumeParallelepiped(NULL,NULL));
+
   return 0;
 }

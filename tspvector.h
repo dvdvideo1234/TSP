@@ -4,7 +4,7 @@
     #define TSP_STR unsigned char          // General type for strings storage in vector names
     #define TSP_BUL unsigned char          // General type for representing booleans
     #define TSP_ERR_COD "TSP_ERROR: "      // General error message prefix
-    #define TSP_ERR_LEN 50
+    #define TSP_ERR_LEN 100
     #define TSP_ROUND roundf
     #define TSP_TRUNC truncf
     #define TSP_FLOOR floorf
