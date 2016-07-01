@@ -194,7 +194,7 @@
     Vec::Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const void *name)
     {
       setX(x); setY(y); setZ(z); setUser(NULL);
-      setName((const TSP_STR*)name); setNext(NULL); Note = NULL; Note = NULL;
+      setName((const TSP_STR*)name); setNext(NULL); Note = NULL;
     }
 
     Vec::Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z)
@@ -841,10 +841,8 @@
 
     TSP_NUM Vec::getAreaTriangle(class Vec *b)
     {
-      TSP_NUM a;
       if(b == NULL){ setNote("%s getAreaTriangle(vec*): Argument is null",TSP_ERR_COD); return 0; }
-      a = TSP_ABS(0.5 * getAreaParallelogram(b));
-      return a;
+      return TSP_ABS(0.5 * getAreaParallelogram(b));
     }
 
     TSP_NUM Vec::getAreaTriangle(class Vec &b)
@@ -854,29 +852,29 @@
 
     TSP_NUM Vec::getMixed(class Vec &b, class Vec &c)
     {
-      cVec T = b.getCross(c); return getDot(T);
+      cVec v = b.getCross(c); return getDot(v);
     }
 
     TSP_NUM Vec::getMixed(class Vec *b, class Vec *c)
     {
       if(b == NULL){ setNote("%s getMixed(vec*,vec*): First argument is null" ,TSP_ERR_COD); return 0; }
       if(c == NULL){ setNote("%s getMixed(vec*,vec*): Second argument is null",TSP_ERR_COD); return 0; }
-      cVec T = b->getCross(c);
-      return getDot(T);
+      cVec v = b->getCross(c);
+      return getDot(v);
     }
 
     TSP_NUM Vec::getMixed(class Vec *b, class Vec &c)
     {
       if(b == NULL){ setNote("%s getMixed(vec*,vec&): First argument is null",TSP_ERR_COD); return 0; }
-      cVec T = b->getCross(c);
-      return getDot(T);
+      cVec v = b->getCross(c);
+      return getDot(v);
     }
 
     TSP_NUM Vec::getMixed(class Vec &b, class Vec *c)
     {
       if(c == NULL){ setNote("%s getMixed(vec&,vec*): Second argument is null",TSP_ERR_COD); return 0; }
-      cVec T = b.getCross(c);
-      return getDot(T);
+      cVec v = b.getCross(c);
+      return getDot(v);
     }
 
     TSP_NUM Vec::getVolumeParallelepiped(class Vec &b, class Vec &c)
