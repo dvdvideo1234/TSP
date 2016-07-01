@@ -1,15 +1,20 @@
 #ifndef __TSP_VECTOR__H_
+    #include <malloc.h>                    // Allocation and memory management
+    #include <stdio.h>                     // Console IO
+    #include <math.h>                      // Maths
+    #include <string.h>                    // Memory move and copy
+    #include <stdarg.h>                    // Variable arguments notes
     #define __TSP_VECTOR__H_               // Types are MCU dependent
     #define TSP_NUM float                  // General type for floating point number
     #define TSP_STR unsigned char          // General type for strings storage in vector names
     #define TSP_BUL unsigned char          // General type for representing booleans
     #define TSP_ERR_COD "ERR:"             // General error message prefix
-    #define TSP_MSG_LEN 200
-    #define TSP_ROUND roundf
-    #define TSP_TRUNC truncf
-    #define TSP_FLOOR floorf
-    #define TSP_CEIL  ceilf
-    #define TSP_ABS   fabs
+    #define TSP_MSG_LEN 200                // General note length. Also used for internal messages
+    #define TSP_ROUND roundf               // General macro for processing rounding
+    #define TSP_TRUNC truncf               // General macro for processing truncate
+    #define TSP_FLOOR floorf               // General macro for processing floor
+    #define TSP_CEIL  ceilf                // General macro for processing ceiling
+    #define TSP_ABS   fabs                 // General macro for processing absolute
     #define TSP_PI 3.1415926535897931
 
     typedef class Vec

@@ -1,13 +1,4 @@
-#include <conio.h>
-#include <malloc.h>
-#include <stdio.h>
-#include <math.h>
-#include <string.h>
-#include <iostream>
-#include <iomanip>
-#include <stdarg.h>
 #include "tspvector.h"
-
 
 int main()
 {
@@ -143,7 +134,6 @@ int main()
   A.getProject( B).Print();
   C.Set(A).Project(&B).Print();
   C.Set(A).Project( B).Print();
-
 
   printf("\n%sAngles%s",border,border);
   printf("\n%f, %f, %f, %f",A.getAngleDeg(B),A.getAngleDeg(&B),A.getAngleRad(&B),A.getAngleRad(B));
