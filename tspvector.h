@@ -3,8 +3,8 @@
     #define TSP_NUM float                  // General type for floating point number
     #define TSP_STR unsigned char          // General type for strings storage in vector names
     #define TSP_BUL unsigned char          // General type for representing booleans
-    #define TSP_ERR_COD "TSP_ERROR: "      // General error message prefix
-    #define TSP_ERR_LEN 100
+    #define TSP_ERR_COD "ERR:"             // General error message prefix
+    #define TSP_MSG_LEN 200
     #define TSP_ROUND roundf
     #define TSP_TRUNC truncf
     #define TSP_FLOOR floorf
@@ -19,10 +19,9 @@
             TSP_NUM Y;
             TSP_NUM Z;
             TSP_STR   *Name;
+            TSP_STR   *Note;
             void      *User;
             class Vec *Next;
-     protected:
-            Vec&           setError(const char *form, ...);
         public:
             friend Vec        operator+ (Vec&, Vec&);
             friend Vec        operator- (Vec&, Vec&);
@@ -74,7 +73,9 @@
             void          *getUser(void){ return User; };
             TSP_STR       *getName(void){ return Name; };
             class Vec     *getNext(void){ return Next; };
-            TSP_STR       *getError(void);
+            TSP_STR       *getNote(void){ return Note; };
+            class Vec&     setNote(const char *form, ...);
+            class Vec&     setNote(void){ if(Note != NULL){ free(Note); } Note = NULL; return *this; };
             class Vec&     setX(TSP_NUM x){ X = x; return *this; };
             class Vec&     setY(TSP_NUM y){ Y = y; return *this; };
             class Vec&     setZ(TSP_NUM z){ Z = z; return *this; };
@@ -176,49 +177,49 @@
     Vec::Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const void *name, void *user, class Vec *next)
     {
       setX(x); setY(y); setZ(z); setUser(user);
-      setName((const TSP_STR*)name); setNext(next);
+      setName((const TSP_STR*)name); setNext(next); Note = NULL;
     }
 
     Vec::Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const void *name, class Vec *next)
     {
       setX(x); setY(y); setZ(z); setUser(NULL);
-      setName((const TSP_STR*)name); setNext(next);
+      setName((const TSP_STR*)name); setNext(next); Note = NULL;
     }
     Vec::Vec(const void *name)
     {
       setX(0.0); setY(0.0); setZ(0.0); setUser(NULL);
-      setName((const TSP_STR*)name); setNext(NULL);
+      setName((const TSP_STR*)name); setNext(NULL); Note = NULL;
     }
 
     Vec::Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const void *name)
     {
       setX(x); setY(y); setZ(z); setUser(NULL);
-      setName((const TSP_STR*)name); setNext(NULL);
+      setName((const TSP_STR*)name); setNext(NULL); Note = NULL; Note = NULL;
     }
 
     Vec::Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z)
     {
-      setX(x); setY(y); setZ(z); setUser(NULL); setName(NULL); setNext(NULL);
+      setX(x); setY(y); setZ(z); setUser(NULL); setName(NULL); setNext(NULL); Note = NULL;
     }
 
     Vec::Vec(TSP_NUM x, TSP_NUM y)
     {
-      setX(x); setY(y); setZ(0.0); setUser(NULL); setName(NULL); setNext(NULL);
+      setX(x); setY(y); setZ(0.0); setUser(NULL); setName(NULL); setNext(NULL); Note = NULL;
     }
 
     Vec::Vec(TSP_NUM x)
     {
-      setX(x); setY(0.0); setZ(0.0); setUser(NULL); setName(NULL); setNext(NULL);
+      setX(x); setY(0.0); setZ(0.0); setUser(NULL); setName(NULL); setNext(NULL); Note = NULL;
     }
 
     Vec::Vec()
     {
-      setX(0.0); setY(0.0); setZ(0.0); setUser(NULL); setName(NULL); setNext(NULL);
+      setX(0.0); setY(0.0); setZ(0.0); setUser(NULL); setName(NULL); setNext(NULL); Note = NULL;
     }
 
     Vec& Vec::Print(void)
     {
-      printf("\n\rVec %p > %p --> %s, %p\n\rXYZ = { %15.8f, %15.8f, %15.8f }\n\r",
+      printf("\nVec %p > %p --> %s, %p\n\rXYZ = { %15.8f, %15.8f, %15.8f }",
          this,getNext(),getName(),getUser(),getX(),getY(),getZ());
       return *this;
     }
@@ -234,32 +235,25 @@
       return *this;
     }
 
-    TSP_STR* Vec::getError(void)
+    Vec& Vec::setNote(const char *form, ...)
     {
-      if(!isValid()){ return Name+sizeof(TSP_ERR_COD)-1; }
-      return (TSP_STR*)NULL; // There is no error
-    }
-
-    Vec& Vec::setError(const char *form, ...)
-    {
-      va_list args; unsigned int sz = sizeof(TSP_ERR_COD); free(Name);
-      if(NULL == (Name = (TSP_STR*)malloc((TSP_ERR_LEN + sz)*sizeof(TSP_STR)))){ return *this; }
-      va_start (args, form); memcpy(Name,TSP_ERR_COD,sizeof(TSP_ERR_COD));
-      vsprintf((char*)(Name+sz-1), form, args);
-      va_end(args); return *this;
+      va_list args;
+      if(NULL != Note){ free(Note); }
+      if(NULL == (Note = (TSP_STR*)malloc((TSP_MSG_LEN)*sizeof(TSP_STR)))){ return *this; }
+      va_start (args, form); vsprintf((char*)(Note), form, args); va_end(args); return *this;
     }
 
     TSP_BUL Vec::isValid(void)
     {
-      if(NULL == Name){ return (1==1); }
-      return memcmp(Name,TSP_ERR_COD,sizeof(TSP_ERR_COD)-1);
+      if(NULL == Note){ return (1==1); }
+      return memcmp(Note,TSP_ERR_COD,sizeof(TSP_ERR_COD)-1);
     }
 
     TSP_BUL Vec::isZero(void){ return (X==0 && Y==0 && Z==0); }
 
     TSP_BUL Vec::isOrthogonal(class Vec *b)
     {
-      if(b == NULL){ setError("isOrthogonal(vec*): Argument is null"); return 0; }
+      if(b == NULL){ setNote("%s isOrthogonal(vec*): Argument is null",TSP_ERR_COD); return 0; }
       return (getDot(b) == 0);
     }
 
@@ -267,7 +261,7 @@
 
     TSP_BUL Vec::isCollinear(class Vec *b)
     {
-      if(b == NULL){ setError("isCollinear(vec*): Argument is null"); return 0; }
+      if(b == NULL){ setNote("%s isCollinear(vec*): Argument is null",TSP_ERR_COD); return 0; }
       TSP_NUM x = getX() / b->getX();
       TSP_NUM y = getY() / b->getY();
       TSP_NUM z = getZ() / b->getZ();
@@ -310,7 +304,7 @@
     Vec& Vec::Direction(void)
     {
       TSP_NUM dst = getDistance();
-      if(dst == 0){ setError("Direction(void): Base module is zero"); return *this; }
+      if(dst == 0){ setNote("%s Direction(void): Base module is zero",TSP_ERR_COD); return *this; }
       setX(getX() / dst);
       setY(getY() / dst);
       setZ(getZ() / dst);
@@ -321,7 +315,7 @@
     {
       if(b == NULL){ return Direction(); }
       TSP_NUM dst = getDistance(b);
-      if(dst == 0){ setError("Direction(vec*): Base module is zero"); return *this; }
+      if(dst == 0){ setNote("%s Direction(vec*): Base module is zero",TSP_ERR_COD); return *this; }
       setX((getX() - b->getX()) / dst);
       setY((getY() - b->getY()) / dst);
       setZ((getZ() - b->getZ()) / dst);
@@ -331,7 +325,7 @@
     Vec& Vec::Direction(class Vec &b)
     {
       TSP_NUM dst = getDistance(&b);
-      if(dst == 0){ setError("Direction(vec&): Base module is zero"); return *this; }
+      if(dst == 0){ setNote("%s Direction(vec&): Base module is zero",TSP_ERR_COD); return *this; }
       setX((getX() - b.getX()) / dst);
       setY((getY() - b.getY()) / dst);
       setZ((getZ() - b.getZ()) / dst);
@@ -342,7 +336,7 @@
     {
       cVec v = Vec();
       TSP_NUM dst = getDistance();
-      if(dst == 0){ v.setError("getDirection(void): Base module is zero"); return v; }
+      if(dst == 0){ v.setNote("%s getDirection(void): Base module is zero",TSP_ERR_COD); return v; }
       v.Set(this).Direction(); return v;
     }
 
@@ -351,7 +345,7 @@
       if(b == NULL){ return getDirection(); }
       cVec v = Vec();
       TSP_NUM dst = getDistance(b);
-      if(dst == 0){ v.setError("getDirection(vec*): Argument module is zero"); return v; }
+      if(dst == 0){ v.setNote("%s getDirection(vec*): Argument module is zero",TSP_ERR_COD); return v; }
       v.Set(this).Direction(b); return v;
     }
 
@@ -359,7 +353,7 @@
     {
       cVec v = Vec();
       TSP_NUM dst = getDistance(&b);
-      if  (dst == 0){ v.setError("getDirection(vec&): Argument module is zero"); return v; }
+      if  (dst == 0){ v.setNote("%s getDirection(vec&): Argument module is zero",TSP_ERR_COD); return v; }
       v.Set(this).Direction(b); return v;
     }
 
@@ -402,7 +396,7 @@
     Vec  operator/(Vec &b, TSP_NUM n)
     {
       cVec v = Vec();
-      if(n == 0){ v.setError("operator/(vec&,num): Divide by zero"); return v; }
+      if(n == 0){ v.setNote("%s operator/(vec&,num): Divide by zero",TSP_ERR_COD); return v; }
       v.Set(b.getX() / n, b.getY() / n, b.getZ() / n); return v;
     }
 
@@ -413,7 +407,7 @@
 
     void operator/=(Vec &a, TSP_NUM n)
     {
-      if(n == 0){ a.setError("oerator(/=): Divide by zero"); return; }
+      if(n == 0){ a.setNote("%s oerator(/=): Divide by zero",TSP_ERR_COD); return; }
       a.Div(n);
     }
 
@@ -479,12 +473,12 @@
 
     TSP_NUM Vec::getAngleRad(class Vec *b)
     {
-      if(b == NULL){ setError("getAngleRad(vec*): Argument is null"); return 0; }
+      if(b == NULL){ setNote("%s getAngleRad(vec*): Argument is null",TSP_ERR_COD); return 0; }
       TSP_NUM dot = getDot(b);
       TSP_NUM abd = getDistance();
       TSP_NUM avd = b->getDistance();
-      if(abd == 0){ setError("getAngleRad(vec*): Base module is zero"); return 0; }
-      if(avd == 0){ setError("getAngleRad(vec*): Argument module is zero"); return 0; }
+      if(abd == 0){ setNote("%s getAngleRad(vec*): Base module is zero",TSP_ERR_COD); return 0; }
+      if(avd == 0){ setNote("%s getAngleRad(vec*): Argument module is zero",TSP_ERR_COD); return 0; }
       return acos(dot / ( abd * avd ));
     }
 
@@ -493,8 +487,8 @@
       TSP_NUM dot = getDot(&b);
       TSP_NUM abd = getDistance();
       TSP_NUM avd = b.getDistance();
-      if(abd == 0){ setError("getAngleRad(vec*): Base module is zero"); return 0; }
-      if(avd == 0){ setError("getAngleRad(vec*): Argument module is zero"); return 0; }
+      if(abd == 0){ setNote("%s getAngleRad(vec*): Base module is zero",TSP_ERR_COD); return 0; }
+      if(avd == 0){ setNote("%s getAngleRad(vec*): Argument module is zero",TSP_ERR_COD); return 0; }
       return acos(dot / ( abd * avd ));
     }
 
@@ -505,18 +499,18 @@
 
     TSP_NUM Vec::getAngleDeg(class Vec *b)
     {
-      if(b == NULL){ setError("getAngleDeg(vec*): Argument is null"); return 0; }
+      if(b == NULL){ setNote("%s getAngleDeg(vec*): Argument is null",TSP_ERR_COD); return 0; }
       return ( getAngleRad(b) * ( 180 / TSP_PI));
     }
 
     Vec& Vec::Project(class Vec *b)
     {
-      if(b == NULL){ setError("getAngleDeg(vec*): Argument is null"); return *this; }
+      if(b == NULL){ setNote("%s getAngleDeg(vec*): Argument is null",TSP_ERR_COD); return *this; }
       TSP_NUM bcx = b->getX();
       TSP_NUM bcy = b->getY();
       TSP_NUM bcz = b->getZ();
       TSP_NUM dst2 = bcx*bcx + bcy*bcy + bcz*bcz;
-      if(dst2 == 0){ setError("Project(vec*): Argument module is zero"); return *this; }
+      if(dst2 == 0){ setNote("%s Project(vec*): Argument module is zero",TSP_ERR_COD); return *this; }
       TSP_NUM dot = getDot(b) / dst2;
       Set(dot*bcx, dot*bcy, dot*bcz);
       return *this;
@@ -528,7 +522,7 @@
       TSP_NUM bcy = b.getY();
       TSP_NUM bcz = b.getZ();
       TSP_NUM dst2 = bcx*bcx + bcy*bcy + bcz*bcz;
-      if(dst2 == 0){ setError("Project(vec&): Argument module is zero"); return *this; }
+      if(dst2 == 0){ setNote("%s Project(vec&): Argument module is zero",TSP_ERR_COD); return *this; }
       TSP_NUM dot = getDot(b) / dst2;
       Set(dot*bcx, dot*bcy, dot*bcz);
       return *this;
@@ -537,12 +531,12 @@
     Vec Vec::getProject(class Vec *b)
     {
       cVec v = Vec();
-      if(b == NULL){ v.setError("getProject(vec*): Argument is null"); return v;}
+      if(b == NULL){ v.setNote("%s getProject(vec*): Argument is null",TSP_ERR_COD); return v;}
       TSP_NUM bcx = b->getX();
       TSP_NUM bcy = b->getY();
       TSP_NUM bcz = b->getZ();
       TSP_NUM dst2 = bcx*bcx + bcy*bcy + bcz*bcz;
-      if(dst2 == 0){ v.setError("getProject(vec*): Argument module is zero"); return v; }
+      if(dst2 == 0){ v.setNote("%s getProject(vec*): Argument module is zero",TSP_ERR_COD); return v; }
       TSP_NUM dot = getDot(b) / dst2; v.Set(dot*bcx, dot*bcy, dot*bcz); return v;
     }
 
@@ -553,13 +547,13 @@
       TSP_NUM bcy = b.getY();
       TSP_NUM bcz = b.getZ();
       TSP_NUM dst2 = bcx*bcx + bcy*bcy + bcz*bcz;
-      if(dst2 == 0){ v.setError("getProject(vec&): Argument module is zero"); return v; }
+      if(dst2 == 0){ v.setNote("%s getProject(vec&): Argument module is zero",TSP_ERR_COD); return v; }
       TSP_NUM dot = getDot(b) / dst2; v.Set(dot*bcx, dot*bcy, dot*bcz); return v;
     }
 
     Vec& Vec::Cross(class Vec *b)
     {
-      if(b == NULL){ setError("Cross(vec*): Argument is null"); return *this; }
+      if(b == NULL){ setNote("s Cross(vec*): Argument is null",TSP_ERR_COD); return *this; }
       Set((getY() * b->getZ()) - (getZ() * b->getY()),
           (getZ() * b->getX()) - (getX() * b->getZ()),
           (getX() * b->getY()) - (getY() * b->getX()));
@@ -577,7 +571,7 @@
     Vec Vec::getCross(class Vec *b)
     {
       cVec v = Vec();
-      if(b == NULL){ v.setError("getCross(vec*): Argument is null"); return v; }
+      if(b == NULL){ v.setNote("%s getCross(vec*): Argument is null",TSP_ERR_COD); return v; }
       v.Set(this).Cross(b); return v;
     }
 
@@ -598,8 +592,8 @@
 
     Vec& Vec::CrossTriple(class Vec *b, class Vec *c)
     {
-      if(b == NULL){ setError("CrossTriple(vec*, vec*): First argument module is null"); return *this; }
-      if(c == NULL){ setError("CrossTriple(vec*, vec*): Second argument module is null"); return *this; }
+      if(b == NULL){ setNote("%s CrossTriple(vec*, vec*): First argument module is null" ,TSP_ERR_COD); return *this; }
+      if(c == NULL){ setNote("%s CrossTriple(vec*, vec*): Second argument module is null",TSP_ERR_COD); return *this; }
       TSP_NUM ac = getDot(c);
       TSP_NUM ab = getDot(b);
       Set((ac * b->getX()) - (ab * c->getX()),
@@ -609,7 +603,7 @@
     }
     Vec& Vec::CrossTriple(class Vec *b, class Vec &c)
     {
-      if(b == NULL){ setError("CrossTriple(vec&): First argument is null"); return *this; }
+      if(b == NULL){ setNote("%s CrossTriple(vec&): First argument is null",TSP_ERR_COD); return *this; }
       TSP_NUM ac = getDot(c);
       TSP_NUM ab = getDot(b);
       Set((ac * b->getX()) - (ab * c.getX()),
@@ -620,7 +614,7 @@
 
     Vec& Vec::CrossTriple(class Vec &b, class Vec *c)
     {
-      if(c == NULL){ setError("CrossTriple(vec&): Second argument is null"); return *this; }
+      if(c == NULL){ setNote("%s CrossTriple(vec&): Second argument is null",TSP_ERR_COD); return *this; }
       TSP_NUM ac = getDot(c);
       TSP_NUM ab = getDot(b);
       Set((ac * b.getX()) - (ab * c->getX()),
@@ -637,28 +631,28 @@
     Vec Vec::getCrossTriple(class Vec *b, class Vec *c)
     {
       cVec v = Vec();
-      if(b == NULL){ v.setError("getCrossTriple(vec*,vec*): First argument is null"); return v; }
-      if(c == NULL){ v.setError("getCrossTriple(vec*,vec*): Second argument is null"); return v; }
+      if(b == NULL){ v.setNote("%s getCrossTriple(vec*,vec*): First argument is null" ,TSP_ERR_COD); return v; }
+      if(c == NULL){ v.setNote("%s getCrossTriple(vec*,vec*): Second argument is null",TSP_ERR_COD); return v; }
       v.Set(this).CrossTriple(b,c); return v;
     }
 
     Vec Vec::getCrossTriple(class Vec *b, class Vec &c)
     {
       cVec v = Vec();
-      if(b == NULL){ v.setError("getCrossTriple(vec*,vec&): First argument is null"); return v; }
+      if(b == NULL){ v.setNote("%s getCrossTriple(vec*,vec&): First argument is null",TSP_ERR_COD); return v; }
       v.Set(this).CrossTriple(b,c); return v;
     }
 
     Vec Vec::getCrossTriple(class Vec &b, class Vec *c)
     {
       cVec v = Vec();
-      if(c == NULL){ v.setError("getCrossTriple(vec&,vec*): Second argument is null"); return v; }
+      if(c == NULL){ v.setNote("%s getCrossTriple(vec&,vec*): Second argument is null",TSP_ERR_COD); return v; }
       v.Set(this).CrossTriple(b,c); return v;
     }
 
     TSP_NUM Vec::getDot(class Vec *b)
     {
-      if(b == NULL){ setError("getDot(vec*): Argument is null"); return 0; }
+      if(b == NULL){ setNote("%s getDot(vec*): Argument is null",TSP_ERR_COD); return 0; }
       return (getX()*b->getX() +
               getY()*b->getY() +
               getZ()*b->getZ());
@@ -673,7 +667,7 @@
 
     Vec& Vec::Add(class Vec *b)
     {
-      if(b == NULL){ setError("Add(vec*): Argument is null"); return *this; }
+      if(b == NULL){ setNote("%s Add(vec*): Argument is null",TSP_ERR_COD); return *this; }
       setX(getX() + b->getX());
       setY(getY() + b->getY());
       setZ(getZ() + b->getZ());
@@ -691,7 +685,7 @@
     Vec Vec::getAdd(class Vec *b)
     {
       cVec v = Vec();
-      if(b == NULL){ v.setError("getAdd(vec*): Argument is null"); return v; }
+      if(b == NULL){ v.setNote("%s getAdd(vec*): Argument is null",TSP_ERR_COD); return v; }
       v.Set(this).Add(b); return v;
     }
 
@@ -702,7 +696,7 @@
 
     Vec& Vec::Sub(class Vec *b)
     {
-      if(b == NULL){ setError("Sub(vec*): Argument is null"); return *this; }
+      if(b == NULL){ setNote("%s Sub(vec*): Argument is null",TSP_ERR_COD); return *this; }
       setX(getX() - b->getX());
       setY(getY() - b->getY());
       setZ(getZ() - b->getZ());
@@ -720,7 +714,7 @@
     Vec Vec::getSub(class Vec *b)
     {
       cVec v = Vec();
-      if(b == NULL){ v.setError("getSub(vec*): Argument is null"); return v; }
+      if(b == NULL){ v.setNote("%s getSub(vec*): Argument is null",TSP_ERR_COD); return v; }
       v.Set(this).Sub(b); return v;
     }
 
@@ -731,7 +725,7 @@
 
     Vec& Vec::Set(class Vec *b)
     {
-      if(b == NULL){ setError("Set(vec*): Argument is null"); return *this; }
+      if(b == NULL){ setNote("%s Set(vec*): Argument is null",TSP_ERR_COD); return *this; }
       setX(b->getX()); setY(b->getY()); setZ(b->getZ()); return *this;
     }
 
@@ -763,7 +757,7 @@
     TSP_NUM Vec::getCosine(TSP_STR ax)
     {
       TSP_NUM ab = getDistance();
-      if(ab ==  0 ){ setError("getCrossTriple(str): Base module is zero"); return 0; }
+      if(ab ==  0 ){ setNote("%s getCrossTriple(str): Base module is zero",TSP_ERR_COD); return 0; }
       if(ax == 'x'){ return getX() / ab; }
       if(ax == 'y'){ return getY() / ab; }
       if(ax == 'z'){ return getZ() / ab; }
@@ -782,14 +776,14 @@
 
     Vec& Vec::Div(TSP_NUM n)
     {
-      if(n == 0){ setError("Div(num): Divide by zero"); return *this; }
+      if(n == 0){ setNote("%s Div(num): Divide by zero",TSP_ERR_COD); return *this; }
       setX(getX() / n); setY(getY() / n); setZ(getZ() / n); return *this;
     }
 
     Vec Vec::getDiv(TSP_NUM n)
     {
       cVec v = Vec();
-      if(n == 0){ v.setError("getDiv(num): Divide by zero"); return v; }
+      if(n == 0){ v.setNote("%s getDiv(num): Divide by zero",TSP_ERR_COD); return v; }
       v.Set(this).Div(n); return v;
     }
     Vec Vec::getRound(void)
@@ -836,7 +830,7 @@
 
     TSP_NUM Vec::getAreaParallelogram(class Vec *b)
     {
-      if(b == NULL){ setError("getAreaParallelogram(vec*): Argument is null"); return 0; }
+      if(b == NULL){ setNote("%s getAreaParallelogram(vec*): Argument is null",TSP_ERR_COD); return 0; }
       return TSP_ABS(getCross(b).getDistance());
     }
 
@@ -847,8 +841,10 @@
 
     TSP_NUM Vec::getAreaTriangle(class Vec *b)
     {
-      if(b == NULL){ setError("getAreaTriangle(vec*): Argument is null"); return 0; }
-      return TSP_ABS(0.5 * getAreaParallelogram(b));
+      TSP_NUM a;
+      if(b == NULL){ setNote("%s getAreaTriangle(vec*): Argument is null",TSP_ERR_COD); return 0; }
+      a = TSP_ABS(0.5 * getAreaParallelogram(b));
+      return a;
     }
 
     TSP_NUM Vec::getAreaTriangle(class Vec &b)
@@ -863,22 +859,22 @@
 
     TSP_NUM Vec::getMixed(class Vec *b, class Vec *c)
     {
-      if(b == NULL){ setError("getMixed(vec*,vec*): First argument is null"); return 0; }
-      if(c == NULL){ setError("getMixed(vec*,vec*): Second argument is null"); return 0; }
+      if(b == NULL){ setNote("%s getMixed(vec*,vec*): First argument is null" ,TSP_ERR_COD); return 0; }
+      if(c == NULL){ setNote("%s getMixed(vec*,vec*): Second argument is null",TSP_ERR_COD); return 0; }
       cVec T = b->getCross(c);
       return getDot(T);
     }
 
     TSP_NUM Vec::getMixed(class Vec *b, class Vec &c)
     {
-      if(b == NULL){ setError("getMixed(vec*,vec&): First argument is null"); return 0; }
+      if(b == NULL){ setNote("%s getMixed(vec*,vec&): First argument is null",TSP_ERR_COD); return 0; }
       cVec T = b->getCross(c);
       return getDot(T);
     }
 
     TSP_NUM Vec::getMixed(class Vec &b, class Vec *c)
     {
-      if(c == NULL){ setError("getMixed(vec&,vec*): Second argument is null"); return 0; }
+      if(c == NULL){ setNote("%s getMixed(vec&,vec*): Second argument is null",TSP_ERR_COD); return 0; }
       cVec T = b.getCross(c);
       return getDot(T);
     }
@@ -890,20 +886,20 @@
 
     TSP_NUM Vec::getVolumeParallelepiped(class Vec *b, class Vec *c)
     {
-      if(b == NULL){ setError("getVolumeParallelepiped(vec*,vec*): First argument is null"); return 0; }
-      if(c == NULL){ setError("getVolumeParallelepiped(vec*,vec*): Second argument is null"); return 0; }
+      if(b == NULL){ setNote("%s getVolumeParallelepiped(vec*,vec*): First argument is null" ,TSP_ERR_COD); return 0; }
+      if(c == NULL){ setNote("%s getVolumeParallelepiped(vec*,vec*): Second argument is null",TSP_ERR_COD); return 0; }
       return TSP_ABS(getMixed(b,c));
     }
 
     TSP_NUM Vec::getVolumeParallelepiped(class Vec *b, class Vec &c)
     {
-      if(b == NULL){ setError("getVolumeParallelepiped(vec*,vec&): First argument is null"); return 0; }
+      if(b == NULL){ setNote("%s getVolumeParallelepiped(vec*,vec&): First argument is null",TSP_ERR_COD); return 0; }
       return TSP_ABS(getMixed(b,c));
     }
 
     TSP_NUM Vec::getVolumeParallelepiped(class Vec &b, class Vec *c)
     {
-      if(c == NULL){ setError("getVolumeParallelepiped(vec&,vec*): Second argument is null"); return 0; }
+      if(c == NULL){ setNote("%s getVolumeParallelepiped(vec&,vec*): Second argument is null",TSP_ERR_COD); return 0; }
       return TSP_ABS(getMixed(b,c));
     }
 
@@ -914,20 +910,20 @@
 
     TSP_NUM Vec::getVolumeTetrahedron(class Vec *b, class Vec *c)
     {
-      if(b == NULL){ setError("getVolumeTetrahedron(vec*,vec*): First argument is null"); return 0; }
-      if(c == NULL){ setError("getVolumeTetrahedron(vec*,vec*): Second argument is null"); return 0; }
+      if(b == NULL){ setNote("%s getVolumeTetrahedron(vec*,vec*): First argument is null" ,TSP_ERR_COD); return 0; }
+      if(c == NULL){ setNote("%s getVolumeTetrahedron(vec*,vec*): Second argument is null",TSP_ERR_COD); return 0; }
       return TSP_ABS(getVolumeParallelepiped(b,c) / 6);
     }
 
     TSP_NUM Vec::getVolumeTetrahedron(class Vec *b, class Vec &c)
     {
-      if(b == NULL){ setError("getVolumeTetrahedron(vec*,vec&): First argument is null"); return 0; }
+      if(b == NULL){ setNote("%s getVolumeTetrahedron(vec*,vec&): First argument is null",TSP_ERR_COD); return 0; }
       return TSP_ABS(getVolumeParallelepiped(b,c) / 6);
     }
 
     TSP_NUM Vec::getVolumeTetrahedron(class Vec &b, class Vec *c)
     {
-      if(c == NULL){ setError("getVolumeTetrahedron(vec&,vec*): Second argument is null"); return 0; }
+      if(c == NULL){ setNote("%s getVolumeTetrahedron(vec&,vec*): Second argument is null",TSP_ERR_COD); return 0; }
       return TSP_ABS(getVolumeParallelepiped(b,c) / 6);
     }
 
@@ -938,26 +934,26 @@
 
     TSP_BUL Vec::isCoplanar(class Vec *a, class Vec *b)
     {
-      if(a == NULL){ setError("isCoplanar(vec*,vec*): First argument is null"); return 0; }
-      if(b == NULL){ setError("isCoplanar(vec*,vec*): Second argument is null"); return 0; }
+      if(a == NULL){ setNote("%s isCoplanar(vec*,vec*): First argument is null" ,TSP_ERR_COD); return 0; }
+      if(b == NULL){ setNote("%s isCoplanar(vec*,vec*): Second argument is null",TSP_ERR_COD); return 0; }
       return (getMixed(a,b) == 0);
     }
 
     TSP_BUL Vec::isCoplanar(class Vec &a, class Vec *b)
     {
-      if(b == NULL){ setError("isCoplanar(vec&,vec*): Second argument is null"); return 0; }
+      if(b == NULL){ setNote("%s isCoplanar(vec&,vec*): Second argument is null",TSP_ERR_COD); return 0; }
       return (getMixed(a,b) == 0);
     }
 
     TSP_BUL Vec::isCoplanar(class Vec *a, class Vec &b)
     {
-      if(a == NULL){ setError("isCoplanar(vec*,vec&): First argument is null"); return 0; }
+      if(a == NULL){ setNote("%s isCoplanar(vec*,vec&): First argument is null",TSP_ERR_COD); return 0; }
       return (getMixed(a,b) == 0);
     }
 
     Vec& Vec::Offset(class Vec *d, TSP_NUM n)
     {
-      if(d == NULL){ setError("Offset(dir*,num): Direction is null"); return *this; }
+      if(d == NULL){ setNote("%s Offset(dir*,num): Direction is null",TSP_ERR_COD); return *this; }
       cVec dir = d->getDirection();
            dir.Mul(n);
       setX(getX() + dir.getX());
@@ -979,7 +975,7 @@
     Vec Vec::getOffset(class Vec *d, TSP_NUM n)
     {
       cVec v = Vec();
-      if(d == NULL){ v.setError("getOffset(dir*,num): Direction is null"); return v; }
+      if(d == NULL){ v.setNote("%s getOffset(dir*,num): Direction is null",TSP_ERR_COD); return v; }
       v.Set(this).Offset(d,n); return v;
     }
 
@@ -1035,7 +1031,7 @@
       if     (!memcmp(swp,"xy",2) || !memcmp(swp,"yx",2)){ T = X; X = Y; Y = T; }
       else if(!memcmp(swp,"yz",2) || !memcmp(swp,"zy",2)){ T = Y; Y = Z; Z = T; }
       else if(!memcmp(swp,"zx",2) || !memcmp(swp,"xz",2)){ T = Y; Y = Z; Z = T; }
-      else setError("Swap(str*): Wrong components <%c%c>",swp[0],swp[1]);
+      else setNote("%s Swap(str*): Wrong components <%c%c>",TSP_ERR_COD,swp[0],swp[1]);
       return *this;
     }
 

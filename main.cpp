@@ -13,7 +13,6 @@ int main()
 {
 
   float t = 0;
-
   char border[] = "------------------";
 
   printf("%30.28lf\n", ((double)TSP_PI));
@@ -291,30 +290,33 @@ int main()
 
   printf("\n%sError handling%s",border,border);
   if(A.Set(0,0,0).Direction().isValid()){ printf("\nOK."); }
-  else{ printf("\nFailed: %s",A.getError()); }
+  else{ printf("\nFailed Direction: %s",A.getNote()); A.setNote(); }
   A.Set(1,1,1) /= 0;
   if(A.isValid()){ printf("\nOK."); }
-  else{ printf("\nFailed: %s",A.getError()); }
-  A.Set(5,6,0);
+  else{ printf("\nFailed /=: %s",A.getNote()); A.setNote(); }
+  A.Set(0,0,0);
   t = A.getAngleRad(B);
   if(A.isValid()){ printf("\nOK. %14.4f",t); }
-  else{ printf("\nFailed: %s",A.getError()); }
-  A.setName("");
-  if(A.Swap("yx").isValid()){ A.Print(); }
-  else{ printf("\nFailed: %s",A.getError()); }
+  else{ printf("\nFailed getAngleRad: %s",A.getNote()); A.setNote(); }
+  if(A.Swap("yx").isValid()){ A.Print(); printf(" OK."); }
+  else{ printf("\nFailed: %s",A.getNote()); }
+  if(A.Swap("ax").isValid()){ A.Print(); A.setNote(); }
+  else{ printf("\nFailed Swap: %s",A.getNote()); }
 
-  printf("\n%sArea%s",border,border);
   A = Vec(1,  2, 3, "A");
   B = Vec(3,  2, 1, "B");
   C = Vec(4,-10, 4, "C");
-  printf("\nTri = \n%30.28lf, \n%30.28lf, \n%30.28lf",
-         A.getAreaTriangle(B),
-         A.getAreaTriangle(&B),
-         A.getAreaTriangle(NULL));
-  printf("\nPar = \n%30.28lf, \n%30.28lf, \n%30.28lf",
-         A.getAreaParallelogram(B),
-         A.getAreaParallelogram(&B),
-         A.getAreaParallelogram(NULL));
+
+  printf("\n%sgetAreaTriangle%s",border,border);
+  printf("\nA.getAreaTriangle(B) = %30.28lf",A.getAreaTriangle(B));
+  printf("\nA.getAreaTriangle(&B) = %30.28lf",A.getAreaTriangle(&B));
+  printf("\nA.getAreaTriangle(NULL) = %30.28lf",A.getAreaTriangle(NULL));
+
+  printf("\n%sgetAreaParallelogram%s",border,border);
+  printf("\nA.getAreaParallelogram(B) = %30.28lf",A.getAreaParallelogram(B));
+  printf("\nA.getAreaParallelogram(&B) = %30.28lf",A.getAreaParallelogram(&B));
+  printf("\nA.getAreaParallelogram(NULL) = %30.28lf",A.getAreaParallelogram(NULL));
+
   printf("\n%sVolumeTetrahedron%s",border,border);
   printf("\ngetVolumeTetrahedron(B,C) = %30.28lf",A.getVolumeTetrahedron(B,C));
   printf("\ngetVolumeTetrahedron(&B,&C) = %30.28lf",A.getVolumeTetrahedron(&B,&C));
