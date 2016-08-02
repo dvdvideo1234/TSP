@@ -2,7 +2,6 @@
 
 int main()
 {
-
   float t = 0;
   char border[] = "------------------";
 
@@ -278,20 +277,25 @@ int main()
   B.Set(A).setName("3").RoundDigit(3).Print();
   printf("\n");
 
-  printf("\n%sError handling%s",border,border);
-  if(A.Set(0,0,0).Direction().isValid()){ printf("\nOK."); }
-  else{ printf("\nFailed Direction: %s",A.getNote()); A.setNote(); }
+  setError("%s %d","sfsdf ",6); // Test static
+
+  printf("\n%sError handling%s <%s>",border,border,getError());
+  A.Set(0,0,0).Direction();
+  if(!hasError()){ printf("\nOK."); }
+  else{ printf("\nFailed Direction: %s",getError()); clrError(); }
   A.Set(1,1,1) /= 0;
-  if(A.isValid()){ printf("\nOK."); }
-  else{ printf("\nFailed /=: %s",A.getNote()); A.setNote(); }
+  if(!hasError()){ printf("\nOK."); }
+  else{ printf("\nFailed /=: %s",getError()); clrError(); }
   A.Set(0,0,0);
   t = A.getAngleRad(B);
-  if(A.isValid()){ printf("\nOK. %14.4f",t); }
-  else{ printf("\nFailed getAngleRad: %s",A.getNote()); A.setNote(); }
-  if(A.Swap("yx").isValid()){ A.Print(); printf(" OK."); }
-  else{ printf("\nFailed: %s",A.getNote()); }
-  if(A.Swap("ax").isValid()){ A.Print(); A.setNote(); }
-  else{ printf("\nFailed Swap: %s",A.getNote()); }
+  if(!hasError()){ printf("\nOK. %14.4f",t); }
+  else{ printf("\nFailed getAngleRad: %s",getError()); clrError(); }
+  A.Swap("yx");
+  if(!hasError()){ A.Print(); printf(" OK."); }
+  else{ printf("\nFailed: %s",getError()); clrError(); }
+  A.Swap("ax");
+  if(!hasError()){ A.Print(); }
+  else{ printf("\nFailed Swap: %s",getError()); clrError(); }
 
   A = Vec(1,  2, 3, "A");
   B = Vec(3,  2, 1, "B");
