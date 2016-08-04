@@ -16,25 +16,19 @@
     #define TSP_ABS   fabs                 // General macro for processing absolute
     #define TSP_PI 3.1415926535897931
 
-    static char msgBuffer[TSP_MSG_LEN] = {0};
+    static TSP_STR msgBuffer[TSP_MSG_LEN] = {0};
 
     static void setError(const char *form, ...)
     {
       va_list args;
       va_start (args, form);
-      vsprintf(msgBuffer, form, args);
+      vsprintf((char*)msgBuffer, form, args);
       va_end(args);
     }
 
-    char *getError(char *dstBuffer)
-    { // Copy including the terminating null character
-      memcpy(dstBuffer, msgBuffer + strlen(TSP_ERR_COD) + 1, strlen(msgBuffer) + 1);
-      return dstBuffer;
-    }
-
-    char   *getError(){ return (msgBuffer + strlen(TSP_ERR_COD) + 1); }
-    TSP_BUL hasError(){ return (memcmp(TSP_ERR_COD, msgBuffer, strlen(TSP_ERR_COD)) == 0); }
-    void    clrError(){ memset (msgBuffer, 0, TSP_MSG_LEN); }
+    TSP_STR *getError(){ return (msgBuffer); }
+    TSP_BUL  hasError(){ return (msgBuffer[0] != '\0'); }
+    void     clrError(){ memset (msgBuffer, 0, TSP_MSG_LEN); }
 
     typedef class Vec
     {
