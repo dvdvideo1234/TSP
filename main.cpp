@@ -277,23 +277,26 @@ int main()
   B.Set(A).setName("3").RoundDigit(3).Print();
   printf("\n");
 
-  printf("\n%sError handling%s <%s>",border,border,getError());
+  // ..TSP\tspvector.h|225|error: 'void Vec::setError(const char*, ...)' is protected|
+  // A.setError("asdad");
+
+  printf("\n%sError handling%s <%s>",border,border,A.getError());
   A.Set(0,0,0).Direction();
-  if(!hasError()){ printf("\nOK."); }
-  else{ printf("\nFailed Direction: %s",getError()); clrError(); }
+  if(!A.hasError()){ printf("\nOK."); }
+  else{ printf("\nFailed Direction: %s",A.getError()); A.clrError(); }
   A.Set(1,1,1) /= 0;
-  if(!hasError()){ printf("\nOK."); }
-  else{ printf("\nFailed /=: %s",getError()); clrError(); }
+  if(!A.hasError()){ printf("\nOK."); }
+  else{ printf("\nFailed /=: %s",A.getError()); A.clrError(); }
   A.Set(0,0,0);
   t = A.getAngleRad(B);
-  if(!hasError()){ printf("\nOK. %14.4f",t); }
-  else{ printf("\nFailed getAngleRad: %s",getError()); clrError(); }
+  if(!A.hasError()){ printf("\nOK. %14.4f",t); }
+  else{ printf("\nFailed getAngleRad: %s",A.getError()); A.clrError(); }
   A.Swap("yx");
-  if(!hasError()){ A.Print(); printf(" OK."); }
-  else{ printf("\nFailed: %s",getError()); clrError(); }
+  if(!A.hasError()){ A.Print(); printf(" OK."); }
+  else{ printf("\nFailed: %s",A.getError()); A.clrError(); }
   A.Swap("ax");
-  if(!hasError()){ A.Print(); }
-  else{ printf("\nFailed Swap: %s",getError()); clrError(); }
+  if(!A.hasError()){ A.Print(); }
+  else{ printf("\nFailed Swap: %s",A.getError()); A.clrError(); }
 
   A = Vec(1,  2, 3, "A");
   B = Vec(3,  2, 1, "B");
