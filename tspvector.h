@@ -50,6 +50,11 @@
         friend TSP_BUL    operator<=(Vec&, Vec&);
         friend TSP_BUL    operator> (Vec&, Vec&);
         friend TSP_BUL    operator< (Vec&, Vec&);
+        friend class Vec  operator% (Vec&, Vec&);
+        friend class Vec  operator% (Vec&, TSP_NUM);
+        friend class Vec  operator% (TSP_NUM, Vec&);
+        friend void       operator%=(Vec&, Vec&);
+        friend void       operator%=(Vec&, TSP_NUM);
         friend class Vec  operator++(Vec&, int);
         friend class Vec  operator--(Vec&, int);
         friend class Vec& operator++(Vec&);
@@ -103,6 +108,10 @@
         TSP_NUM        getVolumeParallelepiped(class Vec *b, class Vec *c);
         TSP_NUM        getVolumeParallelepiped(class Vec *b, class Vec &c);
         TSP_NUM        getVolumeParallelepiped(class Vec &b, class Vec *c);
+        class Vec&        Middle(class Vec *b);
+        class Vec&        Middle(class Vec &b);
+        class Vec      getMiddle(class Vec *b);
+        class Vec      getMiddle(class Vec &b);
         class Vec&        Round(void){ X = TSP_ROUND(X); Y = TSP_ROUND(Y); Z = TSP_ROUND(Z); return *this; };
         class Vec      getRound(void);
         class Vec&        RoundDigit(unsigned int d);
@@ -167,6 +176,8 @@
         class Vec&        Swap(const void* Comp);
         class Vec      getSwap(const void* Comp);
         class Vec&        Print(void);
+        class Vec&        Print(FILE *f);
+        class Vec&        Print(TSP_STR *s);
         class Vec&        PrintTrajectory(void);
                           Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const void *name, void *user, class Vec *next);
                           Vec(TSP_NUM x, TSP_NUM y, TSP_NUM z, const void *name, class Vec *next);
@@ -230,9 +241,25 @@
       va_end(args);
     }
 
+    Vec& Vec::Print(FILE *f)
+    {
+      if(f == NULL){ setError("ERR: Print(file*): Argument is null"); }
+      fprintf(f,"\nVec %p > %p --> %s, %p\nXYZ = { %15.8f, %15.8f, %15.8f }",
+         this,getNext(),getName(),getUser(),getX(),getY(),getZ());
+      return *this;
+    }
+
     Vec& Vec::Print(void)
     {
-      printf("\nVec %p > %p --> %s, %p\n\rXYZ = { %15.8f, %15.8f, %15.8f }",
+      fprintf(stdout,"\nVec %p > %p --> %s, %p\nXYZ = { %15.8f, %15.8f, %15.8f }",
+         this,getNext(),getName(),getUser(),getX(),getY(),getZ());
+      return *this;
+    }
+
+    Vec& Vec::Print(TSP_STR *s)
+    {
+      if(s == NULL){ setError("ERR: Print(string*): Argument is null"); }
+      sprintf((char*)s,"\nVec %p > %p --> %s, %p\nXYZ = { %15.8f, %15.8f, %15.8f }",
          this,getNext(),getName(),getUser(),getX(),getY(),getZ());
       return *this;
     }
@@ -1020,6 +1047,7 @@
 
     Vec& Vec::Swap(const void* cmp)
     {
+      if(cmp == NULL){ setError("ERR: Swap(str*): Argument is null"); return *this; }
       TSP_NUM T      = 0.0;
       TSP_STR swp[2] = {0};
       const TSP_STR *cms = (const TSP_STR*)cmp;
@@ -1036,4 +1064,32 @@
     {
       cVec v = Vec(); v.Set(this).Swap(cmp); return v;
     }
+
+    Vec& Vec::Middle(class Vec *b)
+    {
+      if(b == NULL){ setError("ERR: Middle(vec*): Argument is null"); return *this; }
+      cVec c; c.Set(b).Sub(this).Div(2); Add(c); return *this;
+    }
+
+    Vec& Vec::Middle(class Vec &b)
+    {
+      cVec c; c.Set(b).Sub(this).Div(2); Add(c); return *this;
+    }
+
+    Vec Vec::getMiddle(class Vec *b)
+    {
+      if(b == NULL){ setError("ERR: getMiddle(vec*): Argument is null"); return *this; }
+      cVec c; c.Set(b).Sub(this).Div(2); c.Add(this); return c;
+    }
+
+    Vec Vec::getMiddle(class Vec &b)
+    {
+      cVec c; c.Set(b).Sub(this).Div(2); c.Add(this); return c;
+    }
+
+    Vec operator%(Vec &a, Vec &b){ cVec v; v.Set(a).Middle(b); return v; }
+    Vec operator%(Vec &a, TSP_NUM b){ cVec v = Vec(b); v.Middle(a); return v; }
+    Vec operator%(TSP_NUM a, Vec &b){ cVec v = Vec(a); v.Middle(b); return v; }
+    void operator%=(Vec &a, Vec &b)   {                  a.Middle(b); }
+    void operator%=(Vec &a, TSP_NUM b){ cVec v = Vec(b); a.Middle(v); }
 #endif
