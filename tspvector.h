@@ -108,10 +108,10 @@
         TSP_NUM        getVolumeParallelepiped(class Vec *b, class Vec *c);
         TSP_NUM        getVolumeParallelepiped(class Vec *b, class Vec &c);
         TSP_NUM        getVolumeParallelepiped(class Vec &b, class Vec *c);
-        class Vec&        Middle(class Vec *b);
-        class Vec&        Middle(class Vec &b);
-        class Vec      getMiddle(class Vec *b);
-        class Vec      getMiddle(class Vec &b);
+        class Vec&        Center(class Vec *b);
+        class Vec&        Center(class Vec &b);
+        class Vec      getCenter(class Vec *b);
+        class Vec      getCenter(class Vec &b);
         class Vec&        Round(void){ X = TSP_ROUND(X); Y = TSP_ROUND(Y); Z = TSP_ROUND(Z); return *this; };
         class Vec      getRound(void);
         class Vec&        RoundDigit(unsigned int d);
@@ -1065,31 +1065,37 @@
       cVec v = Vec(); v.Set(this).Swap(cmp); return v;
     }
 
-    Vec& Vec::Middle(class Vec *b)
-    {
-      if(b == NULL){ setError("ERR: Middle(vec*): Argument is null"); return *this; }
-      cVec c; c.Set(b).Sub(this).Div(2); Add(c); return *this;
+    Vec& Vec::Center(class Vec *b)
+    { // It must be able taking the center between A and B
+      if(b == NULL){ setError("ERR: Center(vec*): Argument is null"); return *this; }
+      unsigned int cnt = 1; cVec *pVec = b;
+      while(pVec != NULL){ Add(pVec); cnt++; pVec = pVec->getNext(); } Div(cnt);
+      return *this;
     }
 
-    Vec& Vec::Middle(class Vec &b)
-    {
-      cVec c; c.Set(b).Sub(this).Div(2); Add(c); return *this;
+    Vec& Vec::Center(class Vec &b)
+    { // It must be able taking the center between A and B
+      unsigned int cnt = 1; cVec *pVec = &b;
+      while(pVec != NULL){ Add(pVec); cnt++; pVec = pVec->getNext(); } Div(cnt);
+      return *this;
     }
 
-    Vec Vec::getMiddle(class Vec *b)
-    {
-      if(b == NULL){ setError("ERR: getMiddle(vec*): Argument is null"); return *this; }
-      cVec c; c.Set(b).Sub(this).Div(2); c.Add(this); return c;
+    Vec Vec::getCenter(class Vec *b)
+    { // Get the center separately
+      if(b == NULL){ setError("ERR: getCenter(vec*): Argument is null"); return *this; }
+      cVec c; c.Set(this).Center(b); return c;
     }
 
-    Vec Vec::getMiddle(class Vec &b)
-    {
-      cVec c; c.Set(b).Sub(this).Div(2); c.Add(this); return c;
-    }
+    Vec Vec::getCenter(class Vec &b){ cVec c; c.Set(this).Center(b); return c; }
 
-    Vec operator%(Vec &a, Vec &b){ cVec v; v.Set(a).Middle(b); return v; }
-    Vec operator%(Vec &a, TSP_NUM b){ cVec v = Vec(b); v.Middle(a); return v; }
-    Vec operator%(TSP_NUM a, Vec &b){ cVec v = Vec(a); v.Middle(b); return v; }
-    void operator%=(Vec &a, Vec &b)   {                  a.Middle(b); }
-    void operator%=(Vec &a, TSP_NUM b){ cVec v = Vec(b); a.Middle(v); }
+    Vec operator%(Vec &a, Vec &b)
+    {
+      cVec va = Vec(); va.Set(a).Center(b);
+      cVec vb = Vec(); vb.Set(b).Center(a);
+      return (va + vb).Div(2);
+    }
+    Vec operator%(Vec &a, TSP_NUM b){ cVec v = Vec(b); v.Center(a); return v; }
+    Vec operator%(TSP_NUM a, Vec &b){ cVec v = Vec(a); v.Center(b); return v; }
+    void operator%=(Vec &a, Vec &b)   { cVec v = (a % b); a.Set(v); }
+    void operator%=(Vec &a, TSP_NUM b){ cVec v = (a % b); a.Set(v); }
 #endif

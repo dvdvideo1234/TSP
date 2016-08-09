@@ -4,7 +4,11 @@ int main()
 {
   FILE *f = NULL;
   char name[] = "E:\\Documents\\CodeBlocks-Projs\\TSP\\out.txt";
-  if(name[0] != '\0'){ f = fopen(name,"wt+"); }else{ f = stdout; }
+  if(name[0] != '\0')
+  {
+    f = fopen(name,"wt+");
+    f = (f == NULL) ? stdout : f;
+  }else{ f = stdout; }
   float t = 0;
   char border[] = "------------------";
 
@@ -201,14 +205,14 @@ int main()
   C = A ^ B;
   C.Print(f);
 
-  fprintf(f,"\n%sMiddle point%s",border,border);
-  A = Vec(12, 0, 0, "A"); // {11,0,0}
+  fprintf(f,"\n%sCenter point%s",border,border);
+  A = Vec(30, 0, 0, "A"); // {11,0,0}
   B = Vec(10, 0, 0, "B");
   C = Vec("C");
-  C.Set(A).Middle(B).setName("a.Middle(b)").Print(f);
-  C.Set(A).Middle(&B).setName("a.Middle(*b)").Print(f);
-  A.getMiddle(B).setName("v a.Middle(b)").Print(f);
-  A.getMiddle(&B).setName("v a.Middle(*b)").Print(f);
+  C.Set(A).Center(B).setName("a.Center(b)").Print(f);
+  C.Set(A).Center(&B).setName("a.Center(*b)").Print(f);
+  A.getCenter(B).setName("v a.Center(b)").Print(f);
+  A.getCenter(&B).setName("v a.Center(*b)").Print(f);
   C = A % B; C.setName("A % B").Print(f);
   C = A % B.getX(); C.setName("A % B.x").Print(f);
   C = A.getX() % B; C.setName("A.x % B").Print(f);
