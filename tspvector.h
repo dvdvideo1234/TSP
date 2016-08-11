@@ -30,11 +30,13 @@
         void          setError(const char *form, ...);
       public:
         friend Vec        operator+ (Vec&, Vec&);
+        friend Vec        operator+ (Vec&, TSP_NUM);
         friend Vec        operator- (Vec&, Vec&);
-        friend void       operator+=(Vec&, TSP_NUM);
+        friend Vec        operator- (Vec&, TSP_NUM);
         friend void       operator+=(Vec&, Vec&);
-        friend void       operator-=(Vec&, TSP_NUM);
+        friend void       operator+=(Vec&, TSP_NUM);
         friend void       operator-=(Vec&, Vec&);
+        friend void       operator-=(Vec&, TSP_NUM);
         friend Vec        operator^ (Vec&, Vec&);
         friend void       operator^=(Vec&, Vec&);
         friend TSP_NUM    operator* (Vec&, Vec&);
@@ -43,6 +45,7 @@
         friend void       operator*=(Vec&, TSP_NUM);
         friend void       operator*=(Vec&, Vec&);
         friend Vec        operator/ (Vec&, TSP_NUM);
+        friend Vec        operator/ (Vec&, Vec&);
         friend void       operator/=(Vec&, TSP_NUM);
         friend TSP_BUL    operator==(Vec&, Vec&);
         friend TSP_BUL    operator!=(Vec&, Vec&);
@@ -130,19 +133,35 @@
         class Vec      getProject(class Vec &b);
         class Vec&        Add(class Vec *b);
         class Vec&        Add(class Vec &b);
+        class Vec&        Add(TSP_NUM x);
+        class Vec&        Add(TSP_NUM x, TSP_NUM y);
+        class Vec&        Add(TSP_NUM x, TSP_NUM y, TSP_NUM z);
         class Vec      getAdd(class Vec *b);
         class Vec      getAdd(class Vec &b);
+        class Vec      getAdd(TSP_NUM x);
+        class Vec      getAdd(TSP_NUM x, TSP_NUM y);
+        class Vec      getAdd(TSP_NUM x, TSP_NUM y, TSP_NUM z);
         class Vec&        Sub(class Vec *b);
         class Vec&        Sub(class Vec &b);
+        class Vec&        Sub(TSP_NUM x);
+        class Vec&        Sub(TSP_NUM x, TSP_NUM y);
+        class Vec&        Sub(TSP_NUM x, TSP_NUM y, TSP_NUM z);
         class Vec      getSub(class Vec *b);
         class Vec      getSub(class Vec &b);
+        class Vec      getSub(TSP_NUM x);
+        class Vec      getSub(TSP_NUM x, TSP_NUM y);
+        class Vec      getSub(TSP_NUM x, TSP_NUM y, TSP_NUM z);
         TSP_NUM        getCosine(TSP_STR);
         class Vec&        Neg(void);
         class Vec      getNeg(void);
         class Vec&        Mul(TSP_NUM n);
         class Vec      getMul(TSP_NUM n);
         class Vec&        Div(TSP_NUM n);
+        class Vec&        Div(class Vec &b);
+        class Vec&        Div(class Vec *b);
         class Vec      getDiv(TSP_NUM n);
+        class Vec      getDiv(class Vec &b);
+        class Vec      getDiv(class Vec *b);
         TSP_NUM        getMixed(class Vec &b, class Vec &c);
         TSP_NUM        getMixed(class Vec *b, class Vec *c);
         TSP_NUM        getMixed(class Vec *b, class Vec &c);
@@ -377,7 +396,11 @@
 
     Vec operator+(Vec &a, Vec &b){ cVec v; v.Set(a).Add(b); return v; }
 
+    Vec operator+(Vec &a, TSP_NUM n){ cVec v; v.Set(a).Add(n); return v; }
+
     Vec operator-(Vec &a, Vec &b){ cVec v; v.Set(a).Sub(b); return v; }
+
+    Vec operator-(Vec &a, TSP_NUM n){ cVec v; v.Set(a).Sub(n); return v; }
 
     void operator+=(Vec &a, TSP_NUM n){ a.setX(a.getX() + n); }
 
@@ -395,12 +418,14 @@
 
     Vec operator*(Vec &b, TSP_NUM n){ return Vec(n * b.getX(), n * b.getY(), n * b.getZ()); }
 
-    Vec  operator/(Vec &b, TSP_NUM n)
+    Vec operator/(Vec &b, TSP_NUM n)
     {
       cVec v = Vec();
       if(n == 0){ v.setError("ERR: operator/(vec&,num): Divide by zero"); return v; }
       v.Set(b.getX() / n, b.getY() / n, b.getZ() / n); return v;
     }
+
+    Vec operator/(Vec &a, Vec &b){ cVec v = Vec(); v.Set(a).Div(b); return v; }
 
     void operator*=(Vec &a, TSP_NUM n){ a.Mul(n); }
 
@@ -593,6 +618,21 @@
       Add(*b); return *this;
     }
 
+    Vec& Vec::Add(TSP_NUM x)
+    {
+      cVec v = Vec(); v.setX(x + getX()); return *this;
+    }
+
+    Vec& Vec::Add(TSP_NUM x, TSP_NUM y)
+    {
+      cVec v = Vec(); v.setX(x + getX()).setY(y + getX()); return *this;
+    }
+
+    Vec& Vec::Add(TSP_NUM x, TSP_NUM y, TSP_NUM z)
+    {
+      setX(x + getX()).setY(y + getX()).setZ(z + getZ()); return *this;
+    }
+
     Vec Vec::getAdd(class Vec *b)
     {
       cVec v = Vec();
@@ -601,6 +641,15 @@
     }
 
     Vec Vec::getAdd(class Vec &b){ cVec v = Vec().Set(this).Add(b); return v; }
+
+    Vec Vec::getAdd(TSP_NUM x){ cVec v = Vec(); v.setX(x + getX()); return v; }
+
+    Vec Vec::getAdd(TSP_NUM x, TSP_NUM y){ cVec v = Vec(); v.setX(x + getX()).setY(y + getX()); return v; }
+
+    Vec Vec::getAdd(TSP_NUM x, TSP_NUM y, TSP_NUM z)
+    {
+      cVec v = Vec(); v.setX(x + getX()).setY(y + getX()).setZ(z + getZ()); return v;
+    }
 
     Vec& Vec::Sub(class Vec &b)
     {
@@ -616,6 +665,15 @@
       Sub(*b); return *this;
     }
 
+    Vec& Vec::Sub(TSP_NUM x){ setX(x - getX()); return *this; }
+
+    Vec& Vec::Sub(TSP_NUM x, TSP_NUM y){ setX(x - getX()).setY(y - getX()); return *this; }
+
+    Vec& Vec::Sub(TSP_NUM x, TSP_NUM y, TSP_NUM z)
+    {
+      setX(x - getX()).setY(y - getX()).setZ(z - getZ()); return *this;
+    }
+
     Vec Vec::getSub(class Vec *b)
     {
       cVec v = Vec();
@@ -624,6 +682,15 @@
     }
 
     Vec Vec::getSub(class Vec &b){ cVec v = Vec().Set(this).Sub(b); return v; }
+
+    Vec Vec::getSub(TSP_NUM x){ cVec v = Vec(); v.setX(x - getX()); return v; }
+
+    Vec Vec::getSub(TSP_NUM x, TSP_NUM y){ cVec v = Vec(); v.setX(x - getX()).setY(y - getX()); return v; }
+
+    Vec Vec::getSub(TSP_NUM x, TSP_NUM y, TSP_NUM z)
+    {
+      cVec v = Vec(); v.setX(x - getX()).setY(y - getX()).setZ(z - getZ()); return v;
+    }
 
     Vec& Vec::Set(class Vec *b)
     {
@@ -644,7 +711,7 @@
     TSP_NUM Vec::getCosine(TSP_STR ax)
     {
       TSP_NUM ab = getDistance();
-      if(ab ==  0 ){ setError("ERR: getCrossTriple(str): Base module is zero"); return 0; }
+      if(ab ==  0 ){ setError("ERR: getCosine(str): Base module is zero"); return 0; }
       if(ax == 'x'){ return getX() / ab; }
       if(ax == 'y'){ return getY() / ab; }
       if(ax == 'z'){ return getZ() / ab; }
@@ -661,11 +728,37 @@
       setX(getX() / n); setY(getY() / n); setZ(getZ() / n); return *this;
     }
 
+    Vec& Vec::Div(class Vec &b)
+    {
+      if(b.getX() == 0){ setError("ERR: Div(vec&): Divide(X) by zero"); return *this; }
+      if(b.getY() == 0){ setError("ERR: Div(vec&): Divide(Y) by zero"); return *this; }
+      if(b.getZ() == 0){ setError("ERR: Div(vec&): Divide(Z) by zero"); return *this; }
+      setX(getX() / b.getX()).setY(getY() / b.getY()).setZ(getZ() / b.getZ()); return *this;
+    }
+
+    Vec& Vec::Div(class Vec *b)
+    {
+      if(b == NULL){ setError("ERR: Div(vec*): Argument is null"); return *this; }
+      Div(*b); return *this;
+    }
+
     Vec Vec::getDiv(TSP_NUM n)
     {
       cVec v = Vec();
       if(n == 0){ setError("ERR: getDiv(num): Divide by zero"); return v; }
       v.Set(this).Div(n); return v;
+    }
+
+    Vec Vec::getDiv(class Vec &b)
+    {
+      cVec v = Vec(); v.Set(this).Div(b); return v;
+    }
+
+    Vec Vec::getDiv(class Vec *b)
+    {
+      cVec v = Vec();
+      if(b == NULL){ setError("ERR: getDiv(vec*): Argument is null"); return v; }
+      v.Set(this).Div(*b); return v;
     }
 
     Vec Vec::getRound(void){ cVec v = Vec(); v.Set(this).Round(); return v; }
