@@ -3,7 +3,8 @@
 int main()
 {
   FILE *f = NULL;
-  char name[] = "E:\\Documents\\CodeBlocks-Projs\\TSP\\out.txt";
+  // char name[] = "E:\\Documents\\CodeBlocks-Projs\\TSP\\out.txt";
+  char name[] = "";
   if(name[0] != '\0')
   {
     f = fopen(name,"wt+");
@@ -14,7 +15,7 @@ int main()
 
   fprintf(f,"%30.28lf\n", ((double)TSP_PI));
 
-  cVec A, B, C, D;
+  cVec A, B, C, D, E;
   A = Vec(1, 2, 3,"A");
   B = Vec(3, 2, 1,"B");
 
@@ -206,8 +207,9 @@ int main()
   C.Print(f);
 
   fprintf(f,"\n%sCenter point%s",border,border);
-  A = Vec(30, 0, 0, "A"); // {11,0,0}
-  B = Vec(10, 0, 0, "B");
+  A = Vec(30, 0, 0, "A");
+  B = Vec(10, 0, 0, "B"); // Uncomment "TEST" to try it out
+  E = Vec(30, 0, 0, "E"); B.setNext(&E);
   C = Vec("C");
   C.Set(A).Center(B).setName("a.Center(b)").Print(f);
   C.Set(A).Center(&B).setName("a.Center(*b)").Print(f);
