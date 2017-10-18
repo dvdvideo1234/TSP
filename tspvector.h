@@ -579,7 +579,8 @@
       CrossTriple(b,*c); return *this;
     }
 
-    Vec Vec::getCrossTriple(const Vec &b, const Vec &c) const { cVec v = Vec().Set(this).CrossTriple(b,c); return v; }
+    Vec Vec::getCrossTriple(const Vec &b, const Vec &c) const
+      { cVec v = Vec().Set(this).CrossTriple(b,c); return v; }
 
     Vec Vec::getCrossTriple(const Vec *b, const Vec *c) const
     {
@@ -602,11 +603,7 @@
     }
 
     TSP_NUM Vec::getDot(const Vec &b) const
-    {
-      return (getX()*b.getX() +
-              getY()*b.getY() +
-              getZ()*b.getZ());
-    }
+      { return (getX()*b.getX() + getY()*b.getY() + getZ()*b.getZ()); }
 
     TSP_NUM Vec::getDot(const Vec *b) const
     {
@@ -615,12 +612,7 @@
     }
 
     Vec& Vec::Add(const Vec &b)
-    {
-      setX(getX() + b.getX());
-      setY(getY() + b.getY());
-      setZ(getZ() + b.getZ());
-      return *this;
-    }
+      { setX(getX() + b.getX()).setY(getY() + b.getY()).setZ(getZ() + b.getZ()); return *this; }
 
     Vec& Vec::Add(const Vec *b)
     {
@@ -629,19 +621,13 @@
     }
 
     Vec& Vec::Add(TSP_NUM x)
-    {
-      cVec v = Vec(); v.setX(x + getX()); return *this;
-    }
+      { setX(getX() + x); return *this; }
 
     Vec& Vec::Add(TSP_NUM x, TSP_NUM y)
-    {
-      cVec v = Vec(); v.setX(x + getX()).setY(y + getX()); return *this;
-    }
+      { setX(getX() + x).setY(getY() + y); return *this; }
 
     Vec& Vec::Add(TSP_NUM x, TSP_NUM y, TSP_NUM z)
-    {
-      setX(x + getX()).setY(y + getX()).setZ(z + getZ()); return *this;
-    }
+      { setX(getX() + x).setY(getY() + y).setZ(getZ() + z); return *this; }
 
     Vec Vec::getAdd(const Vec *b) const
     {
@@ -650,16 +636,17 @@
       v.Set(this).Add(b); return v;
     }
 
-    Vec Vec::getAdd(const Vec &b) const { cVec v = Vec().Set(this).Add(b); return v; }
+    Vec Vec::getAdd(const Vec &b) const
+      { cVec v = Vec().Set(this).Add(b); return v; }
 
-    Vec Vec::getAdd(TSP_NUM x) const { cVec v = Vec(); v.setX(x + getX()); return v; }
+    Vec Vec::getAdd(TSP_NUM x) const
+      { cVec v = Vec(); v.Add(x); return v; }
 
-    Vec Vec::getAdd(TSP_NUM x, TSP_NUM y) const { cVec v = Vec(); v.setX(x + getX()).setY(y + getX()); return v; }
+    Vec Vec::getAdd(TSP_NUM x, TSP_NUM y) const
+      { cVec v = Vec(); v.Add(x,y); return v; }
 
     Vec Vec::getAdd(TSP_NUM x, TSP_NUM y, TSP_NUM z) const
-    {
-      cVec v = Vec(); v.setX(x + getX()).setY(y + getX()).setZ(z + getZ()); return v;
-    }
+      { cVec v = Vec(); v.Add(x,y,z); return v; }
 
     Vec& Vec::Sub(const Vec &b)
     {
@@ -675,14 +662,14 @@
       Sub(*b); return *this;
     }
 
-    Vec& Vec::Sub(TSP_NUM x){ setX(x - getX()); return *this; }
+    Vec& Vec::Sub(TSP_NUM x)
+      { setX(getX() - x); return *this; }
 
-    Vec& Vec::Sub(TSP_NUM x, TSP_NUM y){ setX(x - getX()).setY(y - getX()); return *this; }
+    Vec& Vec::Sub(TSP_NUM x, TSP_NUM y)
+      { setX(getX() - x).setY(getY() - y); return *this; }
 
     Vec& Vec::Sub(TSP_NUM x, TSP_NUM y, TSP_NUM z)
-    {
-      setX(x - getX()).setY(y - getX()).setZ(z - getZ()); return *this;
-    }
+      { setX(getX() - x).setY(getY() - y).setZ(getZ() - z); return *this; }
 
     Vec Vec::getSub(const Vec *b) const
     {
@@ -691,16 +678,17 @@
       v.Set(this).Sub(b); return v;
     }
 
-    Vec Vec::getSub(const Vec &b) const { cVec v = Vec().Set(this).Sub(b); return v; }
+    Vec Vec::getSub(const Vec &b) const
+      { cVec v = Vec().Set(this).Sub(b); return v; }
 
-    Vec Vec::getSub(TSP_NUM x) const { cVec v = Vec(); v.setX(x - getX()); return v; }
+    Vec Vec::getSub(TSP_NUM x) const
+      { cVec v = Vec(); v.Sub(x); return v; }
 
-    Vec Vec::getSub(TSP_NUM x, TSP_NUM y) const { cVec v = Vec(); v.setX(x - getX()).setY(y - getX()); return v; }
+    Vec Vec::getSub(TSP_NUM x, TSP_NUM y) const
+      { cVec v = Vec(); v.Sub(x,y); return v; }
 
     Vec Vec::getSub(TSP_NUM x, TSP_NUM y, TSP_NUM z) const
-    {
-      cVec v = Vec(); v.setX(x - getX()).setY(y - getX()).setZ(z - getZ()); return v;
-    }
+      { cVec v = Vec(); v.Sub(x,y,z); return v; }
 
     Vec& Vec::Set(const Vec *b)
     {

@@ -3,8 +3,8 @@
 int main()
 {
   FILE *f = NULL;
-  // char name[] = "E:\\Documents\\CodeBlocks-Projs\\TSP\\out.txt";
-  char name[] = "";
+  char name[] = "E:\\Documents\\CodeBlocks-Projs\\TSP\\out.txt";
+  //char name[] = "";
   if(name[0] != '\0')
   {
     f = fopen(name,"wt+");
@@ -175,10 +175,11 @@ int main()
   A.getSub (B).Print(f);
   C.Set(&A).Sub(B).Print(f);
   C.Set(&A).Sub(&B).Print(f);
-  C.Set(&A) -= B;
-  C.Print(f);
-  C = A - B;
-  C.Print(f);
+  C.Set(&A) -= B; C.Print(f);
+  C = A - B; C.Print(f);
+  C.Set(&A).Sub(10).Print(f);
+  C.Set(&A).Sub(10,10).Print(f);
+  C.Set(&A).Sub(10,10,10).Print(f);
 
   fprintf(f,"\n%sAddition%s",border,border);
   A = Vec(1, 2, 3, "A");
@@ -188,10 +189,11 @@ int main()
   A.getAdd (B).Print(f);
   C.Set(&A).Add(B).Print(f);
   C.Set(&A).Add(&B).Print(f);
-  C.Set(&A) += B;
-  C.Print(f);
-  C = A + B;
-  C.Print(f);
+  C.Set(&A) += B; C.Print(f);
+  C = A + B; C.Print(f);
+  C.Set(&A).Add(10).Print(f);
+  C.Set(&A).Add(10,10).Print(f);
+  C.Set(&A).Add(10,10,10).Print(f);
 
   fprintf(f,"\n%sCross%s",border,border);
   A = Vec(1, 2, 3, "A");

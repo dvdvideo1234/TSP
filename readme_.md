@@ -29,4 +29,5 @@ Methods with prefix "get" return something.
 Methods starting with capital letter affect the object they are call on.
 
 You can view the "main.cpp" for tutorial how to use the library.
+Check out output file to trace the test process.
 ```
