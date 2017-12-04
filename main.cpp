@@ -308,14 +308,15 @@ int main()
   // ..TSP\tspvector.h|225|error: 'void Vec::setError(const char*, ...)' is protected|
   // A.setError("asdad");
 
-  fprintf(f,"\n%sError handling%s <%s>",border,border,A.getError());
+  fprintf(f,"\n%sError handling%s",border,border);
+  fprintf(f,"\nError <%s>",A.getError());
   A.Set(0,0,0).Direction();
   if(!A.hasError()){ fprintf(f,"\nOK."); }
   else{ fprintf(f,"\nFailed Direction: %s",A.getError()); A.clrError(); }
   A.Set(1,1,1) /= 0;
   if(!A.hasError()){ fprintf(f,"\nOK."); }
   else{ fprintf(f,"\nFailed /=: %s",A.getError()); A.clrError(); }
-  A.Set(0,0,0);
+  A.Set(0,4,5);
   t = A.getAngleRad(B);
   if(!A.hasError()){ fprintf(f,"\nOK. %14.4f",t); }
   else{ fprintf(f,"\nFailed getAngleRad: %s",A.getError()); A.clrError(); }

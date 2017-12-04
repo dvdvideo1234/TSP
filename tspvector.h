@@ -16,7 +16,6 @@
     #define TSP_PI 3.1415926535897931
 
     static TSP_STR msgBuffer[TSP_MSG_LEN] = {0};
-    static TSP_STR tmpBuffer[TSP_MSG_LEN] = {0};
 
     typedef class Vec
     {
@@ -63,9 +62,10 @@
         friend class Vec  operator--(Vec&, int);
         friend class Vec& operator++(Vec&);
         friend class Vec& operator--(Vec&);
-        void            clrError(){ memset (msgBuffer, 0, TSP_MSG_LEN); }
-        TSP_STR        *getError(){ return (msgBuffer); }
-        TSP_BUL         hasError(){ return (msgBuffer[0] != '\0'); }
+        void            clrError() const;
+        TSP_STR        *getError() const;
+        TSP_BUL         hasError() const;
+        TSP_STR        *getBuffer() const;
         TSP_BUL         isZero(void) const;
         TSP_BUL         isCollinear (const Vec *b) const;
         TSP_BUL         isCollinear (const Vec &b) const;
@@ -275,11 +275,22 @@
       va_end(args);
     }
 
+    TSP_STR* Vec::getBuffer() const { return (msgBuffer); }
+
+    TSP_BUL Vec::hasError(void) const
+      { return !memcmp(msgBuffer, "ERR", 3); }
+
+    void Vec::clrError(void) const
+      { if(hasError()){ memset(msgBuffer, 0, TSP_MSG_LEN); } }
+
+    TSP_STR* Vec::getError(void) const
+      { if(hasError()){ return msgBuffer; } return ((TSP_STR*)""); }
+
     TSP_STR* Vec::getString(const char * const fnum) const
     {
-      TSP_STR tmpFormat[TSP_MSG_LEN] = {0}; strcpy((char *)tmpBuffer, "{%s,%s,%s}");
-      sprintf((char*)tmpFormat,(const char* const)tmpBuffer,fnum,fnum,fnum);
-      sprintf((char*)tmpBuffer,(const char* const)tmpFormat,X,Y,Z); return tmpBuffer;
+      TSP_STR tmpFormat[TSP_MSG_LEN] = {0}; strcpy((char *)msgBuffer, "{%s,%s,%s}");
+      sprintf((char*)tmpFormat,(const char* const)msgBuffer,fnum,fnum,fnum);
+      sprintf((char*)msgBuffer,(const char* const)tmpFormat,X,Y,Z); return msgBuffer;
     }
 
     Vec& Vec::Print(FILE *f)

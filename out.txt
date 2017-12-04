@@ -269,12 +269,13 @@ XYZ = {      1.12000000,      1.35000002,      1.57000005 }
 Vec 0028F4F4 > 00000000 --> 3, 00000000
 XYZ = {      1.12300003,      1.34599996,      1.56799996 }
 
-------------------Error handling------------------ <>
+------------------Error handling------------------
+Error <>
 Failed Direction: ERR: Direction(void): Base module is zero
 Failed /=: ERR: oerator(/=): Divide by zero
-Failed getAngleRad: ERR: getAngleRad(vec*): Base module is zero
+OK.         0.4989
 Vec 0028F50C > 00000000 --> A, 00000000
-XYZ = {      0.00000000,      0.00000000,      0.00000000 } OK.
+XYZ = {      4.00000000,      0.00000000,      5.00000000 } OK.
 Failed Swap: ERR: Swap(str*): Wrong components <ax>
 ------------------getAreaTriangle------------------
 A.getAreaTriangle(B)    = 4.8989796638488770000000000000
