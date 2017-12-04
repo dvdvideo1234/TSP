@@ -194,6 +194,10 @@
         class Vec      getRollR(void) const;
         class Vec&        RollL(void);
         class Vec      getRollL(void) const;
+        class Vec&        ShiftR(void);
+        class Vec      getShiftR(void) const;
+        class Vec&        ShiftL(void);
+        class Vec      getShiftL(void) const;
         class Vec&        Swap(const void* Comp);
         class Vec      getSwap(const void* Comp) const;
         class Vec&        Print(void);
@@ -925,15 +929,21 @@
     Vec& Vec::RollR(void){ TSP_NUM T = X; X = Y; Y = Z; Z = T; return *this; }
     // X Y Z  ->  Y Z X
     Vec Vec::getRollR(void) const { return Vec(Y,Z,X); }
+    // X Y Z  ->  Y Z 0
+    Vec& Vec::ShiftL(void){ X = Y; Y = Z; Z = 0;  return *this; }
+    // X Y Z  ->  Y Z 0
+    Vec Vec::getShiftL(void) const { return Vec(Y,Z,0); }
+    // X Y Z  ->  0 X Y
+    Vec& Vec::ShiftR(void){ Z = Y; Y = X; X = 0; return *this; }
+    // X Y Z  ->  0 X Y
+    Vec Vec::getShiftR(void) const { return Vec(0,X,Y); }
 
     Vec& Vec::Swap(const void* cmp)
     {
       if(cmp == NULL){ setError("ERR: Swap(str*): Argument is null"); return *this; }
-      TSP_NUM T      = 0.0;
-      TSP_STR swp[2] = {0};
+      TSP_NUM T = 0.0; TSP_STR swp[2] = {0};
       const TSP_STR *cms = (const TSP_STR*)cmp;
-      swp[0] = cms[0] | 0x20;
-      swp[1] = cms[1] | 0x20;
+      swp[0] = cms[0] | 0x20; swp[1] = cms[1] | 0x20;
       if     (!memcmp(swp,"xy",2) || !memcmp(swp,"yx",2)){ T = X; X = Y; Y = T; }
       else if(!memcmp(swp,"yz",2) || !memcmp(swp,"zy",2)){ T = Y; Y = Z; Z = T; }
       else if(!memcmp(swp,"zx",2) || !memcmp(swp,"xz",2)){ T = Y; Y = Z; Z = T; }

@@ -355,6 +355,22 @@ int main()
   fprintf(f,"\ngetVolumeParallelepiped(B,NULL)    = %30.28lf",A.getVolumeParallelepiped(B,NULL));
   fprintf(f,"\ngetVolumeParallelepiped(NULL,NULL) = %30.28lf",A.getVolumeParallelepiped(NULL,NULL));
 
+  fprintf(f,"\n%sRollL%s",border,border);
+  C.Set(A).RollL().Print(f);
+  A.getRollL().Print(f);
+
+  fprintf(f,"\n%sRollR%s",border,border);
+  C.Set(A).RollR().Print(f);
+  A.getRollR().Print(f);
+
+  fprintf(f,"\n%sShiftL%s",border,border);
+  C.Set(A).ShiftL().Print(f);
+  A.getShiftL().Print(f);
+
+  fprintf(f,"\n%sShiftR%s",border,border);
+  C.Set(A).ShiftR().Print(f);
+  A.getShiftR().Print(f);
+
   fclose(f);
 
   return 0;
