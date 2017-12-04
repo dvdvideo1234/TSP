@@ -16,6 +16,7 @@
     #define TSP_PI 3.1415926535897931
 
     static TSP_STR msgBuffer[TSP_MSG_LEN] = {0};
+    static TSP_STR tmpBuffer[TSP_MSG_LEN] = {0};
 
     typedef class Vec
     {
@@ -74,6 +75,7 @@
         TSP_BUL         isCoplanar(const Vec *a, const Vec *b) const;
         TSP_BUL         isCoplanar(const Vec *a, const Vec &b) const;
         TSP_BUL         isCoplanar(const Vec &a, const Vec *b) const;
+        TSP_STR       *getString(const char * const fnum) const;
         TSP_NUM        getDistance(const Vec *b) const;
         TSP_NUM        getDistance(const Vec &b) const;
         TSP_NUM        getDistance(void) const;
@@ -271,6 +273,13 @@
       va_start (args, form);
       vsprintf((char*)msgBuffer, form, args);
       va_end(args);
+    }
+
+    TSP_STR* Vec::getString(const char * const fnum) const
+    {
+      TSP_STR tmpFormat[TSP_MSG_LEN] = {0}; strcpy((char *)tmpBuffer, "{%s,%s,%s}");
+      sprintf((char*)tmpFormat,(const char* const)tmpBuffer,fnum,fnum,fnum);
+      sprintf((char*)tmpBuffer,(const char* const)tmpFormat,X,Y,Z); return tmpBuffer;
     }
 
     Vec& Vec::Print(FILE *f)

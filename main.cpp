@@ -19,6 +19,9 @@ int main()
   A = Vec(1, 2, 3,"A");
   B = Vec(3, 2, 1,"B");
 
+  fprintf(f,"\n%sStringConversion%s",border,border);
+  fprintf(f,"\n%s",A.getString("%30.28lf"));
+
   fprintf(f,"\n%sFriend Operators%s",border,border);
   (A + B).setName("A + B").Print(f);
   C.setName("A += B");
