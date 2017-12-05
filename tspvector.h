@@ -153,7 +153,7 @@
         class Vec      getSub(TSP_NUM x) const;
         class Vec      getSub(TSP_NUM x, TSP_NUM y) const;
         class Vec      getSub(TSP_NUM x, TSP_NUM y, TSP_NUM z) const;
-        TSP_NUM        getCosine(TSP_STR) const;
+        TSP_NUM        getCosine(TSP_STR ax) const;
         class Vec&        Neg(void);
         class Vec      getNeg(void) const;
         class Vec&        Mul(TSP_NUM n);
@@ -179,8 +179,9 @@
         class Vec&        Set(const Vec &b);
         class Vec&        Set(const Vec *b);
         class Vec&        Set(TSP_NUM x, TSP_NUM y, TSP_NUM z);
-        class Vec&        Set(TSP_NUM x, TSP_NUM y);
-        class Vec&        Set(TSP_NUM x);
+        class Vec&        SetXY(TSP_NUM x, TSP_NUM y);
+        class Vec&        SetYZ(TSP_NUM y, TSP_NUM z);
+        class Vec&        SetXZ(TSP_NUM x, TSP_NUM z);
         class Vec&        Set(void);
         class Vec&        Offset(const Vec &Dir, TSP_NUM n);
         class Vec&        Offset(const Vec *Dir, TSP_NUM n);
@@ -724,20 +725,22 @@
 
     Vec& Vec::Set(TSP_NUM x, TSP_NUM y, TSP_NUM z){ setX(x); setY(y); setZ(z); return *this; }
 
-    Vec& Vec::Set(TSP_NUM x, TSP_NUM y){ setX(x); setY(y); setZ(0); return *this; }
+    Vec& Vec::SetXY(TSP_NUM x, TSP_NUM y){ setX(x); setY(y); return *this; }
 
-    Vec& Vec::Set(TSP_NUM x){ setX(x); setY(0); setZ(0); return *this; }
+    Vec& Vec::SetYZ(TSP_NUM y, TSP_NUM z){ setY(y); setZ(z); return *this; }
+
+    Vec& Vec::SetXZ(TSP_NUM x, TSP_NUM z){ setX(x); setZ(z); return *this; }
 
     Vec& Vec::Set(void){ setX(0); setY(0); setZ(0); return *this; }
 
     TSP_NUM Vec::getCosine(TSP_STR ax) const
     {
-      TSP_NUM ab = getDistance();
+      TSP_NUM ab = getDistance(); ax |= 0x20;
       if(ab ==  0 ){ setError("ERR: getCosine(str): Base module is zero"); return 0; }
       if(ax == 'x'){ return getX() / ab; }
       if(ax == 'y'){ return getY() / ab; }
       if(ax == 'z'){ return getZ() / ab; }
-      return 0;
+      setError("ERR: getCosine(str): Component mismatch <%c>",ax); return 0;
     }
 
     Vec& Vec::Mul(TSP_NUM n){ setX(getX() * n); setY(getY() * n); setZ(getZ() * n); return *this; }

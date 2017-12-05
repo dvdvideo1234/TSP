@@ -12,7 +12,6 @@ int main()
   }else{ f = stdout; }
   float t = 0;
   char border[] = "------------------";
-
   fprintf(f,"%30.28lf\n", ((double)TSP_PI));
 
   cVec A, B, C, D, E;
@@ -374,6 +373,9 @@ int main()
   fprintf(f,"\n%sShiftR%s",border,border);
   C.Set(A).ShiftR().Print(f);
   A.getShiftR().Print(f);
+
+  fprintf(f,"\n%sCosine%s",border,border);
+  fprintf(f,"\n{ %30.28lf , %30.28lf }",A.getCosine('x'),A.getCosine('X'));
 
   fclose(f);
 
