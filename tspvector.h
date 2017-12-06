@@ -1005,7 +1005,7 @@
       swp[0] = cms[0] | 0x20; swp[1] = cms[1] | 0x20;
       if     (!memcmp(swp,"xy",2) || !memcmp(swp,"yx",2)){ T = X; X = Y; Y = T; }
       else if(!memcmp(swp,"yz",2) || !memcmp(swp,"zy",2)){ T = Y; Y = Z; Z = T; }
-      else if(!memcmp(swp,"zx",2) || !memcmp(swp,"xz",2)){ T = Y; Y = Z; Z = T; }
+      else if(!memcmp(swp,"zx",2) || !memcmp(swp,"xz",2)){ T = Z; Z = X; X = T; }
       else setError("ERR: Swap(str*): Wrong components <%c%c>",swp[0],swp[1]);
       return *this;
     }

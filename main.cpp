@@ -5,6 +5,7 @@ int main()
   FILE *f = NULL;
   char name[] = "E:\\Documents\\CodeBlocks-Projs\\TSP\\out.txt";
   //char name[] = "";
+  char format[] = "%30.28lf";
   if(name[0] != '\0')
   {
     f = fopen(name,"wt+");
@@ -20,6 +21,7 @@ int main()
 
   fprintf(f,"\n%sStringConversion%s",border,border);
   fprintf(f,"\n%s",A.getString("%30.28lf"));
+  fprintf(f,"\n%s",A.getString(format));
 
   fprintf(f,"\n%sFriend Operators%s",border,border);
   (A + B).setName("A + B").Print(f);
