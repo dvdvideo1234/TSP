@@ -33,6 +33,7 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="main.cpp" />
+		<Unit filename="out.txt" />
 		<Unit filename="tspvector.h" />
 		<Extensions>
 			<code_completion />

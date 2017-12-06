@@ -24,7 +24,6 @@ Supports irrelevant or non-defined operations skipping. For example:
   There is a check for value different than zero before a division
   When a method contains a pointer parameter, NULL check is preformed
   ( And so on .. )
-The V:Set() method, when called with no parameters, resets x, y and z.
 Methods with prefix "get" return something.
 Methods starting with capital letter affect the object they are call on.
 

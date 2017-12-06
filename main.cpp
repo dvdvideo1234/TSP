@@ -24,36 +24,36 @@ int main()
   fprintf(f,"\n%sFriend Operators%s",border,border);
   (A + B).setName("A + B").Print(f);
   C.setName("A += B");
-  C.Set(A) += B;
+  C.Update(A) += B;
   C.Print(f);
   C.setName("A += 4");
-  C.Set(A) += 4;
+  C.Update(A) += 4;
   C.Print(f);
 
   (A - B).setName("A - B").Print(f);
   C.setName("A -= B");
-  C.Set(A) -= B;
+  C.Update(A) -= B;
   C.Print(f);
   C.setName("A -= 4");
-  C.Set(A) -= 4;
+  C.Update(A) -= 4;
   C.Print(f);
 
   (A ^ B).setName("A x B").Print(f);
   C.setName("A x= B");
-  C.Set(A) ^= B;
+  C.Update(A) ^= B;
   C.Print(f);
 
   (4 * A).setName("4 * A").Print(f);
   (A * 4).setName("A * 4").Print(f);
   C.setName("A *= 4");
-  C.Set(A) *= 4;
+  C.Update(A) *= 4;
   C.Print(f);
   C.setName("A = A.Mul(A * B)");
-  C.Set(A) *= B;
+  C.Update(A) *= B;
   C.Print(f);
 
   (A / 2).setName("A / 2").Print(f);
-  C.Set(A).setName("A /= 2") /= 2;
+  C.Update(A).setName("A /= 2") /= 2;
   C.Print(f);
 
   fprintf(f,"\n%sCompare Operators%s",border,border);
@@ -70,7 +70,7 @@ int main()
   fprintf(f,"\n%sStagePrint%s",border,border);
   A = Vec(1, 2, 3, "A");
   B = Vec(3, 2, 1, "B");
-  C.Set(A).setName("A").Print(f).Add(B).setName("A + B").Print(f).Div(4).setName("A / 4").Print(f);
+  C.Update(A).setName("A").Print(f).Add(B).setName("A + B").Print(f).Div(4).setName("A / 4").Print(f);
 
   fprintf(f,"\n%sDistance%s",border,border);
   A = Vec(1, 2, 3, "A");
@@ -115,10 +115,10 @@ int main()
   A.getSwap("xY").Print(f);
   A.getSwap("Xy").Print(f);
   A.getSwap("XY").Print(f);
-  C.Set(A).Swap("xy").Print(f);
-  C.Set(A).Swap("xY").Print(f);
-  C.Set(A).Swap("Xy").Print(f);
-  C.Set(A).Swap("XY").Print(f);
+  C.Update(A).Swap("xy").Print(f);
+  C.Update(A).Swap("xY").Print(f);
+  C.Update(A).Swap("Xy").Print(f);
+  C.Update(A).Swap("XY").Print(f);
 
   fprintf(f,"\n%sDirection%s",border,border);
   A = Vec(1, 2, 3, "A");
@@ -126,14 +126,14 @@ int main()
   C = Vec(0, 0, 0, "C");
   A.getDirection().Print(f);
   A.getDirection(NULL).Print(f);
-  C.Set(A).Direction().Print(f);
-  C.Set(A).Direction(NULL).Print(f);
+  C.Update(A).Direction().Print(f);
+  C.Update(A).Direction(NULL).Print(f);
 
   fprintf(f,"\n%sDirection origin%s",border,border);
   A.getDirection(B).Print(f);
   A.getDirection(&B).Print(f);
-  C.Set(A).Direction(B).Print(f);
-  C.Set(A).Direction(&B).Print(f);
+  C.Update(A).Direction(B).Print(f);
+  C.Update(A).Direction(&B).Print(f);
 
   fprintf(f,"\n%sProject%s",border,border);
   A = Vec(1, 2, 3, "A");
@@ -141,8 +141,8 @@ int main()
   C = Vec(0, 0, 0, "C");
   A.getProject(&B).Print(f);
   A.getProject( B).Print(f);
-  C.Set(A).Project(&B).Print(f);
-  C.Set(A).Project( B).Print(f);
+  C.Update(A).Project(&B).Print(f);
+  C.Update(A).Project( B).Print(f);
 
   fprintf(f,"\n%sAngles%s",border,border);
   fprintf(f,"\n%f, %f, %f, %f",A.getAngleDeg(B),A.getAngleDeg(&B),A.getAngleRad(&B),A.getAngleRad(B));
@@ -152,8 +152,8 @@ int main()
   B = Vec(3, 2, 1, "B");
   C = Vec(0, 0, 0, "C");
   A.getDiv(2).Print(f);
-  C.Set(&A).Div(2).Print(f);
-  C.Set(&A) /= 2;
+  C.Update(&A).Div(2).Print(f);
+  C.Update(&A) /= 2;
   C.Print(f);
   C = A / 2;
   C.Print(f);
@@ -163,8 +163,8 @@ int main()
   B = Vec(3, 2, 1, "B");
   C = Vec(0, 0, 0, "C");
   A.getMul(2).Print(f);
-  C.Set(&A).Mul(2).Print(f);
-  C.Set(&A) *= 2;
+  C.Update(&A).Mul(2).Print(f);
+  C.Update(&A) *= 2;
   C.Print(f);
   C = A * 2;
   C.Print(f);
@@ -175,13 +175,13 @@ int main()
   C = Vec(0, 0, 0, "C");
   A.getSub(&B).Print(f);
   A.getSub (B).Print(f);
-  C.Set(&A).Sub(B).Print(f);
-  C.Set(&A).Sub(&B).Print(f);
-  C.Set(&A) -= B; C.Print(f);
+  C.Update(&A).Sub(B).Print(f);
+  C.Update(&A).Sub(&B).Print(f);
+  C.Update(&A) -= B; C.Print(f);
   C = A - B; C.Print(f);
-  C.Set(&A).Sub(10).Print(f);
-  C.Set(&A).Sub(10,10).Print(f);
-  C.Set(&A).Sub(10,10,10).Print(f);
+  C.Update(&A).Sub(10).Print(f);
+  C.Update(&A).Sub(10,10).Print(f);
+  C.Update(&A).Sub(10,10,10).Print(f);
 
   fprintf(f,"\n%sAddition%s",border,border);
   A = Vec(1, 2, 3, "A");
@@ -189,13 +189,13 @@ int main()
   C = Vec(0, 0, 0, "C");
   A.getAdd(&B).Print(f);
   A.getAdd (B).Print(f);
-  C.Set(&A).Add(B).Print(f);
-  C.Set(&A).Add(&B).Print(f);
-  C.Set(&A) += B; C.Print(f);
+  C.Update(&A).Add(B).Print(f);
+  C.Update(&A).Add(&B).Print(f);
+  C.Update(&A) += B; C.Print(f);
   C = A + B; C.Print(f);
-  C.Set(&A).Add(10).Print(f);
-  C.Set(&A).Add(10,10).Print(f);
-  C.Set(&A).Add(10,10,10).Print(f);
+  C.Update(&A).Add(10).Print(f);
+  C.Update(&A).Add(10,10).Print(f);
+  C.Update(&A).Add(10,10,10).Print(f);
 
   fprintf(f,"\n%sCross%s",border,border);
   A = Vec(1, 2, 3, "A");
@@ -203,9 +203,9 @@ int main()
   C = Vec("C");
   A.getCross(&B).Print(f);
   A.getCross (B).Print(f);
-  C.Set(&A).Cross(B).Print(f);
-  C.Set(&A).Cross(&B).Print(f);
-  C.Set(&A) ^= B;
+  C.Update(&A).Cross(B).Print(f);
+  C.Update(&A).Cross(&B).Print(f);
+  C.Update(&A) ^= B;
   C.Print(f);
   C = A ^ B;
   C.Print(f);
@@ -215,15 +215,15 @@ int main()
   B = Vec(10, 0, 0, "B"); // Uncomment "TEST" to try it out
   E = Vec(30, 0, 0, "E"); B.setNext(&E);
   C = Vec("C");
-  C.Set(A).Center(B).setName("a.Center(b)").Print(f);
-  C.Set(A).Center(&B).setName("a.Center(*b)").Print(f);
+  C.Update(A).Center(B).setName("a.Center(b)").Print(f);
+  C.Update(A).Center(&B).setName("a.Center(*b)").Print(f);
   A.getCenter(B).setName("v a.Center(b)").Print(f);
   A.getCenter(&B).setName("v a.Center(*b)").Print(f);
   C = A % B; C.setName("A % B").Print(f);
   C = A % B.getX(); C.setName("A % B.x").Print(f);
   C = A.getX() % B; C.setName("A.x % B").Print(f);
-  C.Set(A); C %= B; C.setName("C %= B").Print(f);
-  C.Set(A); C %= B.getX(); C.setName("C %= B.x").Print(f);
+  C.Update(A); C %= B; C.setName("C %= B").Print(f);
+  C.Update(A); C %= B.getX(); C.setName("C %= B.x").Print(f);
 
   fprintf(f,"\n%sTriple cross product%s",border,border);
 
@@ -232,10 +232,10 @@ int main()
   C = Vec(2,  4,-2, "C");
   D = Vec(0,0,0,"D");
 
-  D.Set(A).CrossTriple(B,C).Print(f);
-  D.Set(A).CrossTriple(B,&C).Print(f);
-  D.Set(A).CrossTriple(&B,C).Print(f);
-  D.Set(A).CrossTriple(&B,&C).Print(f);
+  D.Update(A).CrossTriple(B,C).Print(f);
+  D.Update(A).CrossTriple(B,&C).Print(f);
+  D.Update(A).CrossTriple(&B,C).Print(f);
+  D.Update(A).CrossTriple(&B,&C).Print(f);
   D = A.getCrossTriple(B,C); D.Print(f);
   D = A.getCrossTriple(B,&C); D.Print(f);
   D = A.getCrossTriple(&B,C); D.Print(f);
@@ -284,24 +284,24 @@ int main()
 
   fprintf(f,"\n%sNegate%s",border,border);
   A = Vec(1,1,1,"A");
-  B.Set(A).Neg().Print(f);
+  B.Update(A).Neg().Print(f);
   A.getNeg().Print(f);
 
   fprintf(f,"\n%sOffset%s",border,border);
   t = sqrt(3);
   A = Vec(1,1,1,"A");
-  B.Set(A).Offset(A,t).Print(f);
-  B.Set(A).Offset(&A,t).Print(f);
+  B.Update(A).Offset(A,t).Print(f);
+  B.Update(A).Offset(&A,t).Print(f);
   A.getOffset(A,t).Print(f);
   A.getOffset(&A,t).Print(f);
 
   fprintf(f,"\n%sNumber ops%s",border,border);
   A = Vec(1.12345,1.34567,1.56789,"A");
   A.Print(f);
-  B.Set(A).setName("0").RoundDigit(0).Print(f);
-  B.Set(A).setName("1").RoundDigit(1).Print(f);
-  B.Set(A).setName("2").RoundDigit(2).Print(f);
-  B.Set(A).setName("3").RoundDigit(3).Print(f);
+  B.Update(A).setName("0").RoundDigit(0).Print(f);
+  B.Update(A).setName("1").RoundDigit(1).Print(f);
+  B.Update(A).setName("2").RoundDigit(2).Print(f);
+  B.Update(A).setName("3").RoundDigit(3).Print(f);
   fprintf(f,"\n");
 
   // ..TSP\tspvector.h|225|error: 'void Vec::setError(const char*, ...)' is protected|
@@ -309,13 +309,13 @@ int main()
 
   fprintf(f,"\n%sError handling%s",border,border);
   fprintf(f,"\nError <%s>",A.getError());
-  A.Set(0,0,0).Direction();
+  A.Update(0,0,0).Direction();
   if(!A.hasError()){ fprintf(f,"\nOK."); }
   else{ fprintf(f,"\nFailed Direction: %s",A.getError()); A.clrError(); }
-  A.Set(1,1,1) /= 0;
+  A.Update(1,1,1) /= 0;
   if(!A.hasError()){ fprintf(f,"\nOK."); }
   else{ fprintf(f,"\nFailed /=: %s",A.getError()); A.clrError(); }
-  A.Set(0,4,5);
+  A.Update(0,4,5);
   t = A.getAngleRad(B);
   if(!A.hasError()){ fprintf(f,"\nOK. %14.4f",t); }
   else{ fprintf(f,"\nFailed getAngleRad: %s",A.getError()); A.clrError(); }
@@ -359,19 +359,19 @@ int main()
   fprintf(f,"\ngetVolumeParallelepiped(NULL,NULL) = %30.28lf",A.getVolumeParallelepiped(NULL,NULL));
 
   fprintf(f,"\n%sRollL%s",border,border);
-  C.Set(A).RollL().Print(f);
+  C.Update(A).RollL().Print(f);
   A.getRollL().Print(f);
 
   fprintf(f,"\n%sRollR%s",border,border);
-  C.Set(A).RollR().Print(f);
+  C.Update(A).RollR().Print(f);
   A.getRollR().Print(f);
 
   fprintf(f,"\n%sShiftL%s",border,border);
-  C.Set(A).ShiftL().Print(f);
+  C.Update(A).ShiftL().Print(f);
   A.getShiftL().Print(f);
 
   fprintf(f,"\n%sShiftR%s",border,border);
-  C.Set(A).ShiftR().Print(f);
+  C.Update(A).ShiftR().Print(f);
   A.getShiftR().Print(f);
 
   fprintf(f,"\n%sCosine%s",border,border);

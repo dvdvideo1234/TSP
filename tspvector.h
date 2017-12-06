@@ -176,13 +176,20 @@
         class Vec      getCrossTriple(const Vec *b, const Vec *c) const;
         class Vec      getCrossTriple(const Vec *b, const Vec &c) const;
         class Vec      getCrossTriple(const Vec &b, const Vec *c) const;
-        class Vec&        Set(const Vec &b);
-        class Vec&        Set(const Vec *b);
-        class Vec&        Set(TSP_NUM x, TSP_NUM y, TSP_NUM z);
-        class Vec&        SetXY(TSP_NUM x, TSP_NUM y);
-        class Vec&        SetYZ(TSP_NUM y, TSP_NUM z);
-        class Vec&        SetXZ(TSP_NUM x, TSP_NUM z);
-        class Vec&        Set(void);
+        class Vec&        Update(const Vec &b);
+        class Vec&        Update(const Vec *b);
+        class Vec&        Update(TSP_NUM x, TSP_NUM y, TSP_NUM z);
+        class Vec      getUpdate(const Vec &b);
+        class Vec      getUpdate(const Vec *b);
+        class Vec      getUpdate(TSP_NUM x, TSP_NUM y, TSP_NUM z);
+        class Vec&        UpdateXY(TSP_NUM x, TSP_NUM y);
+        class Vec      getUpdateXY(TSP_NUM x, TSP_NUM y);
+        class Vec&        UpdateYZ(TSP_NUM y, TSP_NUM z);
+        class Vec      getUpdateYZ(TSP_NUM y, TSP_NUM z);
+        class Vec&        UpdateXZ(TSP_NUM x, TSP_NUM z);
+        class Vec      getUpdateXZ(TSP_NUM x, TSP_NUM z);
+        class Vec&        Zero(void);
+        class Vec      getZero(void);
         class Vec&        Offset(const Vec &Dir, TSP_NUM n);
         class Vec&        Offset(const Vec *Dir, TSP_NUM n);
         class Vec      getOffset(const Vec &Dir, TSP_NUM n) const;
@@ -408,7 +415,7 @@
       cVec v = Vec();
       TSP_NUM dst = getDistance();
       if(dst == 0){ setError("ERR: getDirection(void): Base module is zero"); return v; }
-      v.Set(this).Direction(); return v;
+      v.Update(this).Direction(); return v;
     }
 
     Vec Vec::getDirection(const Vec &b) const
@@ -416,7 +423,7 @@
       cVec v = Vec();
       TSP_NUM dst = getDistance(&b);
       if  (dst == 0){ setError("ERR: getDirection(vec&): Argument module is zero"); return v; }
-      v.Set(this).Direction(b); return v;
+      v.Update(this).Direction(b); return v;
     }
 
     Vec Vec::getDirection(const Vec *b) const
@@ -429,13 +436,13 @@
 
     TSP_NUM operator*(Vec &a, Vec &b){ return a.getDot(b); }
 
-    Vec operator+(Vec &a, Vec &b){ cVec v; v.Set(a).Add(b); return v; }
+    Vec operator+(Vec &a, Vec &b){ cVec v; v.Update(a).Add(b); return v; }
 
-    Vec operator+(Vec &a, TSP_NUM n){ cVec v; v.Set(a).Add(n); return v; }
+    Vec operator+(Vec &a, TSP_NUM n){ cVec v; v.Update(a).Add(n); return v; }
 
-    Vec operator-(Vec &a, Vec &b){ cVec v; v.Set(a).Sub(b); return v; }
+    Vec operator-(Vec &a, Vec &b){ cVec v; v.Update(a).Sub(b); return v; }
 
-    Vec operator-(Vec &a, TSP_NUM n){ cVec v; v.Set(a).Sub(n); return v; }
+    Vec operator-(Vec &a, TSP_NUM n){ cVec v; v.Update(a).Sub(n); return v; }
 
     void operator+=(Vec &a, TSP_NUM n){ a.setX(a.getX() + n); }
 
@@ -457,10 +464,10 @@
     {
       cVec v = Vec();
       if(n == 0){ v.setError("ERR: operator/(vec&,num): Divide by zero"); return v; }
-      v.Set(b.getX() / n, b.getY() / n, b.getZ() / n); return v;
+      v.Update(b.getX() / n, b.getY() / n, b.getZ() / n); return v;
     }
 
-    Vec operator/(Vec &a, Vec &b){ cVec v = Vec(); v.Set(a).Div(b); return v; }
+    Vec operator/(Vec &a, Vec &b){ cVec v = Vec(); v.Update(a).Div(b); return v; }
 
     void operator*=(Vec &a, TSP_NUM n){ a.Mul(n); }
 
@@ -532,7 +539,7 @@
       TSP_NUM dst2 = bcx*bcx + bcy*bcy + bcz*bcz;
       if(dst2 == 0){ setError("ERR: Project(vec&): Argument module is zero"); return *this; }
       TSP_NUM dot = getDot(b) / dst2;
-      Set(dot*bcx, dot*bcy, dot*bcz);
+      Update(dot*bcx, dot*bcy, dot*bcz);
       return *this;
     }
 
@@ -542,7 +549,7 @@
       Project(*b); return *this;
     }
 
-    Vec Vec::getProject(const Vec &b) const { cVec v = Vec(); v.Set(this).Project(b); return v; }
+    Vec Vec::getProject(const Vec &b) const { cVec v = Vec(); v.Update(this).Project(b); return v; }
 
     Vec Vec::getProject(const Vec *b) const
     {
@@ -552,7 +559,7 @@
 
     Vec& Vec::Cross(const Vec &b)
     {
-      Set((getY() * b.getZ()) - (getZ() * b.getY()),
+      Update((getY() * b.getZ()) - (getZ() * b.getY()),
           (getZ() * b.getX()) - (getX() * b.getZ()),
           (getX() * b.getY()) - (getY() * b.getX()));
       return *this;
@@ -568,19 +575,19 @@
     {
       cVec v = Vec();
       if(b == NULL){ setError("ERR: getCross(vec*): Argument is null"); return v; }
-      v.Set(this).Cross(b); return v;
+      v.Update(this).Cross(b); return v;
     }
 
     Vec Vec::getCross(const Vec &b) const
     {
-      cVec v = Vec(); v.Set(this).Cross(b); return v;
+      cVec v = Vec(); v.Update(this).Cross(b); return v;
     }
 
     Vec& Vec::CrossTriple(const Vec &b, const Vec &c)
     {
       TSP_NUM ac = getDot(c);
       TSP_NUM ab = getDot(b);
-      Set((ac * b.getX()) - (ab * c.getX()),
+      Update((ac * b.getX()) - (ab * c.getX()),
           (ac * b.getY()) - (ab * c.getY()),
           (ac * b.getZ()) - (ab * c.getZ()));
       return *this;
@@ -605,7 +612,7 @@
     }
 
     Vec Vec::getCrossTriple(const Vec &b, const Vec &c) const
-      { cVec v = Vec().Set(this).CrossTriple(b,c); return v; }
+      { cVec v = Vec().Update(this).CrossTriple(b,c); return v; }
 
     Vec Vec::getCrossTriple(const Vec *b, const Vec *c) const
     {
@@ -658,11 +665,11 @@
     {
       cVec v = Vec();
       if(b == NULL){ setError("ERR: getAdd(vec*): Argument is null"); return v; }
-      v.Set(this).Add(b); return v;
+      v.Update(this).Add(b); return v;
     }
 
     Vec Vec::getAdd(const Vec &b) const
-      { cVec v = Vec().Set(this).Add(b); return v; }
+      { cVec v = Vec().Update(this).Add(b); return v; }
 
     Vec Vec::getAdd(TSP_NUM x) const
       { cVec v = Vec(); v.Add(x); return v; }
@@ -700,11 +707,11 @@
     {
       cVec v = Vec();
       if(b == NULL){ setError("ERR: getSub(vec*): Argument is null"); return v; }
-      v.Set(this).Sub(b); return v;
+      v.Update(this).Sub(b); return v;
     }
 
     Vec Vec::getSub(const Vec &b) const
-      { cVec v = Vec().Set(this).Sub(b); return v; }
+      { cVec v = Vec().Update(this).Sub(b); return v; }
 
     Vec Vec::getSub(TSP_NUM x) const
       { cVec v = Vec(); v.Sub(x); return v; }
@@ -715,23 +722,52 @@
     Vec Vec::getSub(TSP_NUM x, TSP_NUM y, TSP_NUM z) const
       { cVec v = Vec(); v.Sub(x,y,z); return v; }
 
-    Vec& Vec::Set(const Vec *b)
+    Vec& Vec::Update(const Vec *b)
     {
-      if(b == NULL){ setError("ERR: Set(vec*): Argument is null"); return *this; }
-      setX(b->getX()); setY(b->getY()); setZ(b->getZ()); return *this;
+      if(b == NULL){ setError("ERR: Update(vec*): Argument is null"); return *this; }
+      setX(b->getX()).setY(b->getY()).setZ(b->getZ()); return *this;
     }
 
-    Vec& Vec::Set(const Vec &b){ setX(b.getX()); setY(b.getY()); setZ(b.getZ()); return *this; }
+    Vec Vec::getUpdate(const Vec *b)
+    {
+      cVec v = Vec();
+      if(b == NULL){ setError("ERR: Update(vec*): Argument is null"); return v; }
+      return v.setX(b->getX()).setY(b->getY()).setZ(b->getZ());
+    }
 
-    Vec& Vec::Set(TSP_NUM x, TSP_NUM y, TSP_NUM z){ setX(x); setY(y); setZ(z); return *this; }
+    Vec& Vec::Update(const Vec &b)
+      { setX(b.getX()).setY(b.getY()).setZ(b.getZ()); return *this; }
 
-    Vec& Vec::SetXY(TSP_NUM x, TSP_NUM y){ setX(x); setY(y); return *this; }
+    Vec Vec::getUpdate(const Vec &b)
+      { cVec v = Vec(); return v.setX(b.getX()).setY(b.getY()).setZ(b.getZ()); }
 
-    Vec& Vec::SetYZ(TSP_NUM y, TSP_NUM z){ setY(y); setZ(z); return *this; }
+    Vec& Vec::Update(TSP_NUM x, TSP_NUM y, TSP_NUM z)
+      { setX(x).setY(y).setZ(z); return *this; }
 
-    Vec& Vec::SetXZ(TSP_NUM x, TSP_NUM z){ setX(x); setZ(z); return *this; }
+    Vec Vec::getUpdate(TSP_NUM x, TSP_NUM y, TSP_NUM z)
+      { cVec v = Vec(); return v.setX(x).setY(y).setZ(z); }
 
-    Vec& Vec::Set(void){ setX(0); setY(0); setZ(0); return *this; }
+    Vec& Vec::UpdateXY(TSP_NUM x, TSP_NUM y)
+      { setX(x).setY(y); return *this; }
+
+    Vec Vec::getUpdateXY(TSP_NUM x, TSP_NUM y)
+      { cVec v = Vec(); return v.setX(x).setY(y); }
+
+    Vec& Vec::UpdateYZ(TSP_NUM y, TSP_NUM z)
+      { setY(y).setZ(z); return *this; }
+
+    Vec Vec::getUpdateYZ(TSP_NUM y, TSP_NUM z)
+      { cVec v = Vec(); return v.setY(y).setZ(z); }
+
+    Vec& Vec::UpdateXZ(TSP_NUM x, TSP_NUM z)
+      { setX(x).setZ(z); return *this; }
+
+    Vec Vec::getUpdateXZ(TSP_NUM x, TSP_NUM z)
+      { cVec v = Vec(); return v.setX(x).setZ(z); }
+
+    Vec& Vec::Zero(void){ setX(0).setY(0).setZ(0); return *this; }
+
+    Vec Vec::getZero(void){ cVec v = Vec(); return v; }
 
     TSP_NUM Vec::getCosine(TSP_STR ax) const
     {
@@ -745,7 +781,7 @@
 
     Vec& Vec::Mul(TSP_NUM n){ setX(getX() * n); setY(getY() * n); setZ(getZ() * n); return *this; }
 
-    Vec Vec::getMul(TSP_NUM n) const { cVec v = Vec().Set(this).Mul(n); return v; }
+    Vec Vec::getMul(TSP_NUM n) const { cVec v = Vec().Update(this).Mul(n); return v; }
 
     Vec& Vec::Div(TSP_NUM n)
     {
@@ -771,32 +807,32 @@
     {
       cVec v = Vec();
       if(n == 0){ setError("ERR: getDiv(num): Divide by zero"); return v; }
-      v.Set(this).Div(n); return v;
+      v.Update(this).Div(n); return v;
     }
 
     Vec Vec::getDiv(const Vec &b) const
     {
-      cVec v = Vec(); v.Set(this).Div(b); return v;
+      cVec v = Vec(); v.Update(this).Div(b); return v;
     }
 
     Vec Vec::getDiv(const Vec *b) const
     {
       cVec v = Vec();
       if(b == NULL){ setError("ERR: getDiv(vec*): Argument is null"); return v; }
-      v.Set(this).Div(*b); return v;
+      v.Update(this).Div(*b); return v;
     }
 
-    Vec Vec::getRound(void) const { cVec v = Vec(); v.Set(this).Round(); return v; }
+    Vec Vec::getRound(void) const { cVec v = Vec(); v.Update(this).Round(); return v; }
 
-    Vec Vec::getTrunc(void) const { cVec v = Vec(); v.Set(this).Trunc(); return v; }
+    Vec Vec::getTrunc(void) const { cVec v = Vec(); v.Update(this).Trunc(); return v; }
 
-    Vec Vec::getFloor(void) const { cVec v = Vec(); v.Set(this).Floor(); return v; }
+    Vec Vec::getFloor(void) const { cVec v = Vec(); v.Update(this).Floor(); return v; }
 
-    Vec Vec::getCeil(void) const { cVec v = Vec(); v.Set(this).Ceil(); return v; }
+    Vec Vec::getCeil(void) const { cVec v = Vec(); v.Update(this).Ceil(); return v; }
 
     Vec& Vec::RoundDigit(unsigned int d){ TSP_NUM mul = pow(10,d); Mul(mul); Round(); Div(mul); return *this; }
 
-    Vec Vec::getRoundDigit(unsigned int d) const { cVec v = Vec(); v.Set(this).RoundDigit(d); return v; }
+    Vec Vec::getRoundDigit(unsigned int d) const { cVec v = Vec(); v.Update(this).RoundDigit(d); return v; }
 
     TSP_NUM Vec::getAreaParallelogram(const Vec *b) const
     {
@@ -936,14 +972,14 @@
     {
       cVec v = Vec();
       if(d == NULL){ setError("ERR: getOffset(dir*,num): Direction is null"); return v; }
-      v.Set(this).Offset(d,n); return v;
+      v.Update(this).Offset(d,n); return v;
     }
 
-    Vec Vec::getOffset(const Vec &d, TSP_NUM n) const { cVec v = Vec().Set(this).Offset(d,n); return v; }
+    Vec Vec::getOffset(const Vec &d, TSP_NUM n) const { cVec v = Vec().Update(this).Offset(d,n); return v; }
 
     Vec& Vec::Neg(void){ setX(-getX()); setY(-getY()); setZ(-getZ()); return *this; }
 
-    Vec Vec::getNeg(void) const { cVec v = Vec().Set(this).Neg(); return v; }
+    Vec Vec::getNeg(void) const { cVec v = Vec().Update(this).Neg(); return v; }
     // X Y Z  ->  Z X Y
     Vec& Vec::RollL(void){ TSP_NUM T = Z; Z = Y; Y = X; X = T; return *this; }
     // X Y Z  ->  Z X Y
@@ -974,7 +1010,7 @@
       return *this;
     }
 
-    Vec Vec::getSwap(const void* cmp) const { cVec v = Vec(); v.Set(this).Swap(cmp); return v; }
+    Vec Vec::getSwap(const void* cmp) const { cVec v = Vec(); v.Update(this).Swap(cmp); return v; }
 
     Vec& Vec::Center(const Vec &b) // Depth of A is not considered
     { // It must be able taking the center between A and B
@@ -993,8 +1029,8 @@
 
     Vec Vec::getCenter(const Vec &b) const // Depth of A is used
     {
-      cVec va = Vec(); va.Set(this).Center(b);
-      cVec vb = Vec(); vb.Set(b).Center(this);
+      cVec va = Vec(); va.Update(this).Center(b);
+      cVec vb = Vec(); vb.Update(b).Center(this);
       return (va + vb).Div(2);
     }
 
@@ -1009,6 +1045,6 @@
     Vec operator%(Vec &a, Vec &b){ return a.getCenter(b); }
     Vec operator%(Vec &a, TSP_NUM b){ cVec v = Vec(b); v.Center(a); return v; }
     Vec operator%(TSP_NUM a, Vec &b){ cVec v = Vec(a); v.Center(b); return v; }
-    void operator%=(Vec &a, Vec &b)   { cVec v = (a % b); a.Set(v); }
-    void operator%=(Vec &a, TSP_NUM b){ cVec v = (a % b); a.Set(v); }
+    void operator%=(Vec &a, Vec &b)   { cVec v = (a % b); a.Update(v); }
+    void operator%=(Vec &a, TSP_NUM b){ cVec v = (a % b); a.Update(v); }
 #endif
