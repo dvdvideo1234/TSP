@@ -2,6 +2,17 @@
 
 int main()
 {
+  cVec a = Vec(3.5,0,0);
+  cVec j = Vec(0,7,0);
+  cVec k = Vec(0,0,11);
+
+  printf("Area: %lf\n",a.getVolumeParallelepiped(j,k));
+
+  cVec ang = Vec(1,1,1);
+
+  printf("%f, %f\n",ang.getAnglePitchDeg(), ang.getAngleYawDeg());
+
+
   FILE *f = NULL;
   char name[] = "E:\\Documents\\CodeBlocks-Projs\\TSP\\out.txt";
   //char name[] = "";

@@ -13,7 +13,10 @@
     #define TSP_FLOOR floorf               // General macro for processing floor
     #define TSP_CEIL  ceilf                // General macro for processing ceiling
     #define TSP_ABS   fabs                 // General macro for processing absolute
-    #define TSP_PI 3.1415926535897931
+    #define TSP_ATAN  atan2                // General macro for processing arc tangent of (Y/X)
+    #define TSP_ACOS  acos                 //  General macro for processing arc cosine
+    #define TSP_PI  3.1415926535897932384626433832795028841971693993751L // The value of PI as a macro
+    #define TSP_RD 57.295779513082320876798154814105170332405472466564L  // Radians to degrees
 
     static TSP_STR msgBuffer[TSP_MSG_LEN] = {0};
 
@@ -101,6 +104,10 @@
         TSP_NUM        getAngleDeg(const  Vec &b) const;
         TSP_NUM        getAngleRad(const  Vec *b) const;
         TSP_NUM        getAngleRad(const  Vec &b) const;
+        TSP_NUM        getAngleYawRad() const;
+        TSP_NUM        getAngleYawDeg() const;
+        TSP_NUM        getAnglePitchRad() const;
+        TSP_NUM        getAnglePitchDeg() const;
         TSP_NUM        getAreaTriangle(const Vec *b) const;
         TSP_NUM        getAreaTriangle(const Vec &b) const;
         TSP_NUM        getAreaParallelogram(const Vec *b) const;
@@ -303,7 +310,7 @@
 
     Vec& Vec::Print(FILE *f)
     {
-      if(f == NULL){ setError("ERR: Print(file*): Argument is null"); }
+      if(f == NULL){ setError("ERR:Print(file*): Argument is null"); }
       char *nam = (char *)getName(); nam = (char *)((nam == NULL) ? "" : nam);
         fprintf(f,"\nVec %p > %p --> %s, %p\nXYZ = { %15.8f, %15.8f, %15.8f }",
            (void*)this,(void*)getNext(),nam,(void*)getUser(),getX(),getY(),getZ());
@@ -320,7 +327,7 @@
 
     Vec& Vec::Print(TSP_STR *s)
     {
-      if(s == NULL){ setError("ERR: Print(string*): Argument is null"); }
+      if(s == NULL){ setError("ERR:Print(string*): Argument is null"); }
       char *nam = (char *)getName(); nam = (char *)((nam == NULL) ? "" : nam);
       sprintf((char*)s,"\nVec %p > %p --> %s, %p\nXYZ = { %15.8f, %15.8f, %15.8f }",
          (void*)this,(void*)getNext(),nam,(void*)getUser(),getX(),getY(),getZ());
@@ -342,7 +349,7 @@
 
     TSP_BUL Vec::isOrthogonal(const Vec *b) const
     {
-      if(b == NULL){ setError("ERR: isOrthogonal(vec*): Argument is null"); return 0; }
+      if(b == NULL){ setError("ERR:isOrthogonal(vec*): Argument is null"); return 0; }
       return (getDot(b) == 0);
     }
 
@@ -358,7 +365,7 @@
 
     TSP_BUL Vec::isCollinear(const Vec *b) const
     {
-      if(b == NULL){ setError("ERR: isCollinear(vec*): Argument is null"); return 0; }
+      if(b == NULL){ setError("ERR:isCollinear(vec*): Argument is null"); return 0; }
       return isCollinear(*b);
     }
 
@@ -387,7 +394,7 @@
     Vec& Vec::Direction(void)
     {
       TSP_NUM dst = getDistance();
-      if(dst == 0){ setError("ERR: Direction(void): Base module is zero"); return *this; }
+      if(dst == 0){ setError("ERR:Direction(void): Base module is zero"); return *this; }
       setX(getX() / dst);
       setY(getY() / dst);
       setZ(getZ() / dst);
@@ -397,7 +404,7 @@
     Vec& Vec::Direction(const Vec &b)
     {
       TSP_NUM dst = getDistance(&b);
-      if(dst == 0){ setError("ERR: Direction(vec&): Base module is zero"); return *this; }
+      if(dst == 0){ setError("ERR:Direction(vec&): Base module is zero"); return *this; }
       setX((getX() - b.getX()) / dst);
       setY((getY() - b.getY()) / dst);
       setZ((getZ() - b.getZ()) / dst);
@@ -414,7 +421,7 @@
     {
       cVec v = Vec();
       TSP_NUM dst = getDistance();
-      if(dst == 0){ setError("ERR: getDirection(void): Base module is zero"); return v; }
+      if(dst == 0){ setError("ERR:getDirection(void): Base module is zero"); return v; }
       v.Update(this).Direction(); return v;
     }
 
@@ -422,7 +429,7 @@
     {
       cVec v = Vec();
       TSP_NUM dst = getDistance(&b);
-      if  (dst == 0){ setError("ERR: getDirection(vec&): Argument module is zero"); return v; }
+      if  (dst == 0){ setError("ERR:getDirection(vec&): Argument module is zero"); return v; }
       v.Update(this).Direction(b); return v;
     }
 
@@ -463,7 +470,7 @@
     Vec operator/(Vec &b, TSP_NUM n)
     {
       cVec v = Vec();
-      if(n == 0){ v.setError("ERR: operator/(vec&,num): Divide by zero"); return v; }
+      if(n == 0){ v.setError("ERR:operator/(vec&,num): Divide by zero"); return v; }
       v.Update(b.getX() / n, b.getY() / n, b.getZ() / n); return v;
     }
 
@@ -473,7 +480,7 @@
 
     void operator/=(Vec &a, TSP_NUM n)
     {
-      if(n == 0){ a.setError("ERR: oerator(/=): Divide by zero"); return; }
+      if(n == 0){ a.setError("ERR:operator(/=): Divide by zero"); return; }
       a.Div(n);
     }
 
@@ -504,13 +511,13 @@
 
     TSP_NUM Vec::getAngleRad(const Vec *b) const
     {
-      if(b == NULL){ setError("ERR: getAngleRad(vec*): Argument is null"); return 0; }
+      if(b == NULL){ setError("ERR:getAngleRad(vec*): Argument is null"); return 0; }
       TSP_NUM dot = getDot(b);
       TSP_NUM abd = getDistance();
       TSP_NUM avd = b->getDistance();
-      if(abd == 0){ setError("ERR: getAngleRad(vec*): Base module is zero"); return 0; }
-      if(avd == 0){ setError("ERR: getAngleRad(vec*): Argument module is zero"); return 0; }
-      return acos(dot / ( abd * avd ));
+      if(abd == 0){ setError("ERR:getAngleRad(vec*): Base module is zero"); return 0; }
+      if(avd == 0){ setError("ERR:getAngleRad(vec*): Argument module is zero"); return 0; }
+      return acos(dot / (abd * avd));
     }
 
     TSP_NUM Vec::getAngleRad(const Vec &b) const
@@ -518,17 +525,39 @@
       TSP_NUM dot = getDot(&b);
       TSP_NUM abd = getDistance();
       TSP_NUM avd = b.getDistance();
-      if(abd == 0){ setError("ERR: getAngleRad(vec*): Base module is zero"); return 0; }
-      if(avd == 0){ setError("ERR: getAngleRad(vec*): Argument module is zero"); return 0; }
-      return acos(dot / ( abd * avd ));
+      if(abd == 0){ setError("ERR:getAngleRad(vec*): Base module is zero"); return 0; }
+      if(avd == 0){ setError("ERR:getAngleRad(vec*): Argument module is zero"); return 0; }
+      return acos(dot / (abd * avd));
     }
 
-    TSP_NUM Vec::getAngleDeg(const Vec &b) const { return ( getAngleRad(&b) * ( 180 / TSP_PI)); }
+    TSP_NUM Vec::getAngleDeg(const Vec &b) const { return ( getAngleRad(&b) * TSP_RD); }
 
     TSP_NUM Vec::getAngleDeg(const Vec *b) const
     {
-      if(b == NULL){ setError("ERR: getAngleDeg(vec*): Argument is null"); return 0; }
-      return ( getAngleRad(b) * ( 180 / TSP_PI));
+      if(b == NULL){ setError("ERR:getAngleDeg(vec*): Argument is null"); return 0; }
+      return ( getAngleRad(b) * TSP_RD);
+    }
+
+    TSP_NUM Vec::getAngleYawRad() const
+    {
+      TSP_NUM dst = getDistance();
+      if(dst == 0){ setError("ERR:getAngleYawRad(): Base module is zero"); return 0; }
+      return TSP_ACOS(getZ() / dst);
+    }
+
+    TSP_NUM Vec::getAnglePitchRad() const
+    {
+      return TSP_ATAN(getY(), getX());
+    }
+
+    TSP_NUM Vec::getAngleYawDeg() const
+    {
+      return (getAngleYawRad() * TSP_RD);
+    }
+
+    TSP_NUM Vec::getAnglePitchDeg() const
+    {
+      return (getAnglePitchRad() * TSP_RD);
     }
 
     Vec& Vec::Project(const Vec &b)
@@ -537,7 +566,7 @@
       TSP_NUM bcy = b.getY();
       TSP_NUM bcz = b.getZ();
       TSP_NUM dst2 = bcx*bcx + bcy*bcy + bcz*bcz;
-      if(dst2 == 0){ setError("ERR: Project(vec&): Argument module is zero"); return *this; }
+      if(dst2 == 0){ setError("ERR:Project(vec&): Argument module is zero"); return *this; }
       TSP_NUM dot = getDot(b) / dst2;
       Update(dot*bcx, dot*bcy, dot*bcz);
       return *this;
@@ -545,7 +574,7 @@
 
     Vec& Vec::Project(const Vec *b)
     {
-      if(b == NULL){ setError("ERR: getAngleDeg(vec*): Argument is null"); return *this; }
+      if(b == NULL){ setError("ERR:Project(vec*): Argument is null"); return *this; }
       Project(*b); return *this;
     }
 
@@ -553,28 +582,28 @@
 
     Vec Vec::getProject(const Vec *b) const
     {
-      if(b == NULL){ setError("ERR: getProject(vec*): Argument is null"); return Vec();}
+      if(b == NULL){ setError("ERR:getProject(vec*): Argument is null"); return Vec();}
       return getProject(*b);
     }
 
     Vec& Vec::Cross(const Vec &b)
     {
       Update((getY() * b.getZ()) - (getZ() * b.getY()),
-          (getZ() * b.getX()) - (getX() * b.getZ()),
-          (getX() * b.getY()) - (getY() * b.getX()));
+             (getZ() * b.getX()) - (getX() * b.getZ()),
+             (getX() * b.getY()) - (getY() * b.getX()));
       return *this;
     }
 
     Vec& Vec::Cross(const Vec *b)
     {
-      if(b == NULL){ setError("ERR: Cross(vec*): Argument is null"); return *this; }
+      if(b == NULL){ setError("ERR:Cross(vec*): Argument is null"); return *this; }
       Cross(*b); return *this;
     }
 
     Vec Vec::getCross(const Vec *b) const
     {
       cVec v = Vec();
-      if(b == NULL){ setError("ERR: getCross(vec*): Argument is null"); return v; }
+      if(b == NULL){ setError("ERR:getCross(vec*): Argument is null"); return v; }
       v.Update(this).Cross(b); return v;
     }
 
@@ -588,26 +617,26 @@
       TSP_NUM ac = getDot(c);
       TSP_NUM ab = getDot(b);
       Update((ac * b.getX()) - (ab * c.getX()),
-          (ac * b.getY()) - (ab * c.getY()),
-          (ac * b.getZ()) - (ab * c.getZ()));
+             (ac * b.getY()) - (ab * c.getY()),
+             (ac * b.getZ()) - (ab * c.getZ()));
       return *this;
     }
 
     Vec& Vec::CrossTriple(const Vec *b, const Vec *c)
     {
-      if(b == NULL){ setError("ERR: CrossTriple(vec*, vec*): First argument module is null"); return *this; }
-      if(c == NULL){ setError("ERR: CrossTriple(vec*, vec*): Second argument module is null"); return *this; }
+      if(b == NULL){ setError("ERR:CrossTriple(vec*, vec*): First argument module is null"); return *this; }
+      if(c == NULL){ setError("ERR:CrossTriple(vec*, vec*): Second argument module is null"); return *this; }
       CrossTriple(*b,*c); return *this;
     }
     Vec& Vec::CrossTriple(const Vec *b, const Vec &c)
     {
-      if(b == NULL){ setError("ERR: CrossTriple(vec&): First argument is null"); return *this; }
+      if(b == NULL){ setError("ERR:CrossTriple(vec&): First argument is null"); return *this; }
       CrossTriple(*b,c); return *this;
     }
 
     Vec& Vec::CrossTriple(const Vec &b, const Vec *c)
     {
-      if(c == NULL){ setError("ERR: CrossTriple(vec&): Second argument is null"); return *this; }
+      if(c == NULL){ setError("ERR:CrossTriple(vec&): Second argument is null"); return *this; }
       CrossTriple(b,*c); return *this;
     }
 
@@ -617,20 +646,20 @@
     Vec Vec::getCrossTriple(const Vec *b, const Vec *c) const
     {
       cVec v = Vec();
-      if(b == NULL){ setError("ERR: getCrossTriple(vec*,vec*): First argument is null" ); return v; }
-      if(c == NULL){ setError("ERR: getCrossTriple(vec*,vec*): Second argument is null"); return v; }
+      if(b == NULL){ setError("ERR:getCrossTriple(vec*,vec*): First argument is null" ); return v; }
+      if(c == NULL){ setError("ERR:getCrossTriple(vec*,vec*): Second argument is null"); return v; }
       return getCrossTriple(*b,*c);
     }
 
     Vec Vec::getCrossTriple(const Vec *b, const Vec &c) const
     {
-      if(b == NULL){ setError("ERR: getCrossTriple(vec*,vec&): First argument is null"); return Vec(); }
+      if(b == NULL){ setError("ERR:getCrossTriple(vec*,vec&): First argument is null"); return Vec(); }
       return getCrossTriple(*b,c);
     }
 
     Vec Vec::getCrossTriple(const Vec &b, const Vec *c) const
     {
-      if(c == NULL){ setError("ERR: getCrossTriple(vec&,vec*): Second argument is null"); return Vec(); }
+      if(c == NULL){ setError("ERR:getCrossTriple(vec&,vec*): Second argument is null"); return Vec(); }
       return getCrossTriple(b,*c);
     }
 
@@ -639,7 +668,7 @@
 
     TSP_NUM Vec::getDot(const Vec *b) const
     {
-      if(b == NULL){ setError("ERR: getDot(vec*): Argument is null"); return 0; }
+      if(b == NULL){ setError("ERR:getDot(vec*): Argument is null"); return 0; }
       return getDot(*b);
     }
 
@@ -648,7 +677,7 @@
 
     Vec& Vec::Add(const Vec *b)
     {
-      if(b == NULL){ setError("ERR: Add(vec*): Argument is null"); return *this; }
+      if(b == NULL){ setError("ERR:Add(vec*): Argument is null"); return *this; }
       Add(*b); return *this;
     }
 
@@ -664,7 +693,7 @@
     Vec Vec::getAdd(const Vec *b) const
     {
       cVec v = Vec();
-      if(b == NULL){ setError("ERR: getAdd(vec*): Argument is null"); return v; }
+      if(b == NULL){ setError("ERR:getAdd(vec*): Argument is null"); return v; }
       v.Update(this).Add(b); return v;
     }
 
@@ -690,7 +719,7 @@
 
     Vec& Vec::Sub(const Vec *b)
     {
-      if(b == NULL){ setError("ERR: Sub(vec*): Argument is null"); return *this; }
+      if(b == NULL){ setError("ERR:Sub(vec*): Argument is null"); return *this; }
       Sub(*b); return *this;
     }
 
@@ -706,7 +735,7 @@
     Vec Vec::getSub(const Vec *b) const
     {
       cVec v = Vec();
-      if(b == NULL){ setError("ERR: getSub(vec*): Argument is null"); return v; }
+      if(b == NULL){ setError("ERR:getSub(vec*): Argument is null"); return v; }
       v.Update(this).Sub(b); return v;
     }
 
@@ -724,14 +753,14 @@
 
     Vec& Vec::Update(const Vec *b)
     {
-      if(b == NULL){ setError("ERR: Update(vec*): Argument is null"); return *this; }
+      if(b == NULL){ setError("ERR:Update(vec*): Argument is null"); return *this; }
       setX(b->getX()).setY(b->getY()).setZ(b->getZ()); return *this;
     }
 
     Vec Vec::getUpdate(const Vec *b)
     {
       cVec v = Vec();
-      if(b == NULL){ setError("ERR: Update(vec*): Argument is null"); return v; }
+      if(b == NULL){ setError("ERR:Update(vec*): Argument is null"); return v; }
       return v.setX(b->getX()).setY(b->getY()).setZ(b->getZ());
     }
 
@@ -772,11 +801,11 @@
     TSP_NUM Vec::getCosine(TSP_STR ax) const
     {
       TSP_NUM ab = getDistance(); ax |= 0x20;
-      if(ab ==  0 ){ setError("ERR: getCosine(str): Base module is zero"); return 0; }
+      if(ab ==  0 ){ setError("ERR:getCosine(str): Base module is zero"); return 0; }
       if(ax == 'x'){ return getX() / ab; }
       if(ax == 'y'){ return getY() / ab; }
       if(ax == 'z'){ return getZ() / ab; }
-      setError("ERR: getCosine(str): Component mismatch <%c>",ax); return 0;
+      setError("ERR:getCosine(str): Component mismatch <%c>",ax); return 0;
     }
 
     Vec& Vec::Mul(TSP_NUM n){ setX(getX() * n); setY(getY() * n); setZ(getZ() * n); return *this; }
@@ -785,28 +814,28 @@
 
     Vec& Vec::Div(TSP_NUM n)
     {
-      if(n == 0){ setError("ERR: Div(num): Divide by zero"); return *this; }
+      if(n == 0){ setError("ERR:Div(num): Divide by zero"); return *this; }
       setX(getX() / n); setY(getY() / n); setZ(getZ() / n); return *this;
     }
 
     Vec& Vec::Div(const Vec &b)
     {
-      if(b.getX() == 0){ setError("ERR: Div(vec&): Divide(X) by zero"); return *this; }
-      if(b.getY() == 0){ setError("ERR: Div(vec&): Divide(Y) by zero"); return *this; }
-      if(b.getZ() == 0){ setError("ERR: Div(vec&): Divide(Z) by zero"); return *this; }
+      if(b.getX() == 0){ setError("ERR:Div(vec&): Divide(X) by zero"); return *this; }
+      if(b.getY() == 0){ setError("ERR:Div(vec&): Divide(Y) by zero"); return *this; }
+      if(b.getZ() == 0){ setError("ERR:Div(vec&): Divide(Z) by zero"); return *this; }
       setX(getX() / b.getX()).setY(getY() / b.getY()).setZ(getZ() / b.getZ()); return *this;
     }
 
     Vec& Vec::Div(const Vec *b)
     {
-      if(b == NULL){ setError("ERR: Div(vec*): Argument is null"); return *this; }
+      if(b == NULL){ setError("ERR:Div(vec*): Argument is null"); return *this; }
       Div(*b); return *this;
     }
 
     Vec Vec::getDiv(TSP_NUM n) const
     {
       cVec v = Vec();
-      if(n == 0){ setError("ERR: getDiv(num): Divide by zero"); return v; }
+      if(n == 0){ setError("ERR:getDiv(num): Divide by zero"); return v; }
       v.Update(this).Div(n); return v;
     }
 
@@ -818,7 +847,7 @@
     Vec Vec::getDiv(const Vec *b) const
     {
       cVec v = Vec();
-      if(b == NULL){ setError("ERR: getDiv(vec*): Argument is null"); return v; }
+      if(b == NULL){ setError("ERR:getDiv(vec*): Argument is null"); return v; }
       v.Update(this).Div(*b); return v;
     }
 
@@ -836,7 +865,7 @@
 
     TSP_NUM Vec::getAreaParallelogram(const Vec *b) const
     {
-      if(b == NULL){ setError("ERR: getAreaParallelogram(vec*): Argument is null"); return 0; }
+      if(b == NULL){ setError("ERR:getAreaParallelogram(vec*): Argument is null"); return 0; }
       return TSP_ABS(getCross(b).getDistance());
     }
 
@@ -847,7 +876,7 @@
 
     TSP_NUM Vec::getAreaTriangle(const Vec *b) const
     {
-      if(b == NULL){ setError("ERR: getAreaTriangle(vec*): Argument is null"); return 0; }
+      if(b == NULL){ setError("ERR:getAreaTriangle(vec*): Argument is null"); return 0; }
       return TSP_ABS(0.5 * getAreaParallelogram(b));
     }
 
@@ -863,22 +892,22 @@
 
     TSP_NUM Vec::getMixed(const Vec *b, const Vec *c) const
     {
-      if(b == NULL){ setError("ERR: getMixed(vec*,vec*): First argument is null"); return 0; }
-      if(c == NULL){ setError("ERR: getMixed(vec*,vec*): Second argument is null"); return 0; }
+      if(b == NULL){ setError("ERR:getMixed(vec*,vec*): First argument is null"); return 0; }
+      if(c == NULL){ setError("ERR:getMixed(vec*,vec*): Second argument is null"); return 0; }
       cVec v = b->getCross(c);
       return getDot(v);
     }
 
     TSP_NUM Vec::getMixed(const Vec *b, const Vec &c) const
     {
-      if(b == NULL){ setError("ERR: getMixed(vec*,vec&): First argument is null"); return 0; }
+      if(b == NULL){ setError("ERR:getMixed(vec*,vec&): First argument is null"); return 0; }
       cVec v = b->getCross(c);
       return getDot(v);
     }
 
     TSP_NUM Vec::getMixed(const Vec &b, const Vec *c) const
     {
-      if(c == NULL){ setError("ERR: getMixed(vec&,vec*): Second argument is null"); return 0; }
+      if(c == NULL){ setError("ERR:getMixed(vec&,vec*): Second argument is null"); return 0; }
       cVec v = b.getCross(c);
       return getDot(v);
     }
@@ -890,20 +919,20 @@
 
     TSP_NUM Vec::getVolumeParallelepiped(const Vec *b, const Vec *c) const
     {
-      if(b == NULL){ setError("ERR: getVolumeParallelepiped(vec*,vec*): First argument is null"); return 0; }
-      if(c == NULL){ setError("ERR: getVolumeParallelepiped(vec*,vec*): Second argument is null"); return 0; }
+      if(b == NULL){ setError("ERR:getVolumeParallelepiped(vec*,vec*): First argument is null"); return 0; }
+      if(c == NULL){ setError("ERR:getVolumeParallelepiped(vec*,vec*): Second argument is null"); return 0; }
       return TSP_ABS(getMixed(b,c));
     }
 
     TSP_NUM Vec::getVolumeParallelepiped(const Vec *b, const Vec &c) const
     {
-      if(b == NULL){ setError("ERR: getVolumeParallelepiped(vec*,vec&): First argument is null"); return 0; }
+      if(b == NULL){ setError("ERR:getVolumeParallelepiped(vec*,vec&): First argument is null"); return 0; }
       return TSP_ABS(getMixed(b,c));
     }
 
     TSP_NUM Vec::getVolumeParallelepiped(const Vec &b, const Vec *c) const
     {
-      if(c == NULL){ setError("ERR: getVolumeParallelepiped(vec&,vec*): Second argument is null"); return 0; }
+      if(c == NULL){ setError("ERR:getVolumeParallelepiped(vec&,vec*): Second argument is null"); return 0; }
       return TSP_ABS(getMixed(b,c));
     }
 
@@ -914,20 +943,20 @@
 
     TSP_NUM Vec::getVolumeTetrahedron(const Vec *b, const Vec *c) const
     {
-      if(b == NULL){ setError("ERR: getVolumeTetrahedron(vec*,vec*): First argument is null"); return 0; }
-      if(c == NULL){ setError("ERR: getVolumeTetrahedron(vec*,vec*): Second argument is null"); return 0; }
+      if(b == NULL){ setError("ERR:getVolumeTetrahedron(vec*,vec*): First argument is null"); return 0; }
+      if(c == NULL){ setError("ERR:getVolumeTetrahedron(vec*,vec*): Second argument is null"); return 0; }
       return TSP_ABS(getVolumeParallelepiped(b,c) / 6);
     }
 
     TSP_NUM Vec::getVolumeTetrahedron(const Vec *b, const Vec &c) const
     {
-      if(b == NULL){ setError("ERR: getVolumeTetrahedron(vec*,vec&): First argument is null"); return 0; }
+      if(b == NULL){ setError("ERR:getVolumeTetrahedron(vec*,vec&): First argument is null"); return 0; }
       return TSP_ABS(getVolumeParallelepiped(b,c) / 6);
     }
 
     TSP_NUM Vec::getVolumeTetrahedron(const Vec &b, const Vec *c) const
     {
-      if(c == NULL){ setError("ERR: getVolumeTetrahedron(vec&,vec*): Second argument is null"); return 0; }
+      if(c == NULL){ setError("ERR:getVolumeTetrahedron(vec&,vec*): Second argument is null"); return 0; }
       return TSP_ABS(getVolumeParallelepiped(b,c) / 6);
     }
 
@@ -935,20 +964,20 @@
 
     TSP_BUL Vec::isCoplanar(const Vec *a, const Vec *b) const
     {
-      if(a == NULL){ setError("ERR: isCoplanar(vec*,vec*): First argument is null"); return 0; }
-      if(b == NULL){ setError("ERR: isCoplanar(vec*,vec*): Second argument is null"); return 0; }
+      if(a == NULL){ setError("ERR:isCoplanar(vec*,vec*): First argument is null"); return 0; }
+      if(b == NULL){ setError("ERR:isCoplanar(vec*,vec*): Second argument is null"); return 0; }
       return (getMixed(a,b) == 0);
     }
 
     TSP_BUL Vec::isCoplanar(const Vec &a, const Vec *b) const
     {
-      if(b == NULL){ setError("ERR: isCoplanar(vec&,vec*): Second argument is null"); return 0; }
+      if(b == NULL){ setError("ERR:isCoplanar(vec&,vec*): Second argument is null"); return 0; }
       return (getMixed(a,b) == 0);
     }
 
     TSP_BUL Vec::isCoplanar(const Vec *a, const Vec &b) const
     {
-      if(a == NULL){ setError("ERR: isCoplanar(vec*,vec&): First argument is null"); return 0; }
+      if(a == NULL){ setError("ERR:isCoplanar(vec*,vec&): First argument is null"); return 0; }
       return (getMixed(a,b) == 0);
     }
 
@@ -964,14 +993,14 @@
 
     Vec& Vec::Offset(const Vec *d, TSP_NUM n)
     {
-      if(d == NULL){ setError("ERR: Offset(dir*,num): Direction is null"); return *this; }
+      if(d == NULL){ setError("ERR:Offset(dir*,num): Direction is null"); return *this; }
       Offset(*d,n); return *this;
     }
 
     Vec Vec::getOffset(const Vec *d, TSP_NUM n) const
     {
       cVec v = Vec();
-      if(d == NULL){ setError("ERR: getOffset(dir*,num): Direction is null"); return v; }
+      if(d == NULL){ setError("ERR:getOffset(dir*,num): Direction is null"); return v; }
       v.Update(this).Offset(d,n); return v;
     }
 
@@ -999,14 +1028,14 @@
 
     Vec& Vec::Swap(const void* cmp)
     {
-      if(cmp == NULL){ setError("ERR: Swap(str*): Argument is null"); return *this; }
+      if(cmp == NULL){ setError("ERR:Swap(str*): Argument is null"); return *this; }
       TSP_NUM T = 0.0; TSP_STR swp[2] = {0};
       const TSP_STR *cms = (const TSP_STR*)cmp;
       swp[0] = cms[0] | 0x20; swp[1] = cms[1] | 0x20;
       if     (!memcmp(swp,"xy",2) || !memcmp(swp,"yx",2)){ T = X; X = Y; Y = T; }
       else if(!memcmp(swp,"yz",2) || !memcmp(swp,"zy",2)){ T = Y; Y = Z; Z = T; }
       else if(!memcmp(swp,"zx",2) || !memcmp(swp,"xz",2)){ T = Z; Z = X; X = T; }
-      else setError("ERR: Swap(str*): Wrong components <%c%c>",swp[0],swp[1]);
+      else setError("ERR:Swap(str*): Wrong components <%c%c>",swp[0],swp[1]);
       return *this;
     }
 
@@ -1021,7 +1050,7 @@
 
     Vec& Vec::Center(const Vec *b)
     {
-      if(b == NULL){ setError("ERR: Center(vec*): Argument is null"); return *this; }
+      if(b == NULL){ setError("ERR:Center(vec*): Argument is null"); return *this; }
       Center(*b); return *this;
     }
 
@@ -1036,7 +1065,7 @@
 
     Vec Vec::getCenter(const Vec *b) const
     { // Get the center separately
-      if(b == NULL){ setError("ERR: getCenter(vec*): Argument is null"); return *this; }
+      if(b == NULL){ setError("ERR:getCenter(vec*): Argument is null"); return *this; }
       return getCenter(*b);
     }
 
